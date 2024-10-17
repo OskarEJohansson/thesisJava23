@@ -41,5 +41,5 @@ out/
 .kotlin
 
 ### Secret Properties ###
-jwt/src/main/resources/secret.properties\
 crud/src/main/resources/secrets.properties
+jwt/src/main/resources/secrets.properties
