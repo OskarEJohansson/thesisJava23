@@ -1,4 +1,7 @@
 package dev.oskarjohansson.domain.model
 
-class Author {
+data class Author(val authorId:String,
+                  val authorName: String,
+                    // TODO: PublishedBooks contain reviewIds. Find better suiting name for the variable.
+                  val publishedBooks: List<String>) {
 }

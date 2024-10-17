@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -38,3 +39,7 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### Secret Properties ###
+jwt/src/main/resources/secret.properties\
+crud/src/main/resources/secrets.properties

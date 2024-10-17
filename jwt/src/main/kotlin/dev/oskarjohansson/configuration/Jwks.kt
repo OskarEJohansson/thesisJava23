@@ -31,8 +31,6 @@ class Jwks {
             throw IllegalStateException("Error generating RSA Key Pair: ${ex.message}")
 
         }
-
-
     }
 
     private fun generateRsaKeyPair(): KeyPair {
