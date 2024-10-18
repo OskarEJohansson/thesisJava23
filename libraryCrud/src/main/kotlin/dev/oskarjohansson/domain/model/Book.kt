@@ -1,5 +1,9 @@
 package dev.oskarjohansson.domain.model
 
+import dev.oskarjohansson.domain.enums.Genres
+import org.springframework.data.mongodb.core.mapping.Document
+
+@Document(collation = "Books")
 data class Book(
     val bookid: String,
     val title: String,

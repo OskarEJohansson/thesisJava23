@@ -1,3 +1,3 @@
 rootProject.name = "thesis-java23"
 
-include(":crud", ":jwt")
+include(":libraryCrud", ":jwt")

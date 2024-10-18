@@ -1,5 +1,9 @@
 package dev.oskarjohansson.domain.model
 
+import dev.oskarjohansson.domain.enums.Role
+import org.springframework.data.mongodb.core.mapping.Document
+
+@Document(collation = "Users")
 data class User(val id:String,
                 val email:String,
                 val username: String,

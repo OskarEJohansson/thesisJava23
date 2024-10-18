@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.model
+package dev.oskarjohansson.domain.enums
 
 enum class Genres(
     FICTION:String,
