@@ -4,9 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class CrudApp {
+class Library
 
-    fun main(args: Array<String>) {
-        runApplication<CrudApp>(*args)
-    }
+fun main(args: Array<String>) {
+    runApplication<Library>(*args)
 }
