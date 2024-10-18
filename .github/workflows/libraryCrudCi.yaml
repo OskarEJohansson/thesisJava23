@@ -1,0 +1,35 @@
+
+name: CI
+
+on:
+  push:
+    paths: [ 'libraryCrud/**' ]
+  pull_request:
+    paths: [ 'libraryCrud/**' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+      #env:
+      #DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+    #DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Kotlin
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name:
+        run: ./gradlew build
+
+      - name: Run tests
+        run: ./gradlew test
+
+
