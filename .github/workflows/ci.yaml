@@ -7,15 +7,29 @@
     pull_request:
       branches: [ "main" ]
 
-    jobs:
-      build:
-        runs-on: ubuntu-latest
+  jobs:
+    build:
+      runs-on: ubuntu-latest
 
-        steps:
-          - uses: actions/checkout@v4
+      env:
+        #DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        #DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
-          - name: First job
-            run: |
-              echo Hello, world!,
-              echo Testing Testing!
-    
+      steps:
+        - uses: actions/checkout@v4
+        - name: Set up Kotlin
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'temurin'
+            java-version: '21'
+
+        - name: Set up Gradle
+          uses: gradle/actions/setup-action@v3
+
+        - name:
+          run: ./gradlew build
+
+        - name: Run tests
+          run: ./gradlew test
+
+  
