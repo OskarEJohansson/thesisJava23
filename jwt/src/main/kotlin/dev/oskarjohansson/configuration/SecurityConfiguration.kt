@@ -11,6 +11,7 @@ import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -58,7 +59,13 @@ class SecurityConfiguration {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        TODO("Set up security filter chain")
-        return http.build()
+        // TODO: Set up proper security filter chain 
+        
+        return http
+            .csrf{ csrf -> csrf.disable()}
+            .sessionManagement{ sesssion -> sesssion.sessionCreationPolicy(SessionCreationPolicy.STATELESS)}
+            .authorizeHttpRequests { auth -> auth
+                .requestMatchers("/*").permitAll()}
+            .build()
     }
 }

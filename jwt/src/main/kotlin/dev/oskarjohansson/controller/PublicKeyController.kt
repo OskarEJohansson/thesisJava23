@@ -15,8 +15,8 @@ class PublicKeyController(val rsaKey: RSAKey) {
     // TODO: Connect logger 
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
+    // TODO: Find out why returntype myst be <out Any> and what it mean
     @GetMapping("/v1/public-key")
-    // TODO: Find out why returntype myst be <out Any> and what it mean 
     fun publicKey(): ResponseEntity<out Any>? =
         runCatching {
             ResponseEntity.status(HttpStatus.OK)

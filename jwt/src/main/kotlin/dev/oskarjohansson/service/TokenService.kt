@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service
 @Service
 class TokenService(jwtEncoder: JwtEncoder) {
 
-    fun generateToken(authentication: Authentication): String {
 
+
+    fun generateToken(authentication: Authentication): String {
         TODO("Implement logger, time, scope and JWTClaimSet")
         return "Token"
     }
-
-
 
 }

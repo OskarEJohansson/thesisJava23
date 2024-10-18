@@ -1,6 +1,7 @@
 package dev.oskarjohansson.controller
 
 import dev.oskarjohansson.domain.entity.LoginRequest
+import dev.oskarjohansson.service.TokenService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AuthController(
-    private val tokenService: dev.oskarjohansson.service.TokenService,
+    private val tokenService: TokenService,
     private val authenticationManager: AuthenticationManager
 ) {
     
