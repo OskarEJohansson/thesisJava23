@@ -11,10 +11,13 @@ import org.springframework.security.core.userdetails.User as SecurityCoreUser
 @Service
 class UserDetailService(private val repositoryService: RepositoryService) : UserDetailsService {
 
-    override fun loadUserByUsername(username: String): UserDetails =
-        repositoryService.getUserByUsername(username)
-            ?.let { createUserDetailsAndGrantAuthority(it) }
-            ?: throw UsernameNotFoundException("Username not found")
+    override fun loadUserByUsername(username: String): UserDetails {
+        return runCatching {
+            createUserDetailsAndGrantAuthority(
+                repositoryService.getUserByUsername(username)
+            )
+        }.getOrElse { throw UsernameNotFoundException("Username not found")}
+    }
 
     fun createUserDetailsAndGrantAuthority(user: User): UserDetails =
         SecurityCoreUser.builder()
