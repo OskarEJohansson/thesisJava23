@@ -18,7 +18,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("jakarta.validation-api:3.1.0")
+    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
     implementation(project(":commons"))
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
