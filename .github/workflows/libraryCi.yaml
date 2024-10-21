@@ -1,11 +1,11 @@
 
-name: CI
+name: LibraryCI
 
 on:
   push:
-    paths: [ 'libraryCrud/**' ]
+    paths: [ 'library/**' ]
   pull_request:
-    paths: [ 'libraryCrud/**' ]
+    paths: [ 'library/**' ]
 
 jobs:
   build:
@@ -26,10 +26,7 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name:
-        run: ./gradlew build
-
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew :library:test
 
 

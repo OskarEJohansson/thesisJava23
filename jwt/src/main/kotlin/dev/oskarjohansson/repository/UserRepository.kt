@@ -8,5 +8,5 @@ import java.util.*
 @Repository
 interface UserRepository: MongoRepository<User, String> {
 
-    fun findbyUsername(username:String): User?
+    fun findByUsername(username:String): User?
 }

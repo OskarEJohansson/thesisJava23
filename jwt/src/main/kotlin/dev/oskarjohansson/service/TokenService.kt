@@ -20,7 +20,6 @@ class TokenService(private val jwtEncoder: JwtEncoder) {
 
     private val LOG:Logger = LoggerFactory.getLogger(TokenService::class.java)
 
-
     fun generateToken(authentication: Authentication): String {
 
         val now = Instant.now()
