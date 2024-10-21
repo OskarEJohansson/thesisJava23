@@ -44,7 +44,7 @@ class SecurityConfiguration {
     // TODO: Make sure the JWKSet(rsaKey) does not need .key
     @Bean
     fun jwksSource(rsaKey: RSAKey): JWKSource<SecurityContext> =
-        JWKSource { jwkSelector, context -> jwkSelector.select(JWKSet(rsaKey)) }
+        JWKSource { jwkSelector, _ -> jwkSelector.select(JWKSet(rsaKey)) }
 
     @Bean
     fun jwtEncoder(jwks: JWKSource<SecurityContext>): JwtEncoder = NimbusJwtEncoder(jwks)

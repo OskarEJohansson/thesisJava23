@@ -15,11 +15,14 @@ class UserDetailService(private val repositoryService: RepositoryService) : User
         repositoryService.getUserByUsername(username)
             ?.let { createUserDetailsAndGrantAuthority(it) }
             ?: throw UsernameNotFoundException("Username not found")
+
+    fun createUserDetailsAndGrantAuthority(user: User): UserDetails =
+        SecurityCoreUser.builder()
+            .username(user.username)
+            .password(user.password)
+            .authorities(user.role.authority)
+            .build()
 }
 
-fun createUserDetailsAndGrantAuthority(user: User): UserDetails =
-    SecurityCoreUser.builder()
-        .username(user.username)
-        .password(user.password)
-        .authorities(user.role.authority)
-        .build()
+
+

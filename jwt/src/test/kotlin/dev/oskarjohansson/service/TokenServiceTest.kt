@@ -22,7 +22,7 @@ class TokenServiceTest @Autowired constructor(private val tokenservice: TokenSer
         val mockAuth = mockk<Authentication>()
         every{mockAuth.isAuthenticated } returns true
         every{mockAuth.name } returns "User"
-        every{mockAuth.credentials } returns "User"
+        every{mockAuth.credentials } returns "ROLE_USER"
         val token = tokenservice.generateToken(mockAuth)
 
         assertTrue(token.isNotEmpty())

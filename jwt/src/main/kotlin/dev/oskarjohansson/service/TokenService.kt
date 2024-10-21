@@ -28,6 +28,8 @@ class TokenService(private val jwtEncoder: JwtEncoder) {
         val scope = authentication.authorities
             .joinToString(" ") { grantedAuthority -> grantedAuthority.authority  }
 
+
+//        TODO("Add audience, check out clock and add logging and move variables to properties as env")
          val claims:JwtClaimsSet = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
