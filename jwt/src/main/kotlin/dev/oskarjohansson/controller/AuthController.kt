@@ -1,6 +1,7 @@
 package dev.oskarjohansson.controller
 
-import dev.oskarjohansson.domain.entity.LoginRequest
+import dev.oskarjohansson.domain.dto.LoginRequestDTO
+import dev.oskarjohansson.domain.dto.TokenResponseDTO
 import dev.oskarjohansson.service.TokenService
 import jakarta.validation.Valid
 import org.slf4j.Logger
@@ -20,22 +21,23 @@ class AuthController(
     private val tokenService: TokenService,
     private val authenticationManager: AuthenticationManager
 ) {
-    
+
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
     @PostMapping("/v1/request-token")
-    fun token(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<String> =
+    fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<TokenResponseDTO> =
 
         runCatching {
-            LOG.debug("Token request with login Request Username: ${loginRequest.username}")
+            LOG.debug("Token request with login Request Username: ${loginRequestDTO.username}")
             val auth: Authentication = authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
+                UsernamePasswordAuthenticationToken(loginRequestDTO.username, loginRequestDTO.password)
             )
             LOG.debug("User Authenticated: ${auth.name}")
             //todo: "Make sure caller cam read the token. Turn it into a hashmap?"
-            ResponseEntity.status(HttpStatus.OK).body("Login Successful, token: ${tokenService.generateToken(auth)}")
+            ResponseEntity.ok(TokenResponseDTO("Login Successful", tokenService.generateToken(auth)))
         }.getOrElse {
-            ResponseEntity.badRequest().build()
+            LOG.error("Failed to authenticate: ${it.message}")
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenResponseDTO("Invalid login credentials", ""))
         }
 
 }

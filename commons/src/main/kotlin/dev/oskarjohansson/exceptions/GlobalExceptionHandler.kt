@@ -3,12 +3,16 @@ package dev.oskarjohansson.exceptions
 import dev.oskarjohansson.exceptions.model.ErrorMessageModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.core.codec.ResourceDecoder
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.oauth2.jwt.JwtDecoderInitializationException
 import org.springframework.validation.method.MethodValidationException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -33,11 +37,44 @@ class GlobalExceptionHandler {
     @ExceptionHandler
     fun handleUsernameNotFoundException(exception: UsernameNotFoundException): ResponseEntity<ErrorMessageModel>{
 
-        val errorMessageModel=ErrorMessageModel(
+        val errorMessage=ErrorMessageModel(
             HttpStatus.BAD_REQUEST.value(),
             exception.message
         )
 
-        return ResponseEntity(errorMessageModel, HttpStatus.BAD_REQUEST)
+        return ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler
+    fun handleIllegalStateException(exception: IllegalStateException): ResponseEntity<ErrorMessageModel>{
+
+        val errorMessage = ErrorMessageModel(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            exception.message
+        )
+
+        return ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler
+    fun handleIllegalArgumentException(exception: IllegalArgumentException): ResponseEntity<ErrorMessageModel>{
+
+        val errorMessage= ErrorMessageModel(
+            HttpStatus.BAD_REQUEST.value(),
+            exception.message
+        )
+
+        return ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler
+    fun handleJwtDecoderInitializationException(exception: JwtDecoderInitializationException): ResponseEntity<ErrorMessageModel>{
+
+        val errorMessage = ErrorMessageModel(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            exception.message
+        )
+
+        return ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }

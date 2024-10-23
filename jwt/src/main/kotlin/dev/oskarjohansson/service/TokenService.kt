@@ -34,8 +34,9 @@ class TokenService(private val jwtEncoder: JwtEncoder) {
             .claim("scope", scope)
             .build()
 
+
+        LOG.info("Token generated for${authentication.name}, authorities granted: ${authentication.authorities}, claim: $claims")
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).tokenValue
 
     }
-
 }

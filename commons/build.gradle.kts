@@ -13,4 +13,5 @@ kotlin {
 dependencies{
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.security:spring-security-core:6.3.3")
+    implementation("org.springframework.security:spring-security-oauth2-jose:6.3.3")
 }
