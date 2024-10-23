@@ -71,7 +71,9 @@ class SecurityConfiguration {
             .sessionManagement { sesssion -> sesssion.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/*").permitAll()
+                    .requestMatchers("/public-key-controller/v1/public-key").permitAll()
+                    .requestMatchers("/auth-controller/v1/request-token").authenticated()
+                    .anyRequest().authenticated()
             }
             .build()
     }

@@ -28,5 +28,4 @@ data class User(
     val role: Role,
     val dateJoined: Time,
     val library: Library
-) {
-}
+)

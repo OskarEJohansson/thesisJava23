@@ -25,5 +25,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("io.mockk:mockk:1.13.5")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

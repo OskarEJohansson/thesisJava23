@@ -6,15 +6,16 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
+@RequestMapping("/public-key-controller")
 class PublicKeyController(val rsaKey: RSAKey) {
 
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
-    // TODO: Find out why returntype myst be <out Any> and what it mean
     @GetMapping("/v1/public-key")
     fun publicKey(): ResponseEntity<PublicKeyResponseDTO> =
         runCatching {
