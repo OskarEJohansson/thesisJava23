@@ -27,5 +27,3 @@ class UserDetailService(private val repositoryService: RepositoryService) : User
             .build()
 }
 
-
-
