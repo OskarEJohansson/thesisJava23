@@ -8,5 +8,8 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository: MongoRepository<User, String> {
 
-    fun findByUsernameOrEmail(username: String, email: Email):User?
+    fun findUserByUsernameOrEmail(username: String, email: Email):User?
+
+
+
 }

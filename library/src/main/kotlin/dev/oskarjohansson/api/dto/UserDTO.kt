@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain
+package dev.oskarjohansson.api.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank

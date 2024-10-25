@@ -1,7 +1,7 @@
-package dev.oskarjohansson.controller
+package dev.oskarjohansson.api.controller
 
-import dev.oskarjohansson.domain.dto.LoginRequestDTO
-import dev.oskarjohansson.domain.dto.TokenResponseDTO
+import dev.oskarjohansson.api.dto.LoginRequestDTO
+import dev.oskarjohansson.api.dto.TokenResponseDTO
 import dev.oskarjohansson.service.TokenService
 import jakarta.validation.Valid
 import org.slf4j.Logger

@@ -1,9 +1,8 @@
-package dev.oskarjohansson.exceptions
+package dev.oskarjohansson.exceptions.exceptionHandling
 
 import dev.oskarjohansson.exceptions.model.ErrorMessageModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.core.codec.ResourceDecoder
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UsernameNotFoundException

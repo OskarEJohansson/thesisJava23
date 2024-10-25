@@ -1,9 +1,8 @@
-package dev.oskarjohansson.controller
+package dev.oskarjohansson.api
 
-import dev.oskarjohansson.domain.UserDTO
+import dev.oskarjohansson.api.dto.UserDTO
 import dev.oskarjohansson.service.UserService
 import jakarta.validation.Valid
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

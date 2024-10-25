@@ -1,4 +1,4 @@
-package dev.oskarjohansson.controller
+package dev.oskarjohansson.api
 
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
