@@ -1,4 +1,4 @@
-package dev.oskarjohansson.exceptions.model
+package dev.oskarjohansson.model
 
 
 

@@ -1,6 +1,6 @@
-package dev.oskarjohansson.exceptions.exceptionHandling
+package dev.oskarjohansson.exceptions
 
-import dev.oskarjohansson.exceptions.model.ErrorMessageModel
+import dev.oskarjohansson.model.ErrorMessageModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -36,7 +36,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler
     fun handleUsernameNotFoundException(exception: UsernameNotFoundException): ResponseEntity<ErrorMessageModel>{
 
-        val errorMessage=ErrorMessageModel(
+        val errorMessage= ErrorMessageModel(
             HttpStatus.BAD_REQUEST.value(),
             exception.message
         )

@@ -72,7 +72,7 @@ class SecurityConfiguration {
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/public-key-controller/v1/public-key").permitAll()
-                    .requestMatchers("/auth-controller/v1/request-token").authenticated()
+                    .requestMatchers("/authentication/v1/login").authenticated()
                     .anyRequest().authenticated()
             }
             .build()

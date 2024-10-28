@@ -16,4 +16,5 @@ dependencies{
     implementation("org.springframework.security:spring-security-oauth2-jose:6.3.3")
     implementation("io.ktor:ktor-client-core:3.0.0")
     implementation("io.ktor:ktor-client-cio-jvm:3.0.0")
+    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 }

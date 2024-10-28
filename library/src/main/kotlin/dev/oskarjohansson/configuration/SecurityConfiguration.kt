@@ -1,6 +1,6 @@
 package dev.oskarjohansson.configuration
 
-import dev.oskarjohansson.exceptions.service.PublicKeyService
+import dev.oskarjohansson.service.ApiService
 import io.ktor.client.plugins.*
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
@@ -30,7 +30,7 @@ class SecurityConfiguration {
     @Bean
     fun getPublicKeyFromTokenService(): RSAPublicKey {
         return runCatching {
-            runBlocking { PublicKeyService().getPublicKey("/ADD-ENDPOINT") }
+            runBlocking { ApiService().getPublicKey("/ADD-ENDPOINT") }
         }.getOrElse {
             LOG.error("Failed to retrieve RSA public key: ${it.message}, Stacktrace: ${it}")
             when (it) {

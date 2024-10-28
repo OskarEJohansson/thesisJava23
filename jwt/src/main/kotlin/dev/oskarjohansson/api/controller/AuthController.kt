@@ -1,7 +1,7 @@
 package dev.oskarjohansson.api.controller
 
-import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.api.dto.TokenResponseDTO
+import dev.oskarjohansson.model.LoginRequestDTO
 import dev.oskarjohansson.service.TokenService
 import jakarta.validation.Valid
 import org.slf4j.Logger
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/auth-controller")
+@RequestMapping("/authentication")
 class AuthController(
     private val tokenService: TokenService,
     private val authenticationManager: AuthenticationManager
@@ -26,7 +26,7 @@ class AuthController(
 
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
-    @PostMapping("/v1/request-token")
+    @PostMapping("/v1/login")
     fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<TokenResponseDTO> =
 
         runCatching {
