@@ -31,11 +31,12 @@ class AuthController(
 
         runCatching {
             LOG.debug("Token request with login Request Username: ${loginRequestDTO.username}")
+            println("LOGINREQUESTDTO: $loginRequestDTO")
             val auth: Authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(loginRequestDTO.username, loginRequestDTO.password)
             )
             LOG.debug("User Authenticated: ${auth.name}")
-            //todo: "Make sure caller cam read the token. Turn it into a hashmap?"
+            //todo: "Make sure caller can read the token. Turn it into a hashmap?"
             ResponseEntity.ok(TokenResponseDTO("Login Successful", tokenService.generateToken(auth)))
         }.getOrElse {
             LOG.error("Failed to authenticate: ${it.message}")

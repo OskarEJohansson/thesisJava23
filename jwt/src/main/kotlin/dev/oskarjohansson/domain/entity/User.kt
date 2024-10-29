@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.MongoId
 
-@Document(collation = "Users")
+@Document(collection = "Users")
 data class User(
     @MongoId
     val id: String,

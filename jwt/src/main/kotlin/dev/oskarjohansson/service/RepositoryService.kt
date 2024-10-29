@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service
 class RepositoryService(private val userRepository: UserRepository) {
 
     fun getUserByUsername(username: String): User {
-      return runCatching {
-            requireNotNull(userRepository.findByUsername(username))
-        }.getOrElse {
-            throw UsernameNotFoundException("Error retrieving user", it)
-        }
+        return userRepository.findByUsername(username) ?: throw UsernameNotFoundException(
+            "Error retrieving user $username"
+        )
     }
 }

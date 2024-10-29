@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -20,17 +21,18 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 
 @Configuration
+@EnableWebSecurity
 class SecurityConfiguration {
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
 
     @Bean
-    fun passwordEncoder(passwordEncoder: PasswordEncoder): PasswordEncoder = BCryptPasswordEncoder()
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun getPublicKeyFromTokenService(): RSAPublicKey {
         return runCatching {
-            runBlocking { ApiService().getPublicKey("/ADD-ENDPOINT") }
+            runBlocking { ApiService().getPublicKey() }
         }.getOrElse {
             LOG.error("Failed to retrieve RSA public key: ${it.message}, Stacktrace: ${it}")
             when (it) {
@@ -61,7 +63,9 @@ class SecurityConfiguration {
             .csrf { it.disable() }
             .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .authorizeHttpRequests { it.anyRequest().authenticated() }
+            .authorizeHttpRequests {
+                it.requestMatchers("/user/v1/register-user", "/user/v1/login").permitAll()
+                it.anyRequest().authenticated() }
             .build()
     }
 

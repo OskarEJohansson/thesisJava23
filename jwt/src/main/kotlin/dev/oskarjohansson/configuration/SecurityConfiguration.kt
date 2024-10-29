@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -22,7 +23,6 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.stereotype.Component
 
 @Configuration
-@Component
 @EnableWebSecurity
 class SecurityConfiguration {
 
@@ -45,7 +45,6 @@ class SecurityConfiguration {
     @Bean
     fun generateRsaKey(): RSAKey = Jwks().generateRSA()
 
-    // TODO: Make sure the JWKSet(rsaKey) does not need .key
     @Bean
     fun jwksSource(rsaKey: RSAKey): JWKSource<SecurityContext> =
         JWKSource { jwkSelector, _ -> jwkSelector.select(JWKSet(rsaKey)) }
@@ -64,16 +63,14 @@ class SecurityConfiguration {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        // TODO: Set up proper security filter chain 
-
         return http
-            .csrf { csrf -> csrf.disable() }
-            .sessionManagement { sesssion -> sesssion.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .authorizeHttpRequests { auth ->
-                auth
-                    .requestMatchers("/public-key-controller/v1/public-key").permitAll()
-                    .requestMatchers("/authentication/v1/login").authenticated()
-                    .anyRequest().authenticated()
+            .csrf { it.disable() }
+            .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .authorizeHttpRequests {
+                it.requestMatchers("/public-key-controller/v1/public-key").permitAll()
+                it.requestMatchers("/authentication/v1/login").permitAll()
+                it.anyRequest().authenticated()
             }
             .build()
     }

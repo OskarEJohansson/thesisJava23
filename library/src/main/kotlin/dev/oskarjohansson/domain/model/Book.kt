@@ -3,7 +3,7 @@ package dev.oskarjohansson.domain.model
 import dev.oskarjohansson.domain.enums.Genres
 import org.springframework.data.mongodb.core.mapping.Document
 
-@Document(collation = "Books")
+@Document(collection = "Books")
 data class Book(
     val bookId: String,
     val title: String,

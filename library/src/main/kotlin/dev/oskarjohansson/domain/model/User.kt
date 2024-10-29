@@ -5,10 +5,10 @@ import org.springframework.data.mongodb.core.aggregation.VariableOperators
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
-@Document(collation = "Users")
+@Document(collection = "Users")
 data class User(
     val id: String?,
-    val email: Email,
+    val email: String,
     val username: String,
     val password: String,
     val role: Role,
