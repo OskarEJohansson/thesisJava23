@@ -56,6 +56,7 @@ class ApiService() {
         }
     }
 
+    // TODO: Move to Library and turn return class into a Result
     suspend fun loginUser(loginRequest: LoginRequestDTO): String {
         return runCatching {
 

@@ -1,6 +1,6 @@
 package dev.oskarjohansson.api.controller
 
-import dev.oskarjohansson.api.dto.TokenResponseDTO
+import dev.oskarjohansson.api.dto.ResponseDTO
 import dev.oskarjohansson.model.LoginRequestDTO
 import dev.oskarjohansson.service.TokenService
 import jakarta.validation.Valid
@@ -27,7 +27,7 @@ class AuthController(
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
     @PostMapping("/v1/login")
-    fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<TokenResponseDTO> =
+    fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO> =
 
         runCatching {
             LOG.debug("Token request with login Request Username: ${loginRequestDTO.username}")
@@ -37,10 +37,10 @@ class AuthController(
             )
             LOG.debug("User Authenticated: ${auth.name}")
             //todo: "Make sure caller can read the token. Turn it into a hashmap?"
-            ResponseEntity.ok(TokenResponseDTO("Login Successful", tokenService.generateToken(auth)))
+            ResponseEntity.ok(ResponseDTO("Login Successful", tokenService.generateToken(auth)))
         }.getOrElse {
             LOG.error("Failed to authenticate: ${it.message}")
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenResponseDTO("Invalid login credentials", ""))
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO("Invalid login credentials", ""))
         }
 
 }

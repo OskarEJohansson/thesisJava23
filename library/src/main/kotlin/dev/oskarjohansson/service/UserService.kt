@@ -17,4 +17,8 @@ class UserService(
 
         return userRepository.save(createUserObject(userDTO, passwordEncoder))
     }
+
+    fun getUsers(): List<User>{
+        return userRepository.findAll() ?: throw IllegalStateException("Could not find any users")
+    }
 }
