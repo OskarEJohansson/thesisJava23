@@ -1,7 +1,5 @@
 package dev.oskarjohansson.domain.model
 
-import jakarta.validation.constraints.Email
-import org.springframework.data.mongodb.core.aggregation.VariableOperators
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
