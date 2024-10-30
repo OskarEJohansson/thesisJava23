@@ -3,6 +3,7 @@ package dev.oskarjohansson.api.controller
 import dev.oskarjohansson.api.dto.ResponseDTO
 import dev.oskarjohansson.model.LoginRequestDTO
 import dev.oskarjohansson.service.TokenService
+import io.ktor.util.*
 import jakarta.validation.Valid
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/authentication")
 class AuthController(
     private val tokenService: TokenService,
-    private val authenticationManager: AuthenticationManager
+    private val authenticationManager: AuthenticationManager,
 ) {
 
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
@@ -30,11 +32,11 @@ class AuthController(
     fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO> =
 
         runCatching {
-            LOG.debug("Token request with login Request Username: ${loginRequestDTO.username}")
-            println("LOGINREQUESTDTO: $loginRequestDTO")
             val auth: Authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(loginRequestDTO.username, loginRequestDTO.password)
             )
+
+
             LOG.debug("User Authenticated: ${auth.name}")
             //todo: "Make sure caller can read the token. Turn it into a hashmap?"
             ResponseEntity.ok(ResponseDTO("Login Successful", tokenService.generateToken(auth)))

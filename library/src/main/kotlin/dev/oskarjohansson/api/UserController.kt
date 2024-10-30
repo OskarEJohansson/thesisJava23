@@ -1,7 +1,7 @@
 package dev.oskarjohansson.api
 
+import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.api.dto.UserDTO
-import dev.oskarjohansson.model.LoginRequestDTO
 import dev.oskarjohansson.service.ApiService
 import dev.oskarjohansson.service.UserService
 
@@ -18,20 +18,22 @@ class UserController(private val userService: UserService, private val apiServic
     @PostMapping("/v1/login")
     fun login(@Valid @RequestBody loginRequest: LoginRequestDTO): ResponseEntity<String> {
         return runCatching {
-            ResponseEntity.status(HttpStatus.OK).body(runBlocking { userService.loginUser(loginRequest) } )
-        }.getOrElse { throw IllegalArgumentException("Could not login user: ${it.message}") }
-    }
-
-    @PostMapping("/v1/register-user")
-    fun registerUser(@Valid @RequestBody registerUser: UserDTO): ResponseEntity<String> {
-
-        return runCatching {
-            userService.registerUser(registerUser)
-             ResponseEntity.ok("User registered successfully")
+            ResponseEntity.status(HttpStatus.OK).body(runBlocking { userService.loginUser(loginRequest) })
         }.getOrElse {
-            ResponseEntity.badRequest().body("Could not register user, ${it.message}")
+            ResponseEntity.badRequest().body("Could not login user: ${it.message}")
         }
     }
+
+        @PostMapping("/v1/register-user")
+        fun registerUser(@Valid @RequestBody registerUser: UserDTO): ResponseEntity<String> {
+
+            return runCatching {
+                userService.registerUser(registerUser)
+                ResponseEntity.ok("User registered successfully")
+            }.getOrElse {
+                ResponseEntity.badRequest().body("Could not register user, ${it.message}")
+            }
+        }
 
 
 //    @PutMapping
@@ -44,4 +46,4 @@ class UserController(private val userService: UserService, private val apiServic
 //        TODO("Add logic for deleting a user")
 //    }
 
-}
+    }

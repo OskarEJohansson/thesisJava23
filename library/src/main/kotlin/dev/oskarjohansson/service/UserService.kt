@@ -1,8 +1,9 @@
 package dev.oskarjohansson.service
 
+import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.api.dto.UserDTO
 import dev.oskarjohansson.domain.model.User
-import dev.oskarjohansson.model.LoginRequestDTO
+
 import dev.oskarjohansson.respository.UserRepository
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -60,7 +61,7 @@ class UserService(
             return Json.parseToJsonElement(response.bodyAsText()).jsonObject["token"]?.jsonPrimitive?.content
                 ?: throw IllegalStateException("Could not log in user")
         } else {
-            throw IllegalArgumentException("Error logging in, ${response.status}")
+            throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
     }
 }

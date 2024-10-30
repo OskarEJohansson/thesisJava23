@@ -1,6 +1,8 @@
 package dev.oskarjohansson.service
 
 import dev.oskarjohansson.domain.entity.User
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -11,12 +13,19 @@ import org.springframework.security.core.userdetails.User as SecurityCoreUser
 @Service
 class UserDetailService(private val repositoryService: RepositoryService) : UserDetailsService {
 
+    private val LOG: Logger = LoggerFactory.getLogger(UserDetailService::class.java)
+
     override fun loadUserByUsername(username: String): UserDetails {
         return runCatching {
+
+            LOG.debug("Attempting to load user by username: $username")
+            val user = repositoryService.getUserByUsername(username)
             createUserDetailsAndGrantAuthority(
-                repositoryService.getUserByUsername(username)
+                user
             )
-        }.getOrElse { throw UsernameNotFoundException("Username not found")}
+        }.getOrElse {
+            LOG.debug("Failed to load user by username: $username")
+            throw UsernameNotFoundException("Username not found")}
     }
 
     fun createUserDetailsAndGrantAuthority(user: User): UserDetails =
