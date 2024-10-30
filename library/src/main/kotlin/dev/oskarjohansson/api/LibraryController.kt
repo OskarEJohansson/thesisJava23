@@ -1,21 +1,27 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.domain.model.Author
-import dev.oskarjohansson.domain.model.Book
+import dev.oskarjohansson.domain.service.AuthorService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LibraryController
+class LibraryController(private val authorService: AuthorService) {
 
 
-//    @PostMapping
-//    fun registerBook():ResponseEntity<String>{
-//        TODO("Add logic for registering a book")
-//    }
+    @PostMapping
+    fun registerBook(@Valid @RequestBody authorName: String): ResponseEntity<String> {
+
+        return runCatching {
+            ResponseEntity.ok().body(authorService.save(authorName).toString())
+        }.getOrElse {
+            ResponseEntity.badRequest().body("Could not save author ${authorName}, ${it.message}")
+        }
+
+
+    }
 //
 //    @PostMapping
 //    fun registerAuthor():ResponseEntity<String>{
@@ -64,4 +70,4 @@ class LibraryController
 //
 //
 //
-//}
+}

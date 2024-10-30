@@ -24,16 +24,16 @@ class UserController(private val userService: UserService, private val apiServic
         }
     }
 
-        @PostMapping("/v1/register-user")
-        fun registerUser(@Valid @RequestBody registerUser: UserDTO): ResponseEntity<String> {
+    @PostMapping("/v1/register-user")
+    fun registerUser(@Valid @RequestBody registerUser: UserDTO): ResponseEntity<String> {
 
-            return runCatching {
-                userService.registerUser(registerUser)
-                ResponseEntity.ok("User registered successfully")
-            }.getOrElse {
-                ResponseEntity.badRequest().body("Could not register user, ${it.message}")
-            }
+        return runCatching {
+            userService.registerUser(registerUser)
+            ResponseEntity.ok("User registered successfully")
+        }.getOrElse {
+            ResponseEntity.badRequest().body("Could not register user, ${it.message}")
         }
+    }
 
 
 //    @PutMapping
@@ -46,4 +46,4 @@ class UserController(private val userService: UserService, private val apiServic
 //        TODO("Add logic for deleting a user")
 //    }
 
-    }
+}
