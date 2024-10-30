@@ -2,9 +2,8 @@ package dev.oskarjohansson.service
 
 import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.api.dto.UserDTO
-import dev.oskarjohansson.domain.model.User
-
-import dev.oskarjohansson.respository.UserRepository
+import dev.oskarjohansson.model.User
+import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*

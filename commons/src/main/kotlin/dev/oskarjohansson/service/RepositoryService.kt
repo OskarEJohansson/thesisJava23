@@ -1,6 +1,7 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.domain.entity.User
+
+import dev.oskarjohansson.model.User
 import dev.oskarjohansson.repository.UserRepository
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service

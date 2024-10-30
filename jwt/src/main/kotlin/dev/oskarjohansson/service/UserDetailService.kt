@@ -1,6 +1,6 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.domain.entity.User
+import dev.oskarjohansson.model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.userdetails.UserDetails

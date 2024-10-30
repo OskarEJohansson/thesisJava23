@@ -1,7 +1,8 @@
 package dev.oskarjohansson.api
 
 import dev.oskarjohansson.api.dto.ResponseDTO
-import dev.oskarjohansson.domain.model.User
+import dev.oskarjohansson.model.User
+
 import dev.oskarjohansson.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
