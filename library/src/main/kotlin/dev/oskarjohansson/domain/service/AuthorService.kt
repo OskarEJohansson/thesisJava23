@@ -11,9 +11,9 @@ class AuthorService(private val authorRepository: AuthorRepository) {
 
     fun save(authorName: String): Author {
         authorRepository.findByAuthorName(authorName)?.let {
-            throw IllegalStateException("Author already exist, ${it.authorName} ")
+            throw IllegalStateException("Author already exist, ${it.authorName}, id: ${it.authorId} ")
         }
 
-        return authorRepository.save(Author(null, authorName, null))
+        return authorRepository.save(Author(authorName = authorName))
     }
 }

@@ -1,6 +1,5 @@
 package dev.oskarjohansson.model
 
-import com.mongodb.internal.connection.Time
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.apache.tomcat.jni.Library
@@ -12,7 +11,7 @@ import java.time.LocalDateTime
 @Document(collection = "Users")
 data class User(
     @MongoId
-    val id: String?,
+    val id: String? = null,
     val email: String,
     @NotBlank(message = "Username must not be empty") @Size(
         min = 4,
@@ -28,5 +27,5 @@ data class User(
     val password: String,
     val role: Role,
     val dateJoined: LocalDateTime,
-    val library: Library?
+    val library: Library? = null
 )

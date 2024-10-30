@@ -35,10 +35,7 @@ class AuthController(
             val auth: Authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(loginRequestDTO.username, loginRequestDTO.password)
             )
-
-
             LOG.debug("User Authenticated: ${auth.name}")
-            //todo: "Make sure caller can read the token. Turn it into a hashmap?"
             ResponseEntity.ok(ResponseDTO("Login Successful", tokenService.generateToken(auth)))
         }.getOrElse {
             LOG.error("Failed to authenticate: ${it.message}")
