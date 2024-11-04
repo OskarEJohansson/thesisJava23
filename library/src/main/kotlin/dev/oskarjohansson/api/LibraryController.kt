@@ -1,6 +1,7 @@
 package dev.oskarjohansson.api
 
 import dev.oskarjohansson.api.dto.BookDTO
+import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.domain.service.AuthorService
@@ -17,12 +18,18 @@ class LibraryController(private val authorService: AuthorService, private val bo
 
 
     @PostMapping
-    fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<String> {
+    fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<ResponseDTO<Author>> {
 
         return runCatching {
-            ResponseEntity.ok().body(authorService.save(authorName).toString())
+            ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", authorService.save(authorName)))
         }.getOrElse {
-            ResponseEntity.badRequest().body("Could not save author ${authorName}, ${it.message}")
+            ResponseEntity.badRequest().body(
+                ResponseDTO(
+                    HttpStatus.BAD_REQUEST.value(),
+                    message = "Could not save author ${authorName}, ${it.message}"
+                )
+            )
         }
     }
 
@@ -30,8 +37,8 @@ class LibraryController(private val authorService: AuthorService, private val bo
     fun registerBook(@Valid @RequestBody book: BookDTO): ResponseEntity<ResponseDTO<Book>> {
 
         return runCatching {
-            ResponseEntity.ok()
-                .body(ResponseDTO(status = HttpStatus.OK.value(), "Book saved", data = bookService.saveBook(book)))
+            ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseDTO(status = HttpStatus.CREATED.value(), "Book saved", data = bookService.saveBook(book)))
         }.getOrElse {
             ResponseEntity.badRequest().body(
                 ResponseDTO(
@@ -40,9 +47,10 @@ class LibraryController(private val authorService: AuthorService, private val bo
                 )
             )
         }
-
-
     }
+
+    @PostMapping
+    fun createReview
 //
 //    @PostMapping
 //    fun registerReview():ResponseEntity<String>{
