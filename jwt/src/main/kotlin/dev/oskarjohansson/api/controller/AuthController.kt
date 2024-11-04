@@ -36,9 +36,9 @@ class AuthController(
             )
             LOG.debug("User Authenticated: ${auth.name}")
             ResponseEntity.ok(ResponseDTO(HttpStatus.OK.value(), message = "Login Successful", tokenService.generateToken(auth)))
+
         }.getOrElse {
             LOG.error("Failed to authenticate: ${it.message}")
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value() ,"Invalid login credentials" ))
         }
-
 }

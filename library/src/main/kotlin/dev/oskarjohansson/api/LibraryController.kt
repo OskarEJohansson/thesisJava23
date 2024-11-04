@@ -1,8 +1,10 @@
 package dev.oskarjohansson.api
 
 import dev.oskarjohansson.api.dto.BookDTO
+import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
+import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.domain.service.AuthorService
 import dev.oskarjohansson.domain.service.BookService
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 class LibraryController(private val authorService: AuthorService, private val bookService: BookService) {
 
 
-    @PostMapping
+    @PostMapping("/v1/register-author")
     fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<ResponseDTO<Author>> {
 
         return runCatching {
@@ -33,7 +35,7 @@ class LibraryController(private val authorService: AuthorService, private val bo
         }
     }
 
-    @PostMapping
+    @PostMapping("/v1/register-book")
     fun registerBook(@Valid @RequestBody book: BookDTO): ResponseEntity<ResponseDTO<Book>> {
 
         return runCatching {
@@ -49,9 +51,15 @@ class LibraryController(private val authorService: AuthorService, private val bo
         }
     }
 
-    @PostMapping
-    fun createReview
+//    @PostMapping
+//    fun createReview(@Valid @RequestBody review: ReviewDTO): ResponseEntity<ResponseDTO<Review>> {
 //
+//        // TODO: Take in a review
+//        // TODO: Check that bookID exist
+//        // TODO: Check that userID exist
+//        // TODO: Save review or throw exception
+//
+//    }
 //    @PostMapping
 //    fun registerReview():ResponseEntity<String>{
 //        TODO("Add logic for registering a Review")

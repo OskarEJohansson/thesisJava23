@@ -56,8 +56,10 @@ class UserService(
                 setBody(loginRequestDTO)
             }
         }
+
+        LOG.debug("response in caller value: ${response.status.value}")
         if (response.status.isSuccess()) {
-            return Json.parseToJsonElement(response.bodyAsText()).jsonObject["token"]?.jsonPrimitive?.content
+            return Json.parseToJsonElement(response.bodyAsText()).jsonObject["data"]?.jsonPrimitive?.content
                 ?: throw IllegalStateException("Could not log in user")
         } else {
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
