@@ -11,6 +11,6 @@ data class Book(
     val title: String,
     val authorIds: List<String>,
     val reviewIds: List<String>? = null,
-    val genres: Genres,
-    val isbn: String?
+    val genres: Genres?,
+    val isbn: String? = null
 )

@@ -1,6 +1,7 @@
 package dev.oskarjohansson.service
 
 import dev.oskarjohansson.api.dto.UserDTO
+import dev.oskarjohansson.domain.service.BookService
 import dev.oskarjohansson.model.Role
 import dev.oskarjohansson.model.User
 
@@ -19,3 +20,4 @@ fun UserService.createUserObject(user: UserDTO, passwordEncoder: PasswordEncoder
         null
     )
 }
+

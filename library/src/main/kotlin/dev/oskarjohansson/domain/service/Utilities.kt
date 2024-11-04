@@ -1,5 +1,6 @@
 package dev.oskarjohansson.domain.service
 
-class Utilities {
+import dev.oskarjohansson.respository.AuthorRepository
 
-}
+
+

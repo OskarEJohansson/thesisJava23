@@ -1,6 +1,6 @@
 package dev.oskarjohansson.api.controller
 
-import dev.oskarjohansson.api.dto.ResponseDTO
+import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.model.LoginRequestDTO
 import dev.oskarjohansson.service.TokenService
 import io.ktor.util.*
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -29,17 +28,17 @@ class AuthController(
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
     @PostMapping("/v1/login")
-    fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO> =
+    fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO<String>> =
 
         runCatching {
             val auth: Authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(loginRequestDTO.username, loginRequestDTO.password)
             )
             LOG.debug("User Authenticated: ${auth.name}")
-            ResponseEntity.ok(ResponseDTO("Login Successful", tokenService.generateToken(auth)))
+            ResponseEntity.ok(ResponseDTO(HttpStatus.OK.value(), message = "Login Successful", tokenService.generateToken(auth)))
         }.getOrElse {
             LOG.error("Failed to authenticate: ${it.message}")
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO("Invalid login credentials", ""))
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value() ,"Invalid login credentials" ))
         }
 
 }

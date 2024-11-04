@@ -1,6 +1,6 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.api.dto.ResponseDTO
+import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.model.User
 
 import dev.oskarjohansson.service.UserService

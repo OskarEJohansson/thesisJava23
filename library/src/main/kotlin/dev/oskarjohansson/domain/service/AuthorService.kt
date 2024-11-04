@@ -16,4 +16,10 @@ class AuthorService(private val authorRepository: AuthorRepository) {
 
         return authorRepository.save(Author(authorName = authorName))
     }
+
+    fun getOrCreateAuthor(authorName: String): String?{
+        return authorRepository.findByAuthorName(authorName)?.authorId ?: authorRepository.save(Author(authorName = authorName)).authorId
+    }
+
+
 }
