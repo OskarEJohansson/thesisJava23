@@ -4,16 +4,20 @@ import dev.oskarjohansson.service.ApiService
 import io.ktor.client.plugins.*
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
 import java.lang.IllegalStateException
 import java.security.interfaces.RSAPublicKey
@@ -55,6 +59,7 @@ class SecurityConfiguration {
     fun jwtDecoder(rsaPublicKey: RSAPublicKey): JwtDecoder {
         return NimbusJwtDecoder.withPublicKey(rsaPublicKey).build()
     }
+
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {

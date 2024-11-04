@@ -22,4 +22,8 @@ class BookService(private val bookRepository: BookRepository, private val author
                     genres = book.genre))
         }.getOrThrow()
     }
+
+    fun findBookById(bookId: String): Boolean{
+        return bookRepository.findById(bookId).isPresent
+    }
 }

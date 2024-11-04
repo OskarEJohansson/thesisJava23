@@ -59,8 +59,9 @@ class UserService(
 
         LOG.debug("response in caller value: ${response.status.value}")
         if (response.status.isSuccess()) {
+            LOG.debug("Response status for api call to login user,status: ${response.status.value}")
             return Json.parseToJsonElement(response.bodyAsText()).jsonObject["data"]?.jsonPrimitive?.content
-                ?: throw IllegalStateException("Could not log in user")
+                ?: throw IllegalStateException("Error parsing response from api, ${response.status}, \n request: ${response.request}")
         } else {
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }

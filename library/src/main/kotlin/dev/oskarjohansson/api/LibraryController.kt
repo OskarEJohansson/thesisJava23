@@ -8,15 +8,19 @@ import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.domain.service.AuthorService
 import dev.oskarjohansson.domain.service.BookService
+import dev.oskarjohansson.domain.service.ReviewService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import java.security.Principal
 
 @RestController
-class LibraryController(private val authorService: AuthorService, private val bookService: BookService) {
+class LibraryController(private val authorService: AuthorService, private val bookService: BookService, private val reviewService: ReviewService) {
 
 
     @PostMapping("/v1/register-author")
@@ -51,15 +55,21 @@ class LibraryController(private val authorService: AuthorService, private val bo
         }
     }
 
-//    @PostMapping
-//    fun createReview(@Valid @RequestBody review: ReviewDTO): ResponseEntity<ResponseDTO<Review>> {
-//
-//        // TODO: Take in a review
-//        // TODO: Check that bookID exist
-//        // TODO: Check that userID exist
-//        // TODO: Save review or throw exception
-//
-//    }
+    @PostMapping
+    fun createReview(@AuthenticationPrincipal jwt: Jwt, @Valid @RequestBody review: ReviewDTO): ResponseEntity<ResponseDTO<Review>> {
+
+        return runCatching {
+
+
+            val review = reviewService.createReview(review, jwt)
+
+
+            ResponseEntity.status(HttpStatus.CREATED).body(ResponseDTO(HttpStatus.CREATED.value(), "Review created", review ))
+
+        }.getOrElse { ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not save review")) }
+
+
+    }
 //    @PostMapping
 //    fun registerReview():ResponseEntity<String>{
 //        TODO("Add logic for registering a Review")
