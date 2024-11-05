@@ -8,3 +8,5 @@ data class ReviewDTO(
     val rating:Int,
     val bookId: String)
 
+// TODO: ADD validation for maximum number of characters for text and 1-5 range for rating
+

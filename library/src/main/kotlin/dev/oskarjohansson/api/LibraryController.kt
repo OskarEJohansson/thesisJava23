@@ -68,11 +68,14 @@ class LibraryController(
     ): ResponseEntity<ResponseDTO<Review>> {
 
         return runCatching {
-
-            val review = reviewService.createReview(review, jwt)
-
             ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDTO(HttpStatus.CREATED.value(), "Review created", review))
+                .body(
+                    ResponseDTO(
+                        HttpStatus.CREATED.value(),
+                        "Review created",
+                        reviewService.createReview(review, jwt)
+                    )
+                )
 
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -81,11 +84,7 @@ class LibraryController(
 
 
     }
-//    @PostMapping
-//    fun registerReview():ResponseEntity<String>{
-//        TODO("Add logic for registering a Review")
-//    }
-//
+
 //    @GetMapping
 //    fun getBooks():ResponseEntity<List<Book>>{
 //        TODO("Add logic for retrieving all books")

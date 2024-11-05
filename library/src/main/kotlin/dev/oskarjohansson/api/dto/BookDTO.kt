@@ -9,3 +9,4 @@ data class BookDTO(
     val authorName: String,
     val genre: Genres,
     val isbn:String? = null)
+

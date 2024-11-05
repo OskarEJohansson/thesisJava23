@@ -1,4 +1,4 @@
-package dev.oskarjohansson.controller
+package dev.oskarjohansson.domain.service
 
 
 import com.fasterxml.jackson.databind.ObjectMapper

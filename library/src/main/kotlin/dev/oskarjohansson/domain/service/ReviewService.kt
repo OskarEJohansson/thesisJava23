@@ -13,7 +13,6 @@ class ReviewService(private val bookService: BookService, private val reviewRepo
 
     fun createReview(review: ReviewDTO, jwt: Jwt): Review {
         return runCatching {
-
             jwt.claims["userId"]?.toString()
                 ?.takeIf { bookService.findBookById(review.bookId) }
                 ?.let { userId -> createReviewFromReviewDto(review, userId) }
