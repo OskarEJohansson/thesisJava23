@@ -1,14 +1,17 @@
 package dev.oskarjohansson.domain.enums
 
-enum class Genres(
-    FICTION:String,
-    NON_FICTION:String,
-    FANTASY:String,
-    MYSTERY:String,
-    ROMANCE:String,
-    SCIENCE_FICTION:String,
-    THRILLER:String,
-    HORROR:String,
-    HISTORICAL:String,
-    BIOGRAPH:String,
-)
+import org.springframework.validation.annotation.Validated
+
+@Validated
+enum class Genres{
+    FICTION,
+    NON_FICTION,
+    FANTASY,
+    MYSTERY,
+    ROMANCE,
+    SCIENCE_FICTION,
+    THRILLER,
+    HORROR,
+    HISTORICAL,
+    BIOGRAPHY
+}

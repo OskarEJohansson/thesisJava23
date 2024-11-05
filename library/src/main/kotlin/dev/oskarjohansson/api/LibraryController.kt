@@ -16,11 +16,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.security.Principal
+
 
 @RestController
-class LibraryController(private val authorService: AuthorService, private val bookService: BookService, private val reviewService: ReviewService) {
+@RequestMapping("/library")
+class LibraryController(
+    private val authorService: AuthorService,
+    private val bookService: BookService,
+    private val reviewService: ReviewService
+) {
 
 
     @PostMapping("/v1/register-author")
@@ -55,18 +61,23 @@ class LibraryController(private val authorService: AuthorService, private val bo
         }
     }
 
-    @PostMapping
-    fun createReview(@AuthenticationPrincipal jwt: Jwt, @Valid @RequestBody review: ReviewDTO): ResponseEntity<ResponseDTO<Review>> {
+    @PostMapping("/v1/create-review")
+    fun createReview(
+        @AuthenticationPrincipal jwt: Jwt,
+        @Valid @RequestBody review: ReviewDTO
+    ): ResponseEntity<ResponseDTO<Review>> {
 
         return runCatching {
 
-
             val review = reviewService.createReview(review, jwt)
 
+            ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseDTO(HttpStatus.CREATED.value(), "Review created", review))
 
-            ResponseEntity.status(HttpStatus.CREATED).body(ResponseDTO(HttpStatus.CREATED.value(), "Review created", review ))
-
-        }.getOrElse { ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not save review")) }
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not save review"))
+        }
 
 
     }

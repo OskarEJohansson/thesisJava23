@@ -2,31 +2,24 @@ package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Review
-import io.ktor.http.*
+import dev.oskarjohansson.respository.ReviewRepository
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
-import java.lang.IllegalStateException
-import java.security.Principal
+import kotlin.IllegalStateException
 
 
 @Service
-class ReviewService(private val reviewService: ReviewService, private val bookService: BookService) {
+class ReviewService(private val bookService: BookService, private val reviewRepository: ReviewRepository) {
 
+    fun createReview(review: ReviewDTO, jwt: Jwt): Review {
+        return runCatching {
 
-    // TODO: Read out the userId from the JWT claim from @AuthenticationPrincipal and
-    fun createReview(review: ReviewDTO, jwt:Jwt): Review? {
-
-        // TODO: Check that userID exist
-       val userId = jwt.claims["userId"].toString()
-
-        //TODO: Check that bookID exist
-        if(bookService.findBookById(review.bookId)) {
-
-
-            // TODO: Save review or throw exception
-        }
-
-        return null
-
+            jwt.claims["userId"]?.toString()
+                ?.takeIf { bookService.findBookById(review.bookId) }
+                ?.let { userId -> createReviewFromReviewDto(review, userId) }
+                ?.let { review -> reviewRepository.save(review) }
+                ?: throw IllegalStateException("Invalid userId or bookId ")
+        }.getOrElse { throw IllegalStateException("Could not save review, ${it.message}") }
     }
+
 }

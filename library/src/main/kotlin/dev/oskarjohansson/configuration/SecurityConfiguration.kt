@@ -70,7 +70,9 @@ class SecurityConfiguration {
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers("/user/v1/register-user", "/user/v1/login", "/admin/v1/users").permitAll()
-                it.anyRequest().authenticated() }
+                it.requestMatchers("/library/*").hasRole("User")
+                it.anyRequest().authenticated()
+            }
             .build()
     }
 
