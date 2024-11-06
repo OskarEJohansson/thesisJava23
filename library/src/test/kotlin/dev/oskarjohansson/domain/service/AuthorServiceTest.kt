@@ -43,7 +43,6 @@ class AuthorServiceTest {
         every { repository.findByAuthorName(any()) } returns null
         every { repository.save(any()) } returns Author("123", "author2", null)
 
-
         assertEquals("123", service.getOrCreateAuthor("NAME") )
     }
 

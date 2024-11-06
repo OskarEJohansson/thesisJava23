@@ -1,19 +1,23 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 
-class UserDetailServiceTest(@Autowired private val userDetailService: UserDetailService) {
+class UserDetailServiceTest() {
+
+    private val repository = mockk<RepositoryService>()
+    private val userDetailService = UserDetailService(repository)
 
     @Test
     fun `test global exception handling for UserNotFound working`() {
 
+        every { repository.getUserByUsername(any()) } returns mockk()
+
+        assertThrows<UsernameNotFoundException> {
+            userDetailService.loadUserByUsername("user")
+        }
     }
 }

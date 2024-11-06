@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder
 ) {
-
     private val LOG: Logger = LoggerFactory.getLogger(UserService::class.java)
 
     val client = HttpClient(CIO) {

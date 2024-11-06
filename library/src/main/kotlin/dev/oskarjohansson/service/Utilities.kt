@@ -8,8 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
 
 
-fun UserService.createUserObject(user: UserDTO, passwordEncoder: PasswordEncoder): User {
-    return User(
+fun createUserObject(user: UserDTO, passwordEncoder: PasswordEncoder): User = User(
         null,
         user.email,
         user.username,
@@ -18,5 +17,3 @@ fun UserService.createUserObject(user: UserDTO, passwordEncoder: PasswordEncoder
         LocalDateTime.now(),
         null
     )
-}
-
