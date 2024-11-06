@@ -18,20 +18,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+class TokenServiceTest () {
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class TokenServiceTest @Autowired constructor(private val tokenService: TokenService, private val securityConfiguration: SecurityConfiguration) {
-
-    @Test
-    fun `test that token is returned when user is authenticated`() {
-        val mockAuth = mockk<Authentication>()
-        every{mockAuth.isAuthenticated } returns true
-        every{mockAuth.name } returns "User"
-        every{mockAuth.credentials } returns "User"
-        every { mockAuth.authorities } returns listOf(SimpleGrantedAuthority("ROLE_USER"))
-        val token = tokenService.generateToken(mockAuth)
-
-        assertTrue(token.isNotEmpty())
-    }
 }

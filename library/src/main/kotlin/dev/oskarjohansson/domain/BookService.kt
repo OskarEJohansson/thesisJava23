@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.service
+package dev.oskarjohansson.domain
 
 
 import dev.oskarjohansson.api.dto.BookDTO

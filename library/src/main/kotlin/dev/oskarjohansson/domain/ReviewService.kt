@@ -1,10 +1,11 @@
-package dev.oskarjohansson.domain.service
+package dev.oskarjohansson.domain
 
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.respository.ReviewRepository
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 import kotlin.IllegalStateException
 
 
@@ -17,8 +18,7 @@ class ReviewService(private val bookService: BookService, private val reviewRepo
                 ?.takeIf { bookService.findBookById(review.bookId) }
                 ?.let { userId -> createReviewFromReviewDto(review, userId) }
                 ?.let { review -> reviewRepository.save(review) }
-                ?: throw IllegalStateException("Invalid userId or bookId ")
-        }.getOrElse { throw IllegalStateException("Could not save review, ${it.message}") }
+                ?: throw IllegalArgumentException("Invalid userId or bookId ")
+        }.getOrThrow()
     }
-
 }
