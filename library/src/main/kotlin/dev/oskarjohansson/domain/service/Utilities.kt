@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain
+package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Review

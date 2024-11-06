@@ -1,7 +1,6 @@
 package dev.oskarjohansson.service
 
 import dev.oskarjohansson.api.dto.UserDTO
-import dev.oskarjohansson.domain.BookService
 import dev.oskarjohansson.model.Role
 import dev.oskarjohansson.model.User
 

@@ -6,9 +6,9 @@ import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.model.ResponseDTO
-import dev.oskarjohansson.domain.AuthorService
-import dev.oskarjohansson.domain.BookService
-import dev.oskarjohansson.domain.ReviewService
+import dev.oskarjohansson.domain.service.AuthorService
+import dev.oskarjohansson.domain.service.BookService
+import dev.oskarjohansson.domain.service.ReviewService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

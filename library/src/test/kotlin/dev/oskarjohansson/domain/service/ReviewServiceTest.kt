@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain
+package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.respository.ReviewRepository
@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.oauth2.jwt.Jwt
 
 import kotlin.IllegalStateException

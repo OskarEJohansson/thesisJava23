@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain
+package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Review
@@ -6,7 +6,6 @@ import dev.oskarjohansson.respository.ReviewRepository
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
-import kotlin.IllegalStateException
 
 
 @Service
