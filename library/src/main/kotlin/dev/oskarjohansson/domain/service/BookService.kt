@@ -17,21 +17,26 @@ class BookService(private val bookRepository: BookRepository, private val author
         return runCatching {
             val authorID = authorService.getOrCreateAuthor(book.authorName)
                 ?: throw IllegalStateException(
-                    "Failed to create or retrieve author: ${book.authorName}}")
+                    "Failed to create or retrieve author: ${book.authorName}}"
+                )
 
             bookRepository.save(
-                Book(title = book.title,
+                Book(
+                    title = book.title,
                     authorIds = listOf(authorID),
-                    genres = book.genre))
+                    genres = book.genre
+                )
+            )
         }.getOrThrow()
     }
 
-    fun findBookById(bookId: String): Boolean{
+    fun findBookById(bookId: String): Boolean {
         return bookRepository.findById(bookId).isPresent
     }
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
+        // TODO: finish map and find out how to return a page with the bookResponseDTO
         val books = bookRepository.findAll(pageable)
-        books.map{ book -> book.toBookResponseDTO(authorService.createAuthorResponseDTO(book.authorIds))    }
+        return books.map { book -> book.toBookResponseDTO(authorService.createAuthorResponseDTO(book.authorIds)) }
     }
 }

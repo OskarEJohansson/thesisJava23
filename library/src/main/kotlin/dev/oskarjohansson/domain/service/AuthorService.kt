@@ -26,12 +26,14 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     }
 
     fun createAuthorResponseDTO(authors: List<String>): List<AuthorResponseDTO> {
+
+        // TODO: Try to refactor this to remove !! in the authorResponseDTO
         return authors.map { authorId ->
             authorRepository.findById(authorId).orElse(null)
                 ?.takeIf { it.authorId != null }
-                ?.let { AuthorResponseDTO(it.authorId!!, it.authorName)
-
-            }?: throw IllegalStateException("Author ID is null for author with name ${author.authorName})
+                ?.let {
+                    AuthorResponseDTO(it.authorId!!, it.authorName)
+                } ?: throw IllegalStateException("Author with id ${authorId} not found or Id is null.")
         }
     }
 

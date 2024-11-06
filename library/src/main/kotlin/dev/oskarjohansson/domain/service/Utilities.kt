@@ -16,13 +16,15 @@ fun createReviewFromReviewDto(review: ReviewDTO, userId: String): Review = Revie
     userId = userId,
 )
 
-fun Book.toBookResponseDTO(authors:AuthorResponseDTO) {
-    BookResponseDTO(
-        bookId = this.bookId,
-        title = this.title,
-        authors = listOf(authors),
-        genres = this.genres
-    )
+fun Book.toBookResponseDTO(authors:List<AuthorResponseDTO>) {
+    this.bookId?. let {
+        BookResponseDTO(
+            bookId = this.bookId,
+            title = this.title,
+            authors = authors,
+            genres = this.genres
+        )
+    }
 }
 
 fun createAuthorResonseDTOList(authorId:String){

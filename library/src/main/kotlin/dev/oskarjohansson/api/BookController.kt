@@ -41,6 +41,7 @@ class BookController(private val bookService: BookService) {
     @GetMapping("/v1/books")
     fun books(pageable: Pageable): ResponseEntity<ResponseDTO<Page<BookResponseDTO>>>{
 
+        // TODO: Finish controller and service
         return runCatching {
             ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO(status = HttpStatus.OK.value(), message = "All books in the repository" , data =  bookService.getBooks(pageable))
