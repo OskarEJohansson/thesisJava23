@@ -1,9 +1,7 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.api.dto.BookDTO
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Author
-import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.domain.service.AuthorService
@@ -40,22 +38,6 @@ class LibraryController(
                 ResponseDTO(
                     HttpStatus.BAD_REQUEST.value(),
                     message = "Could not save author ${authorName}, ${it.message}"
-                )
-            )
-        }
-    }
-
-    @PostMapping("/v1/register-book")
-    fun registerBook(@Valid @RequestBody book: BookDTO): ResponseEntity<ResponseDTO<Book>> {
-
-        return runCatching {
-            ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDTO(status = HttpStatus.CREATED.value(), "Book saved", data = bookService.saveBook(book)))
-        }.getOrElse {
-            ResponseEntity.badRequest().body(
-                ResponseDTO(
-                    HttpStatus.BAD_REQUEST.value(),
-                    "Could not save book title: ${book.title} and author: ${book.authorName}, message: ${it.message}"
                 )
             )
         }

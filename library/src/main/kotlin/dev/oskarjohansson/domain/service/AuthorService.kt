@@ -1,10 +1,12 @@
 package dev.oskarjohansson.domain.service
 
 
+import dev.oskarjohansson.api.dto.AuthorResponseDTO
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.respository.AuthorRepository
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 
 @Service
@@ -18,11 +20,20 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         return authorRepository.save(Author(authorName = authorName))
     }
 
-    fun getOrCreateAuthor(authorName: String): String?{
+    fun getOrCreateAuthor(authorName: String): String? {
         return authorRepository.findByAuthorName(authorName)?.authorId
-            ?:
-            authorRepository.save(Author(authorName = authorName)).authorId
+            ?: authorRepository.save(Author(authorName = authorName)).authorId
     }
 
+    fun createAuthorResponseDTO(authors: List<String>): List<AuthorResponseDTO> {
+        return authors.map { authorId ->
+            authorRepository.findById(authorId).orElse(null)
+                ?.takeIf { it.authorId != null }
+                ?.let { AuthorResponseDTO(it.authorId!!, it.authorName)
+
+            }?: throw IllegalStateException("Author ID is null for author with name ${author.authorName})
+        }
+    }
 
 }
+
