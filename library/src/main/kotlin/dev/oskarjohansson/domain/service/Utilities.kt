@@ -16,21 +16,17 @@ fun createReviewFromReviewDto(review: ReviewDTO, userId: String): Review = Revie
     userId = userId,
 )
 
-fun Book.toBookResponseDTO(authors:List<AuthorResponseDTO>) {
-    this.bookId?. let {
+fun Book.toBookResponseDTO(authors: List<AuthorResponseDTO>): BookResponseDTO {
+    return this.bookId?.let {
         BookResponseDTO(
             bookId = this.bookId,
             title = this.title,
             authors = authors,
             genres = this.genres
         )
-    }
+    } ?: throw IllegalStateException("Error creating toBookResponseDTO due to $this bookId is null")
 }
 
-fun createAuthorResonseDTOList(authorId:String){
 
-
-
-}
 
 

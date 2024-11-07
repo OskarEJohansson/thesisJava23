@@ -35,8 +35,12 @@ class BookService(private val bookRepository: BookRepository, private val author
     }
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
-        // TODO: finish map and find out how to return a page with the bookResponseDTO
+
         val books = bookRepository.findAll(pageable)
-        return books.map { book -> book.toBookResponseDTO(authorService.createAuthorResponseDTO(book.authorIds)) }
+
+        return books.map { book ->
+            book.toBookResponseDTO(authorService.createAuthorResponseDTO(book.authorIds))
+        }
     }
+
 }

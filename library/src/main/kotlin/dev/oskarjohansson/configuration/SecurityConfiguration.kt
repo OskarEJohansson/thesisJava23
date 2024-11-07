@@ -4,28 +4,25 @@ import dev.oskarjohansson.service.ApiService
 import io.ktor.client.plugins.*
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.web.config.EnableSpringDataWebSupport
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
-import java.lang.IllegalStateException
-import java.security.interfaces.RSAPublicKey
 import java.io.IOException
 import java.net.SocketTimeoutException
+import java.security.interfaces.RSAPublicKey
 
 @Configuration
 @EnableWebSecurity
+@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 class SecurityConfiguration {
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
@@ -70,7 +67,8 @@ class SecurityConfiguration {
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers("/user/v1/register-user", "/user/v1/login", "/admin/v1/users").permitAll()
-                it.requestMatchers("/library/*").hasRole("User")
+                it.requestMatchers("/v3/*","/v3/api-docs/swagger-config", "/swagger-ui/*").permitAll()
+                it.requestMatchers("/book/*").hasRole("User")
                 it.anyRequest().authenticated()
             }
             .build()

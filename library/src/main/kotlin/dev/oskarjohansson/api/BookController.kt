@@ -1,5 +1,6 @@
 package dev.oskarjohansson.api
 
+import com.sun.net.httpserver.HttpsServer
 import dev.oskarjohansson.api.dto.BookRequestDTO
 import dev.oskarjohansson.api.dto.BookResponseDTO
 import dev.oskarjohansson.domain.model.Book
@@ -27,7 +28,13 @@ class BookController(private val bookService: BookService) {
 
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDTO(status = HttpStatus.CREATED.value(), "Book saved", data = bookService.saveBook(book)))
+                .body(
+                    ResponseDTO(
+                        HttpStatus.CREATED.value(),
+                        "Book saved",
+                        bookService.saveBook(book)
+                    )
+                )
         }.getOrElse {
             ResponseEntity.badRequest().body(
                 ResponseDTO(
@@ -39,15 +46,27 @@ class BookController(private val bookService: BookService) {
     }
 
     @GetMapping("/v1/books")
-    fun books(pageable: Pageable): ResponseEntity<ResponseDTO<Page<BookResponseDTO>>>{
+    fun books(pageable: Pageable): ResponseEntity<ResponseDTO<Page<BookResponseDTO>>> {
 
-        // TODO: Finish controller and service
         return runCatching {
             ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDTO(status = HttpStatus.OK.value(), message = "All books in the repository" , data =  bookService.getBooks(pageable))
-        }.getOrThrow()
+                .body(
+                    ResponseDTO(
+                        HttpStatus.OK.value(),
+                        "All books in the repository",
+                        bookService.getBooks(pageable)
+                    )
+                )
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(
+                    ResponseDTO(
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        "Could not retrieve books from the repository: ${it.message}"
+                    )
+                )
+        }
     }
-
 
 
 }
