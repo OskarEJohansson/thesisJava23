@@ -28,15 +28,14 @@ class AuthorService(private val authorRepository: AuthorRepository) {
 
     // TODO: Write tests
     fun createAuthorResponseDTO(authors: List<String>): List<AuthorResponseDTO> {
-        return authors.map { authorId ->
-            authorRepository.findById(authorId).getOrNull()?.let {
-                it.authorId?.run {
-                    AuthorResponseDTO(it.authorId, it.authorName)
-                } ?: throw IllegalStateException("Id for Author not found: ${it.authorName}")
-            } ?: throw IllegalArgumentException("Author with id $authorId not found")
+
+        return authors.mapNotNull { authorId ->
+            authorRepository.findById(authorId).getOrNull()
+                ?.let {
+                    AuthorResponseDTO(it.authorId!!, it.authorName)
+                }
         }
     }
-
 
 }
 
