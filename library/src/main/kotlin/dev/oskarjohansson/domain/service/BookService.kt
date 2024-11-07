@@ -8,26 +8,15 @@ import dev.oskarjohansson.respository.BookRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.lang.IllegalStateException
 
 @Service
 class BookService(private val bookRepository: BookRepository, private val authorService: AuthorService) {
 
     fun saveBook(book: BookRequestDTO): Book {
-
-        return runCatching {
-            val authorID = authorService.getOrCreateAuthor(book.authorName)
-                ?: throw IllegalStateException(
-                    "Failed to create or retrieve author: ${book.authorName}}"
-                )
-
-            bookRepository.save(
-                Book(
-                    title = book.title,
-                    authorIds = listOf(authorID),
-                    genres = book.genre
-                )
-            )
-        }.getOrThrow()
+        return authorService.getOrCreateAuthor(book.authorName)?.let {
+            bookRepository.save(Book(authorIds = listOf(it), title = book.title, genres = book.genre))
+        } ?: throw java.lang.IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
     }
 
     fun findBookById(bookId: String): Boolean {
@@ -35,12 +24,11 @@ class BookService(private val bookRepository: BookRepository, private val author
     }
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
-
-        val books = bookRepository.findAll(pageable)
-
-        return books.map { book ->
-            book.toBookResponseDTO(authorService.createAuthorResponseDTO(book.authorIds))
+        return bookRepository.findAll(pageable).map { book ->
+            book
+                .toBookResponseDTO(
+                    authorService.createAuthorResponseDTO(book.authorIds)
+                )
         }
     }
-
 }

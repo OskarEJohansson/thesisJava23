@@ -26,6 +26,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
             ?: authorRepository.save(Author(authorName = authorName)).authorId
     }
 
+    // TODO: Write tests
     fun createAuthorResponseDTO(authors: List<String>): List<AuthorResponseDTO> {
         return authors.map { authorId ->
             authorRepository.findById(authorId).getOrNull()?.let {
