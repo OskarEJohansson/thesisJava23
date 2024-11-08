@@ -39,19 +39,9 @@ class AuthorService(private val authorRepository: AuthorRepository) {
             ?: throw IllegalStateException("Failed to create or retrieve Author $authorName")
 
 
-
-
-
-
     fun getAuthors(pageable: Pageable): Page<Author> {
     return authorRepository.findAll(pageable)
     }
 
-
-//    .map { author ->
-//        author.authorId?.let { authorId ->
-//            author.toAuthorResponseDTO(createBookInAuthorResponseDTO(authorId))
-//        }
-//    }
 }
 

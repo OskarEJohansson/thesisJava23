@@ -23,6 +23,7 @@ class AuthorController(private val libraryService: LibraryService) {
     @PostMapping("/v1/register-author")
     fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<ResponseDTO<Author>> {
 
+        // TODO: CHANGE RESPONSE TO AUTHORRESPONSEDTO 
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", libraryService.saveAuthor(authorName)))
