@@ -34,13 +34,4 @@ class BookService(private val bookRepository: BookRepository, private val dtoSer
             }
         }.getOrElse { throw IllegalStateException("Error while loading books: ${it.message}") }
     }
-
-//    fun createBookInAuthorResponseDTO(publishedBooksId: List<String>?): List<BookInAuthorResponseDTO> {
-//
-//        return publishedBooksId?.mapNotNull { bookId ->
-//            bookRepository.findById(bookId).getOrNull()?.let {
-//                BookInAuthorResponseDTO(it.bookId!!, it.title)
-//            }
-//        } ?: listOf(BookInAuthorResponseDTO("0", "No published books"))
-//    }
 }

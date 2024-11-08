@@ -22,17 +22,10 @@ class DtoService(private val authorRepository: AuthorRepository, private val boo
 
     fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO> {
 
-        return bookRepository.findByAuthorIds(authorId)?.map {
-            book ->
+        return bookRepository.findByAuthorIds(authorId)?.map { book ->
             BookInAuthorResponseDTO(book.bookId!!, book.title)
         } ?: listOf(BookInAuthorResponseDTO("0", "No published books"))
 
-//        // TODO: put up side down, take authorID and find in book repository and filter as all authors has 0 books in its entity
-//        return authorId?.mapNotNull { bookId ->
-//            bookRepository.findById(bookId).getOrNull()?.let {
-//                BookInAuthorResponseDTO(it.bookId!!, it.title)
-//            }
-//        } ?: listOf(BookInAuthorResponseDTO("0", "No published books"))
     }
 
     fun getOrCreateAuthor(authorName: String): String? {
