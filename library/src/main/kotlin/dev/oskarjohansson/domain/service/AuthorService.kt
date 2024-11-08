@@ -21,25 +21,13 @@ class AuthorService(private val authorRepository: AuthorRepository, private val 
     }
 
 
-
-//    fun createAuthorResponseDTO(listOfAuthorIds: List<String>): List<AuthorInBookResponseDTO> {
-//
-//        return listOfAuthorIds.mapNotNull { authorId ->
-//            authorRepository.findById(authorId).getOrNull()?.let {
-//                AuthorInBookResponseDTO(it.authorId!!, it.authorName)
-//            }
-//        }
-//    }
-
     fun createPageableAuthor(pageable: Pageable): Page<AuthorResponseDTO> {
-        return authorRepository.findAll(pageable).map { author ->
-            takeIf {author.authorId != null}
-            author.toAuthorResponseDTO(
-                dtoService.createBookInAuthorResponseDTO(author.publishedBooksId)
-            )
-
-        }
-
+        return authorRepository.findAll(pageable)
+            .map { author ->
+                author.authorId?.let { authorId ->
+                    author.toAuthorResponseDTO(dtoService.createBookInAuthorResponseDTO(authorId))
+                }
+            }
     }
 
 }

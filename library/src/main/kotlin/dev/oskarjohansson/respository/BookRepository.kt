@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BookRepository :MongoRepository<Book, String> {
+
+
+    fun findByAuthorIds(authorId:String): List<Book>?
 }
