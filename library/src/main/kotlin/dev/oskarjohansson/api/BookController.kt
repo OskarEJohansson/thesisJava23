@@ -5,6 +5,7 @@ import dev.oskarjohansson.api.dto.BookRequestDTO
 import dev.oskarjohansson.api.dto.BookResponseDTO
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.service.BookService
+import dev.oskarjohansson.domain.service.LibraryService
 import dev.oskarjohansson.model.ResponseDTO
 
 import jakarta.validation.Valid
@@ -20,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/book")
-class BookController(private val bookService: BookService) {
+class BookController(private val libraryService: LibraryService) {
 
 
     @PostMapping("/v1/register-book")
-    fun registerBook(@Valid @RequestBody book: BookRequestDTO): ResponseEntity<ResponseDTO<Book>> {
+    fun registerBook(@Valid @RequestBody book: BookRequestDTO): ResponseEntity<ResponseDTO<BookResponseDTO>> {
 
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)
@@ -32,7 +33,7 @@ class BookController(private val bookService: BookService) {
                     ResponseDTO(
                         HttpStatus.CREATED.value(),
                         "Book saved",
-                        bookService.saveBook(book)
+                        libraryService.saveBook(book)
                     )
                 )
         }.getOrElse {
@@ -54,7 +55,7 @@ class BookController(private val bookService: BookService) {
                     ResponseDTO(
                         HttpStatus.OK.value(),
                         "All books in the repository",
-                        bookService.getBooks(pageable)
+                        libraryService.getBooks(pageable)
                     )
                 )
         }.getOrElse {
@@ -68,7 +69,7 @@ class BookController(private val bookService: BookService) {
         }
     }
 
-    // TODO: book, a controller that send a specifik book based on the bookId to the caller
+    // TODO: book, a controller that send a specific book based on the bookId to the caller
 
 
 }

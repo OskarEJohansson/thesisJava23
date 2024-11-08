@@ -7,6 +7,7 @@ import dev.oskarjohansson.domain.model.Review
 
 import java.time.LocalDateTime
 
+// TODO: Create into an extension function of ReviewDTO
 fun createReviewFromReviewDto(review: ReviewDTO, userId: String): Review = Review(
     text = review.review,
     rating = review.rating,

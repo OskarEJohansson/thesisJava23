@@ -3,7 +3,7 @@ package dev.oskarjohansson.api
 import dev.oskarjohansson.api.dto.AuthorResponseDTO
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.service.AuthorService
-import dev.oskarjohansson.domain.service.DtoService
+import dev.oskarjohansson.domain.service.LibraryService
 import dev.oskarjohansson.model.ResponseDTO
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/author")
-class AuthorController(private val authorService: AuthorService) {
+class AuthorController(private val libraryService: LibraryService) {
 
     @PostMapping("/v1/register-author")
     fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<ResponseDTO<Author>> {
 
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", authorService.save(authorName)))
+                .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", libraryService.saveAuthor(authorName)))
         }.getOrElse {
             ResponseEntity.badRequest().body(
                 ResponseDTO(
@@ -46,7 +46,7 @@ class AuthorController(private val authorService: AuthorService) {
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "All authors in the database",
-                    authorService.createPageableAuthor(pageable)
+                    libraryService.getAuthors(pageable)
                 )
             )
         }.getOrElse {

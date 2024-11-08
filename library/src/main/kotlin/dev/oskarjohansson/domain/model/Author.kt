@@ -7,8 +7,6 @@ import org.springframework.data.mongodb.core.mapping.MongoId
 data class Author(
     @MongoId
     val authorId: String? = null,
-    val authorName: String,
-    // TODO: PublishedBooks contain reviewIds. Find better suiting name for the variable.
-    val publishedBooksId: List<String>? = null
+    val authorName: String
 ) {
 }

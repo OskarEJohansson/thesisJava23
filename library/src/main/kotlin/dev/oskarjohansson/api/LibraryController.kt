@@ -5,8 +5,6 @@ import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.domain.service.AuthorService
 import dev.oskarjohansson.model.ResponseDTO
-import dev.oskarjohansson.domain.service.DtoService
-import dev.oskarjohansson.domain.service.BookService
 import dev.oskarjohansson.domain.service.ReviewService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -25,23 +23,6 @@ class LibraryController(
     private val authorService: AuthorService,
     private val reviewService: ReviewService
 ) {
-
-
-    @PostMapping("/v1/register-author")
-    fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<ResponseDTO<Author>> {
-
-        return runCatching {
-            ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", authorService.save(authorName)))
-        }.getOrElse {
-            ResponseEntity.badRequest().body(
-                ResponseDTO(
-                    HttpStatus.BAD_REQUEST.value(),
-                    message = "Could not save author ${authorName}, ${it.message}"
-                )
-            )
-        }
-    }
 
     @PostMapping("/v1/create-review")
     fun createReview(

@@ -1,6 +1,7 @@
 package dev.oskarjohansson.domain.service
 
 
+import dev.oskarjohansson.api.dto.BookInAuthorResponseDTO
 import dev.oskarjohansson.api.dto.BookRequestDTO
 import dev.oskarjohansson.api.dto.BookResponseDTO
 import dev.oskarjohansson.domain.model.Book
@@ -10,28 +11,26 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
-class BookService(private val bookRepository: BookRepository, private val dtoService: DtoService) {
+class BookService(private val bookRepository: BookRepository) {
 
-    fun saveBook(book: BookRequestDTO): Book {
-        return dtoService.getOrCreateAuthor(book.authorName)?.let {
-            bookRepository.save(Book(authorIds = listOf(it), title = book.title, genres = book.genre))
-        } ?: throw IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
+    fun saveBook(book: BookRequestDTO, authorId: String): Book {
+        return bookRepository.save(Book(authorIds = listOf(authorId), title = book.title, genres = book.genre))
+        ?: throw IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
     }
 
     fun findBookById(bookId: String): Boolean {
         return bookRepository.findById(bookId).isPresent
     }
 
-    fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
+    fun findAllBooksPageable(pageable: Pageable) : Page<Book> = bookRepository.findAll(pageable)
 
-        return runCatching {
-            bookRepository.findAll(pageable).map { book ->
-                takeIf { book.bookId != null }
-                book
-                    .toBookResponseDTO(
-                        dtoService.createAuthorResponseDTO(book.authorIds)
-                    )
-            }
-        }.getOrElse { throw IllegalStateException("Error while loading books: ${it.message}") }
+
+
+    fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO> {
+
+        return bookRepository.findByAuthorIds(authorId)?.map { book ->
+            BookInAuthorResponseDTO(book.bookId!!, book.title)
+        } ?: listOf(BookInAuthorResponseDTO("0", "No published books"))
+
     }
 }
