@@ -2,9 +2,9 @@ package dev.oskarjohansson.api.dto
 
 import dev.oskarjohansson.domain.enums.Genres
 
-class BookResponseDTO(
+data class BookResponseDTO(
     val bookId: String,
     val title: String,
-    val authors: List<AuthorResponseDTO>,
+    val authors: List<AuthorInBookResponseDTO>,
     val genres: Genres,
 )

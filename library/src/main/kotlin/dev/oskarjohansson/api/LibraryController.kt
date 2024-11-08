@@ -3,8 +3,9 @@ package dev.oskarjohansson.api
 import dev.oskarjohansson.api.dto.ReviewDTO
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Review
-import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.domain.service.AuthorService
+import dev.oskarjohansson.model.ResponseDTO
+import dev.oskarjohansson.domain.service.DtoService
 import dev.oskarjohansson.domain.service.BookService
 import dev.oskarjohansson.domain.service.ReviewService
 import jakarta.validation.Valid
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/library")
 class LibraryController(
     private val authorService: AuthorService,
-    private val bookService: BookService,
     private val reviewService: ReviewService
 ) {
 

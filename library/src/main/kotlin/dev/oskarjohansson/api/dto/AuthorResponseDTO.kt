@@ -1,4 +1,8 @@
 package dev.oskarjohansson.api.dto
 
-class AuthorResponseDTO(val authorId: String, val authorName: String) {
-}
+data class AuthorResponseDTO(
+    val authorID: String,
+    val authorName: String,
+    val publishedBooks: List<BookInAuthorResponseDTO>
+
+)

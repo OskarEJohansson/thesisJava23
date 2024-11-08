@@ -8,15 +8,14 @@ import dev.oskarjohansson.respository.BookRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.lang.IllegalStateException
 
 @Service
-class BookService(private val bookRepository: BookRepository, private val authorService: AuthorService) {
+class BookService(private val bookRepository: BookRepository, private val dtoService: DtoService) {
 
     fun saveBook(book: BookRequestDTO): Book {
-        return authorService.getOrCreateAuthor(book.authorName)?.let {
+        return dtoService.getOrCreateAuthor(book.authorName)?.let {
             bookRepository.save(Book(authorIds = listOf(it), title = book.title, genres = book.genre))
-        } ?: throw java.lang.IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
+        } ?: throw IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
     }
 
     fun findBookById(bookId: String): Boolean {
@@ -24,11 +23,24 @@ class BookService(private val bookRepository: BookRepository, private val author
     }
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
-        return bookRepository.findAll(pageable).map { book ->
-            book
-                .toBookResponseDTO(
-                    authorService.createAuthorResponseDTO(book.authorIds)
-                )
-        }
+
+        return runCatching {
+            bookRepository.findAll(pageable).map { book ->
+                takeIf { book.bookId != null }
+                book
+                    .toBookResponseDTO(
+                        dtoService.createAuthorResponseDTO(book.authorIds)
+                    )
+            }
+        }.getOrElse { throw IllegalStateException("Error while loading books: ${it.message}") }
     }
+
+//    fun createBookInAuthorResponseDTO(publishedBooksId: List<String>?): List<BookInAuthorResponseDTO> {
+//
+//        return publishedBooksId?.mapNotNull { bookId ->
+//            bookRepository.findById(bookId).getOrNull()?.let {
+//                BookInAuthorResponseDTO(it.bookId!!, it.title)
+//            }
+//        } ?: listOf(BookInAuthorResponseDTO("0", "No published books"))
+//    }
 }

@@ -9,6 +9,6 @@ data class Author(
     val authorId: String? = null,
     val authorName: String,
     // TODO: PublishedBooks contain reviewIds. Find better suiting name for the variable.
-    val publishedBooks: List<String>? = null
+    val publishedBooksId: List<String>? = null
 ) {
 }

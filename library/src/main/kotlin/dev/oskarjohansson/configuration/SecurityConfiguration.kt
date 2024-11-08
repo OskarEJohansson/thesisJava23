@@ -66,9 +66,10 @@ class SecurityConfiguration {
             .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/user/v1/register-user", "/user/v1/login", "/admin/v1/users").permitAll()
-                it.requestMatchers("/v3/*","/v3/api-docs/swagger-config", "/swagger-ui/*").permitAll()
-                it.requestMatchers("/book/*").hasRole("User")
+                it.requestMatchers("/user/v1/register-user", "/user/v1/login").permitAll()
+                it.requestMatchers("/v3/*","/v3/api-docs/swagger-config", "/swagger-ui/*").permitAll() // TODO: Find out how to to do this security chain safe when using a browser
+                it.requestMatchers("/book/*", "/author/*", "/review/*").hasRole("User")
+                it.requestMatchers("/admin/*").hasRole("Admin")
                 it.anyRequest().authenticated()
             }
             .build()

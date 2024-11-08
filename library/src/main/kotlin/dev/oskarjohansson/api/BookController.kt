@@ -68,5 +68,7 @@ class BookController(private val bookService: BookService) {
         }
     }
 
+    // TODO: book, a controller that send a specifik book based on the bookId to the caller
+
 
 }

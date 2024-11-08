@@ -1,8 +1,7 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.AuthorResponseDTO
-import dev.oskarjohansson.api.dto.BookResponseDTO
-import dev.oskarjohansson.api.dto.ReviewDTO
+import dev.oskarjohansson.api.dto.*
+import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
 
@@ -16,16 +15,21 @@ fun createReviewFromReviewDto(review: ReviewDTO, userId: String): Review = Revie
     userId = userId,
 )
 
-fun Book.toBookResponseDTO(authors: List<AuthorResponseDTO>): BookResponseDTO {
-    return this.bookId?.let {
+fun Book.toBookResponseDTO(authors: List<AuthorInBookResponseDTO>): BookResponseDTO =
         BookResponseDTO(
-            bookId = this.bookId,
+            bookId = this.bookId!!,
             title = this.title,
             authors = authors,
             genres = this.genres
         )
-    } ?: throw IllegalStateException("Error creating toBookResponseDTO due to $this bookId is null")
-}
+
+
+fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>): AuthorResponseDTO =
+        AuthorResponseDTO(
+            this.authorId!!,
+            this.authorName,
+            books
+        )
 
 
 

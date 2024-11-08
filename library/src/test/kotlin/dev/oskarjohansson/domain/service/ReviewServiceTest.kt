@@ -14,11 +14,11 @@ import kotlin.test.Test
 
 class ReviewServiceTest {
 
-    val bookService = mockk<BookService>()
-    val reviewRepository = mockk<ReviewRepository>()
-    val jwt = mockk<Jwt>()
-    val reviewService = ReviewService(bookService, reviewRepository)
-    val reviewDto = ReviewDTO("Review 123", 5, "abcd")
+    private val bookService = mockk<BookService>()
+    private val reviewRepository = mockk<ReviewRepository>()
+    private val jwt = mockk<Jwt>()
+    private val reviewService = ReviewService(bookService, reviewRepository)
+    private val reviewDto = ReviewDTO("Review 123", 5, "abcd")
 
 
     @Test
@@ -49,7 +49,7 @@ class ReviewServiceTest {
     fun `test that repository throws different error when entity cant be persisted`() {
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { bookService.findBookById(reviewDto.bookId) } returns true
-        every { reviewRepository.save(any())}.throws(IllegalStateException("Cant persist object"))
+        every { reviewRepository.save(any())}.throws(IllegalStateException())
         assertThrows<IllegalStateException>{ reviewService.createReview(reviewDto, jwt) }
 
     }
