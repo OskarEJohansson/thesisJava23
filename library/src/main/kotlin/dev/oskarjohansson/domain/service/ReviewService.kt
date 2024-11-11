@@ -31,7 +31,9 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
     }
 
     fun createPageableReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
-        return reviewRepository.findByBookId(pageable, bookId)?.map { it.toReviewResponseDTO() }
+        return reviewRepository.findByBookId(pageable, bookId)?.map {review ->
+            review.toReviewResponseDTO()
+        }
             ?: throw IllegalStateException("Could not find any reviews for book $bookId")
     }
 }

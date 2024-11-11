@@ -1,6 +1,7 @@
 package dev.oskarjohansson.api
 
 import dev.oskarjohansson.api.dto.ReviewDTO
+import dev.oskarjohansson.api.dto.ReviewRequestDTO
 import dev.oskarjohansson.api.dto.ReviewResponseDTO
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.domain.service.LibraryService
@@ -42,19 +43,17 @@ class ReviewController(private val libraryService: LibraryService) {
 
     }
 
-    // TODO: VALIDATE BOOKID
     @GetMapping("/v1/get-reviews")
     fun getReviews(
         pageable: Pageable,
-        @RequestBody bookId: String
+        @RequestBody bookId: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<Page<ReviewResponseDTO>>> {
         return runCatching {
-
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "All reviews for book: $bookId",
-                    libraryService.getReviews(pageable, bookId)
+                    "All reviews for book:  ${libraryService.getBook(bookId.bookId).title}",
+                    libraryService.getReviews(pageable, bookId.bookId)
                 )
             )
 

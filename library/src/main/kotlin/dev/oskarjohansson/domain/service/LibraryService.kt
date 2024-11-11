@@ -26,8 +26,11 @@ class LibraryService(
         return savedBook.toBookResponseDTO(authors)
     }
 
-    fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
+    fun getBook(bookId: String): Book = bookService.findBookById(bookId)
 
+
+
+    fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
         return runCatching {
             bookService.findAllBooksPageable(pageable).map { book ->
                 book.takeIf { book.bookId != null }
@@ -60,18 +63,21 @@ class LibraryService(
     fun createReview(review: ReviewDTO, jwt: Jwt): Review {
         return run {
 
-            // TODO: A Check that userID exist
-            // TODO: B Check that book exist
+            // TODO: A Check that book exist
+            // TODO: B Check that userID exist
             // TODO: C Check If user has an existing review on Book
             // TODO: If C is true, return review Id else continue
             // TODO: Create review with reviewDTO and userId string
             // TODO:  propagate Error to controller
 
-            jwt.claims["userId"]?.toString()
-                ?.takeIf { bookService.findBookById(review.bookId) != null }
-                ?.takeIf { !reviewService.findReviewCreatedByUser(userId = it) }
-                ?.let { reviewService.createReview(review, it) }
-                ?: throw IllegalArgumentException("Could not find book with bookId: ${review.bookId}")
+            run {
+                bookService.findBookById(review.bookId)
+                jwt.claims["userId"]?.toString()
+                    ?.takeIf { !reviewService.findReviewCreatedByUser(userId = it) }
+                    ?.let { reviewService.createReview(review, it) }
+                    ?: throw IllegalArgumentException("Could not find book with bookId: ${review.bookId}")
+            }
+
         }
 
     }
@@ -79,15 +85,15 @@ class LibraryService(
     fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
 
         // TODO: A Find book and do a null check
-        // TODO: B Send list of reviewIds to reviewService 
+        // TODO: B Send list of reviewIds to reviewService
         // TODO: Map reviewIdList and fetch review
-        // TODO: Convert Review to ReviewResponseDTO 
-        // TODO: Collect in a Page<ReviewResponseDTO> 
+        // TODO: Convert Review to ReviewResponseDTO
+        // TODO: Collect in a Page<ReviewResponseDTO>
 
-
-        return bookService.findBookById(bookId)?.let { book ->
+        // TODO: CANT FIND BOOK ON ID
+        return bookService.findBookById(bookId).let { book ->
             reviewService.createPageableReviews(pageable, book.bookId!!)
-        } ?: throw IllegalStateException("Could not find book with bookId $bookId")
+        }
     }
 
 
