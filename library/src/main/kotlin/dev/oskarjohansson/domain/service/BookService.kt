@@ -24,11 +24,9 @@ class BookService(private val bookRepository: BookRepository) {
 
     fun findAllBooksPageable(pageable: Pageable) : Page<Book> = bookRepository.findAll(pageable)
 
-    // TODO: THE NO PUBLISHED BOOKS FUNCTION DOES NOT WORK 
-    fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO> {
+    fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO>? {
         return bookRepository.findByAuthorIds(authorId)?.map { book ->
             BookInAuthorResponseDTO(book.bookId!!, book.title)
-        } ?: listOf(BookInAuthorResponseDTO("0", "No published books"))
-
+        }
     }
 }

@@ -9,16 +9,23 @@ import java.lang.IllegalArgumentException
 
 
 @Service
-class ReviewService(private val bookService: BookService, private val reviewRepository: ReviewRepository) {
+class ReviewService(private val reviewRepository: ReviewRepository) {
 
-    // TODO: ADD FUNCTION TO CHECK IF USER ALREADY HAS A REVIEW ON OBJECT 
-    fun createReview(review: ReviewDTO, jwt: Jwt): Review {
-        return runCatching {
-            jwt.claims["userId"]?.toString()
-                ?.takeIf { bookService.findBookById(review.bookId) }
-                ?.let { userId -> createReviewFromReviewDto(review, userId) }
-                ?.let { review -> reviewRepository.save(review) }
-                ?: throw IllegalArgumentException("Invalid userId or bookId ")
-        }.getOrThrow()
+    fun createReview(review: ReviewDTO, userId: String): Review {
+
+        return run {
+            createReviewFromReviewDto(review, userId)
+                .let { reviewRepository.save(it) }
+        }
+    }
+
+    fun findReviewCreatedByUser(userId: String): Boolean {
+
+        return runCatching { reviewRepository.findByUserId(userId).isEmpty }.getOrElse {
+            throw IllegalArgumentException(
+                "Review exist for user with userId $userId",
+            )
+        }
+
     }
 }
