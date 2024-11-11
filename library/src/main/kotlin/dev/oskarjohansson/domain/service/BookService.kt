@@ -3,7 +3,6 @@ package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.BookInAuthorResponseDTO
 import dev.oskarjohansson.api.dto.BookRequestDTO
-import dev.oskarjohansson.api.dto.BookResponseDTO
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.respository.BookRepository
 import org.springframework.data.domain.Page
@@ -18,8 +17,8 @@ class BookService(private val bookRepository: BookRepository) {
         ?: throw IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
     }
 
-    fun findBookById(bookId: String): Boolean {
-        return bookRepository.findById(bookId).isPresent
+    fun findBookById(bookId: String): Book? {
+        return bookRepository.findByBookId(bookId)
     }
 
     fun findAllBooksPageable(pageable: Pageable) : Page<Book> = bookRepository.findAll(pageable)

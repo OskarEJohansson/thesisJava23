@@ -1,9 +1,6 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.AuthorResponseDTO
-import dev.oskarjohansson.api.dto.BookRequestDTO
-import dev.oskarjohansson.api.dto.BookResponseDTO
-import dev.oskarjohansson.api.dto.ReviewDTO
+import dev.oskarjohansson.api.dto.*
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
@@ -60,14 +57,8 @@ class LibraryService(
         }
     }
 
-    /* TODO: FIND OUT WHY MESSAGE WHEN REVIEW ALREADY EXIST LOOKS LIKE THIS:
-    Expected to read Document Document{{_id=6729ec9e6b5c99640509fade,
-    text=This is a great book!, rating=5, createdAt=Tue Nov 05 10:59:58 CET 2024, userId=6728ca2d572c957e4386f8e8, bookId=6729eb38c14eae0ffd536ac0,
-    _class=dev.oskarjohansson.domain.model.Review}} into type boolean but didn't find a PersistentEntity for the latter",
-     */
-
     fun createReview(review: ReviewDTO, jwt: Jwt): Review {
-        return run{
+        return run {
 
             // TODO: A Check that userID exist
             // TODO: B Check that book exist
@@ -77,11 +68,27 @@ class LibraryService(
             // TODO:  propagate Error to controller
 
             jwt.claims["userId"]?.toString()
-                ?.takeIf { bookService.findBookById(review.bookId)}
+                ?.takeIf { bookService.findBookById(review.bookId) != null }
                 ?.takeIf { !reviewService.findReviewCreatedByUser(userId = it) }
                 ?.let { reviewService.createReview(review, it) }
                 ?: throw IllegalArgumentException("Could not find book with bookId: ${review.bookId}")
         }
 
     }
+
+    fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
+
+        // TODO: A Find book and do a null check
+        // TODO: B Send list of reviewIds to reviewService 
+        // TODO: Map reviewIdList and fetch review
+        // TODO: Convert Review to ReviewResponseDTO 
+        // TODO: Collect in a Page<ReviewResponseDTO> 
+
+
+        return bookService.findBookById(bookId)?.let { book ->
+            reviewService.createPageableReviews(pageable, book.bookId!!)
+        } ?: throw IllegalStateException("Could not find book with bookId $bookId")
+    }
+
+
 }

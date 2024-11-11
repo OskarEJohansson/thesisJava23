@@ -9,4 +9,6 @@ interface BookRepository :MongoRepository<Book, String> {
 
 
     fun findByAuthorIds(authorId:String): List<Book>?
+
+    fun findByBookId(bookId: String): Book?
 }
