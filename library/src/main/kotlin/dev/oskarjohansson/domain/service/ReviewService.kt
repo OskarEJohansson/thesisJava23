@@ -21,13 +21,8 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
         }
     }
 
-    fun findReviewCreatedByUser(userId: String): Boolean {
-
-        return runCatching { reviewRepository.findByUserId(userId) != null }.getOrElse {
-            throw IllegalArgumentException(
-                "Review exist for user with userId $userId",
-            )
-        }
+    fun findReviewCreatedByUser(userId: String): Review? {
+        return  reviewRepository.findByUserId(userId)
     }
 
     fun createPageableReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {

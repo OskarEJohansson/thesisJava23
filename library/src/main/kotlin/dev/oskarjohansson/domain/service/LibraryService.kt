@@ -18,6 +18,8 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
+    // TODO: Should error handling be in each low level service and this service be clean?
+
     // TODO: REFACTOR WHEN ALL WORKS 
     fun saveBook(book: BookRequestDTO): BookResponseDTO {
         val authorId = authorService.getOrCreateAuthor(book.authorName)
@@ -26,10 +28,11 @@ class LibraryService(
         return savedBook.toBookResponseDTO(authors)
     }
 
-    fun getBook(bookId: String): Book = bookService.findBookById(bookId)
+    fun getBook(bookId: String): Book =
+        bookService.findBookById(bookId) ?: throw IllegalArgumentException("Could not find book with id $bookId")
 
 
-
+    // TODO: Remode takeIf and move throw to inside the run and remove catching and getOrElse?
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
         return runCatching {
             bookService.findAllBooksPageable(pageable).map { book ->
@@ -60,40 +63,34 @@ class LibraryService(
         }
     }
 
+    // TODO: Does not work again
     fun createReview(review: ReviewDTO, jwt: Jwt): Review {
         return run {
-
             // TODO: A Check that book exist
             // TODO: B Check that userID exist
             // TODO: C Check If user has an existing review on Book
             // TODO: If C is true, return review Id else continue
             // TODO: Create review with reviewDTO and userId string
             // TODO:  propagate Error to controller
-
             run {
-                bookService.findBookById(review.bookId)
+
                 jwt.claims["userId"]?.toString()
-                    ?.takeIf { !reviewService.findReviewCreatedByUser(userId = it) }
+                    ?.takeIf { bookService.findBookById(review.bookId) != null && reviewService.findReviewCreatedByUser(it) == null }
                     ?.let { reviewService.createReview(review, it) }
-                    ?: throw IllegalArgumentException("Could not find book with bookId: ${review.bookId}")
+                    ?: throw IllegalArgumentException("Could not create review")
             }
-
         }
-
     }
 
     fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
-
         // TODO: A Find book and do a null check
         // TODO: B Send list of reviewIds to reviewService
         // TODO: Map reviewIdList and fetch review
         // TODO: Convert Review to ReviewResponseDTO
         // TODO: Collect in a Page<ReviewResponseDTO>
-
-        // TODO: CANT FIND BOOK ON ID
-        return bookService.findBookById(bookId).let { book ->
+        return bookService.findBookById(bookId)?.let { book ->
             reviewService.createPageableReviews(pageable, book.bookId!!)
-        }
+        } ?: throw IllegalArgumentException("Could not save review")
     }
 
 
