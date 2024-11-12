@@ -43,6 +43,8 @@ class ReviewController(private val libraryService: LibraryService) {
 
     }
 
+    // TODO: LOOK AT REVIEWREQUETDTO for all controllers of review
+    // TODO: Change ReviewRequestDTO as it has bookId in get and ReviewId in delete
     @GetMapping("/v1/get-reviews")
     fun getReviews(
         pageable: Pageable,
@@ -52,8 +54,8 @@ class ReviewController(private val libraryService: LibraryService) {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "All reviews for book:  ${libraryService.getBook(bookId.bookId).title}",
-                    libraryService.getReviews(pageable, bookId.bookId)
+                    "All reviews for book:  ${libraryService.getBook(bookId.id).title}",
+                    libraryService.getReviews(pageable, bookId.id)
                 )
             )
 
@@ -65,5 +67,27 @@ class ReviewController(private val libraryService: LibraryService) {
                 )
             )
         }
+    }
+
+    @DeleteMapping("/v1/delete-review")
+    fun deleteReview(
+        @AuthenticationPrincipal jwt: Jwt,
+        @Valid @RequestBody reviewId: ReviewRequestDTO
+    ): ResponseEntity<ResponseDTO<Unit>> {
+
+        return runCatching {
+            ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDTO(
+                    HttpStatus.OK.value(),
+                    "Review deleted successfully",
+                    libraryService.deleteReview(jwt, reviewId.id)
+                )
+            )
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "Error deleting review with id $reviewId "))
+        }
+
     }
 }

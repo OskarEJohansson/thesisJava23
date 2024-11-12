@@ -63,7 +63,6 @@ class LibraryService(
         }
     }
 
-    // TODO: Does not work again
     fun createReview(review: ReviewDTO, jwt: Jwt): Review {
         return run {
             // TODO: A Check that book exist
@@ -72,14 +71,21 @@ class LibraryService(
             // TODO: If C is true, return review Id else continue
             // TODO: Create review with reviewDTO and userId string
             // TODO:  propagate Error to controller
-            run {
 
-                jwt.claims["userId"]?.toString()
-                    ?.takeIf { bookService.findBookById(review.bookId) != null && reviewService.findReviewCreatedByUser(it) == null }
-                    ?.let { reviewService.createReview(review, it) }
-                    ?: throw IllegalArgumentException("Could not create review")
-            }
+            val book = bookService.findBookById(review.bookId)
+                ?: throw IllegalArgumentException("No book found for Id ${review.bookId}")
+            val userId = jwt.claims["userId"].toString()
+            val existingReview = book.bookId?.let { reviewService.findByBookIdAndUserId(it, userId) }
+
+            review.takeIf {
+                println("Inside takeIf, $existingReview")
+                existingReview == null
+            }?.let {
+                reviewService.createReview(review, userId)
+            } ?: throw IllegalArgumentException("Review already exist for user, ${existingReview?.reviewId}")
         }
+
+
     }
 
     fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
@@ -93,5 +99,20 @@ class LibraryService(
         } ?: throw IllegalArgumentException("Could not save review")
     }
 
+    fun deleteReview(jwt: Jwt, reviewId: String) {
+        // TODO: Check that reviewId exist
+        // TODO: Check that userID in jwt exist on Review
+        // TODO: Delete review
 
+        val review = reviewService.findById(reviewId)
+            ?: throw IllegalArgumentException("No review found")
+
+        val user = jwt.claims["userId"].toString() == review.userId
+
+        return run {
+            review.reviewId?.takeIf {
+                user
+            }?.let { reviewService.deleteById(it) }
+        }
+    }
 }
