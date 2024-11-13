@@ -19,9 +19,9 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
-    fun saveBook(book: BookRequestDTO): BookResponseDTO {
-        val authorId = authorService.getOrCreateAuthor(book.authorName)
-        val savedBook = bookService.saveBook(book, authorId)
+    fun saveBook(bookRequest: BookRequestDTO): BookResponseDTO {
+        val authorIds = authorService.getOrCreateAuthors(bookRequest.authors)
+        val savedBook = bookService.saveBook(bookRequest, authorIds)
         val authors = authorService.createAuthorResponseDTO(savedBook.authorIds)
         return savedBook.toBookResponseDTO(authors)
     }

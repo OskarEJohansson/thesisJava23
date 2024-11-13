@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated
 @Validated
 data class BookRequestDTO(
     val title: String,
-    val authorName: String,
-    val genre: Genres,
+    val authors: List<String>,
+    val genre: Genres
 )
 

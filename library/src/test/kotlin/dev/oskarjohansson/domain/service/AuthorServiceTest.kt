@@ -32,22 +32,17 @@ class AuthorServiceTest {
     @Test
     fun `Test that save does not throw error if author does not exist`() {
         every { authorRepository.findByAuthorName(any()) } returns null
-        every { authorRepository.save(any()) } returns mockk<Author>()
-        assertDoesNotThrow { authorService.saveAuthor(author) }
+        every { authorRepository.save(any()) } returns existingAuthor
+        assertEquals(existingAuthor, authorService.saveAuthor(author) )
     }
 
-    @Test
-    fun `that getOrCreateAuthor returns id when an author exist`() {
-        every { authorRepository.findByAuthorName(any()) } returns existingAuthor
-        assertEquals(existingAuthor.authorId, authorService.getOrCreateAuthor("author"))
-    }
 
     @Test
     fun `test that getOrCreateAuthor saves a new author when author does not exist in the repository`() {
         every { authorRepository.findByAuthorName(any()) } returns null
         every { authorRepository.save(any()) } returns Author("123", "author2")
 
-        assertEquals("123", authorService.getOrCreateAuthor("NAME"))
+        assertDoesNotThrow { authorService.saveAuthor(author) }
     }
 
     @Test

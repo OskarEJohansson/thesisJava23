@@ -40,7 +40,7 @@ class BookController(private val libraryService: LibraryService) {
             ResponseEntity.badRequest().body(
                 ResponseDTO(
                     HttpStatus.BAD_REQUEST.value(),
-                    "Could not save book title: ${book.title} and author: ${book.authorName}, message: ${it.message}"
+                    "Could not save book title: ${book.title}, message: ${it.message}"
                 )
             )
         }

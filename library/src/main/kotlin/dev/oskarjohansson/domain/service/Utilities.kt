@@ -40,3 +40,10 @@ fun Review.toReviewResponseDTO(): ReviewResponseDTO = ReviewResponseDTO(
 
 )
 
+fun BookRequestDTO.toBook() = Book(
+    null,
+    title = this.title,
+    authorIds = this.authors,
+    genres = this.genre
+)
+
