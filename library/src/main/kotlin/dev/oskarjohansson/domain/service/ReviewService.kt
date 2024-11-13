@@ -7,17 +7,16 @@ import dev.oskarjohansson.respository.ReviewRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 
 
 @Service
 class ReviewService(private val reviewRepository: ReviewRepository) {
 
-    fun createReview(review: ReviewRequestDTO, userId: String): Review {
+    fun createReview(reviewRequest: ReviewRequestDTO, userId: String): Review {
 
-        return run {
-            createReviewFromReviewDto(review, userId)
-                .let { reviewRepository.save(it) }
-        }
+        return reviewRequest.toReview(userId)
+            .let { reviewRepository.save(it) }
     }
 
     fun findByBookIdAndUserId(bookId: String, userId: String): Review? {
