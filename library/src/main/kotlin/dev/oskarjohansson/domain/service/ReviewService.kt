@@ -7,7 +7,6 @@ import dev.oskarjohansson.respository.ReviewRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 
 
 @Service
@@ -28,15 +27,13 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
         } ?: throw IllegalStateException("Could not find any reviews for book $bookId")
     }
 
+    fun save(review: Review): Review = reviewRepository.save(review)
+
     fun findById(reviewId: String): Review? {
         return reviewRepository.findByReviewId(reviewId)
     }
 
     fun deleteById(reviewId: String) {
         return reviewRepository.deleteById(reviewId)
-    }
-
-    fun updateReview(review: Review): Review? {
-        return review.reviewId?.let { reviewRepository.updateByReviewId(it, review) }
     }
 }

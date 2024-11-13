@@ -33,7 +33,7 @@ class LibraryServiceTest {
         every { bookService.findBookById(any()) } returns book
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { reviewService.createReview(any(), any()) } returns review
-        assertDoesNotThrow { libraryService.createReview(reviewRequestDto, jwt) }
+        assertDoesNotThrow { libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
@@ -42,7 +42,7 @@ class LibraryServiceTest {
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { bookService.findBookById(any()) } returns book
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns review
-        assertThrows<IllegalArgumentException> { libraryService.createReview(reviewRequestDto, jwt) }
+        assertThrows<IllegalArgumentException> { libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
 
@@ -52,7 +52,7 @@ class LibraryServiceTest {
         every { bookService.findBookById(any()) } returns book
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns review
         every { jwt.claims } returns mapOf("userId" to "user123")
-        assertThrows<IllegalArgumentException> { libraryService.createReview(reviewRequestDto, jwt) }
+        assertThrows<IllegalArgumentException> { libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
@@ -62,7 +62,7 @@ class LibraryServiceTest {
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { reviewService.createReview(any(), any()) } returns review
-        assertDoesNotThrow{ libraryService.createReview(reviewRequestDto, jwt) }
+        assertDoesNotThrow{ libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
@@ -72,7 +72,7 @@ class LibraryServiceTest {
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { reviewService.createReview(any(), any()) } returns review
-        assertThrows<IllegalStateException>{ libraryService.createReview(reviewRequestDto, jwt) }
+        assertThrows<IllegalStateException>{ libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
@@ -81,7 +81,7 @@ class LibraryServiceTest {
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { reviewService.createReview(any(), any()) } throws IllegalStateException()
-        assertThrows<IllegalStateException>{ libraryService.createReview(reviewRequestDto, jwt) }
+        assertThrows<IllegalStateException>{ libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
 }

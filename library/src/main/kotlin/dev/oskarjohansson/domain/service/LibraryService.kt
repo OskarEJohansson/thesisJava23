@@ -30,7 +30,7 @@ class LibraryService(
         return authorService.saveAuthor(authorName)
     }
 
-    fun createReview(review: ReviewRequestDTO, jwt: Jwt): Review {
+    fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
 
         val book = bookService.findBookById(review.bookId!!) // null check in controller
         val userId = jwt.claims["userId"].toString()
@@ -84,7 +84,6 @@ class LibraryService(
             ?: throw IllegalArgumentException("No review found")
 
         val isUser = jwt.claims["userId"].toString() == review.userId
-
         return run {
             review.reviewId?.takeIf {
                 isUser
@@ -94,34 +93,14 @@ class LibraryService(
     }
 
     fun updateReview(jwt: Jwt, reviewRequest: ReviewRequestDTO): ReviewResponseDTO {
-        // TODO: Check that review exist
-        // TODO: Check that user exist on review
-        // TODO: Create Review()
-        // TODO: Check if text is null, if not add to a ReviewObject
-        // TODO: check if rating is null, if not add to ReviewObject
-
-
         val review = reviewService.findById(reviewRequest.reviewId!!)
             ?: throw IllegalArgumentException("No review found")
 
         val isUser = jwt.claims["userId"].toString() == review.userId
-
-        val updatedReview = review.takeIf { isUser }
-            ?.let {
-                Review(
-                    review.reviewId,
-                    reviewRequest.text ?: review.text,
-                    reviewRequest.rating ?: review.rating,
-                    review.createdAt,
-                    LocalDateTime.now(),
-                    review.userId,
-                    review.bookId
-                )
-            }
-
+        val updatedReview = review.takeIf { isUser }?.toUpdatedReview(reviewRequest)
         val response =
-            updatedReview?.let { reviewService.updateReview(it) }
-                ?: throw IllegalStateException("Could not update review")
+            updatedReview?.let { reviewService.save(updatedReview) }
+                ?: throw IllegalArgumentException("UserId and userId on review did not match")
 
         return response.toReviewResponseDTO()
 

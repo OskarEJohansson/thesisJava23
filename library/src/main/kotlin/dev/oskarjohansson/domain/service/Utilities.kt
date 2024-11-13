@@ -36,7 +36,8 @@ fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>): AuthorResp
 fun Review.toReviewResponseDTO(): ReviewResponseDTO = ReviewResponseDTO(
     text = this.text,
     rating = this.rating,
-    userId = this.userId
+    userId = this.userId,
+    reviewId = this.reviewId!!
 
 )
 
@@ -47,3 +48,13 @@ fun BookRequestDTO.toBook() = Book(
     genres = this.genre
 )
 
+fun Review.toUpdatedReview(reviewRequest: ReviewRequestDTO) =
+    Review(
+        this.reviewId,
+        reviewRequest.text ?:this.text,
+        reviewRequest.rating ?: this.rating,
+        this.createdAt,
+        LocalDateTime.now(),
+        this.userId,
+        this.bookId
+    )

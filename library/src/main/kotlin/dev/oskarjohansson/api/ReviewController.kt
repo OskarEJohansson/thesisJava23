@@ -33,7 +33,7 @@ class ReviewController(private val libraryService: LibraryService) {
                     ResponseDTO(
                         HttpStatus.CREATED.value(),
                         "Review created",
-                        libraryService.createReview(review, jwt)
+                        libraryService.saveReview(review, jwt)
                     )
                 )
 
@@ -75,12 +75,14 @@ class ReviewController(private val libraryService: LibraryService) {
         }
     }
 
+    // TODO: Does not work 
     @DeleteMapping("/v1/delete-review")
     fun deleteReview(
         @AuthenticationPrincipal jwt: Jwt,
         @Valid @RequestBody request: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<Unit>> {
 
+        println("Inside delete")
         return runCatching {
 
             val reviewId = request.reviewId ?: throw IllegalArgumentException("ReviewId must not be null")
@@ -107,7 +109,7 @@ class ReviewController(private val libraryService: LibraryService) {
     @PutMapping("/v1/update-review")
     fun updateReview(
         @AuthenticationPrincipal jwt: Jwt,
-        request: ReviewRequestDTO
+       @RequestBody request: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<ReviewResponseDTO>> {
 
         return runCatching {
