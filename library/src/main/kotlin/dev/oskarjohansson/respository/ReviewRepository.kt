@@ -13,4 +13,5 @@ interface ReviewRepository:MongoRepository<Review, String> {
     fun findByBookId(pageable: Pageable, bookId:String): Page<Review>?
     fun findByBookIdAndUserId(bookId: String, userId: String): Review?
     fun findByReviewId(reviewId:String): Review?
+    fun updateByReviewId(reviewId: String, review: Review): Review?
 }

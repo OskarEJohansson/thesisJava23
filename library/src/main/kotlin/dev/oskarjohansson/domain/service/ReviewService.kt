@@ -1,6 +1,6 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.ReviewDTO
+import dev.oskarjohansson.api.dto.ReviewRequestDTO
 import dev.oskarjohansson.api.dto.ReviewResponseDTO
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.respository.ReviewRepository
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class ReviewService(private val reviewRepository: ReviewRepository) {
 
-    fun createReview(review: ReviewDTO, userId: String): Review {
+    fun createReview(review: ReviewRequestDTO, userId: String): Review {
 
         return run {
             createReviewFromReviewDto(review, userId)
@@ -20,7 +20,7 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
         }
     }
 
-    fun findByBookIdAndUserId(bookId:String, userId: String): Review?{
+    fun findByBookIdAndUserId(bookId: String, userId: String): Review? {
         return reviewRepository.findByBookIdAndUserId(bookId, userId)
     }
 
@@ -35,7 +35,12 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
         return reviewRepository.findByReviewId(reviewId)
     }
 
-    fun deleteById(reviewId:String){
+    fun deleteById(reviewId: String) {
         return reviewRepository.deleteById(reviewId)
+    }
+
+    fun updateReview(review: Review): Review? {
+
+        return review.reviewId?.let { reviewRepository.updateByReviewId(it, review) }
     }
 }

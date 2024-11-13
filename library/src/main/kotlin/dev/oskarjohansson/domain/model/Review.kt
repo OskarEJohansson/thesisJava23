@@ -12,6 +12,7 @@ data class Review(
     val text: String,
     val rating: Int,
     val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
     val userId: String,
     val bookId: String
 )
