@@ -25,6 +25,8 @@ class ReviewController(private val libraryService: LibraryService) {
         @Valid @RequestBody review: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<Review>> {
 
+        review.bookId ?: throw IllegalArgumentException("BookId must not be null")
+
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)
                 .body(

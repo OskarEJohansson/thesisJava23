@@ -20,8 +20,8 @@ class BookService(private val bookRepository: BookRepository) {
             ?: throw IllegalStateException("Failed to create or retrieve author: ${book.authorName}")
     }
 
-    fun findBookById(bookId: String): Book? {
-        return bookRepository.findByBookId(bookId)
+    fun findBookById(bookId: String): Book {
+        return bookRepository.findByBookId(bookId) ?: throw IllegalArgumentException("Could not find book with id $bookId")
     }
 
     fun findAllBooksPageable(pageable: Pageable): Page<Book> = bookRepository.findAll(pageable)

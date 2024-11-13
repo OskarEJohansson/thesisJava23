@@ -15,6 +15,7 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class AuthorService(private val authorRepository: AuthorRepository) {
 
+    // TODO: Test
     fun saveAuthor(authorName: String): Author {
         return findExistingAuthor(authorName)
             ?: authorRepository.save(Author(authorName = authorName))
@@ -24,6 +25,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     fun findExistingAuthor(authorName: String): Author? =
         authorRepository.findByAuthorName(authorName)
 
+    // TODO: Test
     fun createAuthorResponseDTO(listOfAuthorIds: List<String>): List<AuthorInBookResponseDTO> {
 
         return listOfAuthorIds.mapNotNull { authorId ->
@@ -33,6 +35,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         }
     }
 
+    // TODO: Test
     fun getOrCreateAuthor(authorName: String): String =
         authorRepository.findByAuthorName(authorName)?.authorId
             ?: authorRepository.save(Author(authorName = authorName)).authorId

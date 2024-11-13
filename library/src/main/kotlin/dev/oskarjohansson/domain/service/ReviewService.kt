@@ -14,7 +14,6 @@ import java.lang.IllegalArgumentException
 class ReviewService(private val reviewRepository: ReviewRepository) {
 
     fun createReview(reviewRequest: ReviewRequestDTO, userId: String): Review {
-
         return reviewRequest.toReview(userId)
             .let { reviewRepository.save(it) }
     }
@@ -26,8 +25,7 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
     fun createPageableReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
         return reviewRepository.findByBookId(pageable, bookId)?.map { review ->
             review.toReviewResponseDTO()
-        }
-            ?: throw IllegalStateException("Could not find any reviews for book $bookId")
+        } ?: throw IllegalStateException("Could not find any reviews for book $bookId")
     }
 
     fun findById(reviewId: String): Review? {
@@ -39,7 +37,6 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
     }
 
     fun updateReview(review: Review): Review? {
-
         return review.reviewId?.let { reviewRepository.updateByReviewId(it, review) }
     }
 }
