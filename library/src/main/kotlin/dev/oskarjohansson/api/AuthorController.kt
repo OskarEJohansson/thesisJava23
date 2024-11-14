@@ -1,8 +1,7 @@
 package dev.oskarjohansson.api
 
+import dev.oskarjohansson.api.dto.AuthorRequestDTO
 import dev.oskarjohansson.api.dto.AuthorResponseDTO
-import dev.oskarjohansson.domain.model.Author
-import dev.oskarjohansson.domain.service.AuthorService
 import dev.oskarjohansson.domain.service.LibraryService
 import dev.oskarjohansson.model.ResponseDTO
 import jakarta.validation.Valid
@@ -21,17 +20,16 @@ import org.springframework.web.bind.annotation.RestController
 class AuthorController(private val libraryService: LibraryService) {
 
     @PostMapping("/v1/register-author")
-    fun registerAuthor(@Valid @RequestBody authorName: String): ResponseEntity<ResponseDTO<Author>> {
+    fun registerAuthor(@Valid @RequestBody authorRequestDTO: AuthorRequestDTO ): ResponseEntity<ResponseDTO<AuthorResponseDTO>> {
 
-        // TODO: CHANGE RESPONSE TO AUTHORRESPONSEDTO 
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", libraryService.saveAuthor(authorName)))
+                .body(ResponseDTO(HttpStatus.CREATED.value(), "Author created", libraryService.saveAuthor(authorRequestDTO.authorName)))
         }.getOrElse {
             ResponseEntity.badRequest().body(
                 ResponseDTO(
                     HttpStatus.BAD_REQUEST.value(),
-                    message = "Could not save author ${authorName}, ${it.message}"
+                    message = "Could not save author ${authorRequestDTO.authorName}, ${it.message}"
                 )
             )
         }

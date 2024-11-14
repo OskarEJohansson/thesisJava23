@@ -26,11 +26,11 @@ fun Book.toBookResponseDTO(authors: List<AuthorInBookResponseDTO>): BookResponse
         genres = this.genres
     )
 
-fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>): AuthorResponseDTO =
+fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>?): AuthorResponseDTO =
     AuthorResponseDTO(
         this.authorId!!,
         this.authorName,
-        books
+        publishedBooks = books
     )
 
 fun Review.toReviewResponseDTO(): ReviewResponseDTO = ReviewResponseDTO(

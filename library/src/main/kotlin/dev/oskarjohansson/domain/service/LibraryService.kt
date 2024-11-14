@@ -25,8 +25,8 @@ class LibraryService(
         return savedBook.toBookResponseDTO(authors)
     }
 
-    fun saveAuthor(authorName: String): Author {
-        return authorService.saveAuthor(authorName)
+    fun saveAuthor(authorName: String): AuthorResponseDTO {
+        return authorService.saveAuthor(authorName).toAuthorResponseDTO(null)
     }
 
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
