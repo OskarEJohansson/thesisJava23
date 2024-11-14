@@ -16,8 +16,8 @@ import java.lang.IllegalArgumentException
 @Service
 class BookService(private val bookRepository: BookRepository) {
 
-    fun saveBook(bookRequest: BookRequestDTO, authorId: List<Author>): Book {
-        return bookRepository.save(bookRequest.toBook())
+    fun saveBook(bookRequest: BookRequestDTO, authors: List<String>): Book {
+        return bookRepository.save(bookRequest.toBook(authors))
     }
 
     fun findBookById(bookId: String): Book {
@@ -26,6 +26,7 @@ class BookService(private val bookRepository: BookRepository) {
 
     fun findAllBooksPageable(pageable: Pageable): Page<Book> = bookRepository.findAll(pageable)
 
+    // TODO: books in author does not work 
     fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO>? {
         return bookRepository.findByAuthorIds(authorId)?.map { book ->
             BookInAuthorResponseDTO(book.bookId!!, book.title)

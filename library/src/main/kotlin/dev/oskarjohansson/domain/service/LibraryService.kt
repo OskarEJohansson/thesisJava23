@@ -18,15 +18,19 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
+
+    // TODO: Refactor
     fun saveBook(bookRequest: BookRequestDTO): BookResponseDTO {
-        val authorIds = authorService.getOrCreateAuthors(bookRequest.authors)
-        val savedBook = bookService.saveBook(bookRequest, authorIds)
-        val authors = authorService.createAuthorResponseDTO(savedBook.authorIds)
-        return savedBook.toBookResponseDTO(authors)
+
+       val authors =  authorService.getOrCreateAuthors(bookRequest.authors)
+        val authorIdList = authors.map { it.authorId!! } //id is created in the db
+        val savedBook = bookService.saveBook(bookRequest, authorIdList )
+        val authorsResponse = authorService.createAuthorResponseDTO(authorIdList)
+        return savedBook.toBookResponseDTO(authorsResponse)
     }
 
     fun saveAuthor(authorName: String): AuthorResponseDTO {
-        return authorService.saveAuthor(authorName).toAuthorResponseDTO(null)
+        return authorService.saveAuthor(authorName).toAuthorResponseDTO(emptyList())
     }
 
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
@@ -52,7 +56,11 @@ class LibraryService(
         }.getOrElse { throw IllegalStateException("Error while loading books: ${it.message}") }
     }
 
+    // TODO: books in authors does not work
     fun getAuthors(pageable: Pageable): Page<AuthorResponseDTO> {
+//        val pageableBooks = authorService.getAuthors(pageable)
+//        val books = pageableBooks.map { author -> bookService.createBookInAuthorResponseDTO(author.authorId!!) }
+        
         return authorService.getAuthors(pageable).map {
             author -> bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
                 ?.let {
