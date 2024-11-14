@@ -69,6 +69,16 @@ class BookController(private val libraryService: LibraryService) {
         }
     }
 
+//    @GetMapping
+//    fun getBook(@Valid @RequestBody request:BookRequestDTO): ResponseEntity<ResponseDTO<BookResponseDTO>>{
+//
+//        return runCatching {
+//
+//            ResponseEntity.status(HttpStatus.OK).body(ResponseDTO(HttpStatus.OK.value()),"Requested Book:", libraryService.getBook(request))
+//        }
+//
+//    }
+
 
 
     // TODO: book, a controller that send a specific book based on the bookId to the caller

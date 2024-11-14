@@ -1,7 +1,6 @@
 package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.*
-import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
 import org.springframework.data.domain.Page
@@ -18,15 +17,14 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
-
-    // TODO: Refactor
     fun saveBook(bookRequest: BookRequestDTO): BookResponseDTO {
-
-       val authors =  authorService.getOrCreateAuthors(bookRequest.authors)
-        val authorIdList = authors.map { it.authorId!! } //id is created in the db
-        val savedBook = bookService.saveBook(bookRequest, authorIdList )
-        val authorsResponse = authorService.createAuthorResponseDTO(authorIdList)
-        return savedBook.toBookResponseDTO(authorsResponse)
+       return authorService.getOrCreateAuthors(bookRequest.authors)
+            .map { author -> author.authorId!! }
+            .let {authorList ->
+                bookService.saveBook(bookRequest, authorList).toBookResponseDTO(
+                    authorService.createAuthorResponseDTO(authorList)
+                )
+            }
     }
 
     fun saveAuthor(authorName: String): AuthorResponseDTO {
@@ -58,11 +56,8 @@ class LibraryService(
 
     // TODO: books in authors does not work
     fun getAuthors(pageable: Pageable): Page<AuthorResponseDTO> {
-//        val pageableBooks = authorService.getAuthors(pageable)
-//        val books = pageableBooks.map { author -> bookService.createBookInAuthorResponseDTO(author.authorId!!) }
-        
-        return authorService.getAuthors(pageable).map {
-            author -> bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
+        return authorService.getAuthors(pageable).map { author ->
+            bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
                 ?.let {
                     author.toAuthorResponseDTO(it)
                 }
