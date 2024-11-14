@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
-import java.time.LocalDateTime
 
 @Service
 class LibraryService(
@@ -31,7 +30,6 @@ class LibraryService(
     }
 
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
-
         val book = bookService.findBookById(review.bookId!!) // null check in controller
         val userId = jwt.claims["userId"].toString()
         val existingReview = book.bookId?.let { reviewService.findByBookIdAndUserId(it, userId) }
@@ -41,10 +39,8 @@ class LibraryService(
         } ?: throw IllegalArgumentException("Review already exist for user, ${existingReview?.reviewId}")
     }
 
-
     fun getBook(bookId: String): Book =
         bookService.findBookById(bookId)
-
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
         return runCatching {
@@ -56,18 +52,14 @@ class LibraryService(
         }.getOrElse { throw IllegalStateException("Error while loading books: ${it.message}") }
     }
 
-
     fun getAuthors(pageable: Pageable): Page<AuthorResponseDTO> {
-        val authors = authorService.getAuthors(pageable)
-
-        return authors.map { author ->
-            bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
+        return authorService.getAuthors(pageable).map {
+            author -> bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
                 ?.let {
                     author.toAuthorResponseDTO(it)
                 }
         }
     }
-
 
     fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
         return bookService.findBookById(bookId).let { book ->
@@ -76,13 +68,7 @@ class LibraryService(
     }
 
     fun deleteReview(jwt: Jwt, reviewId: String) {
-        // TODO: Check that reviewId exist
-        // TODO: Check that userID in jwt exist on Review
-        // TODO: Delete review
-
         val review = reviewService.findById(reviewId)
-            ?: throw IllegalArgumentException("No review found")
-
         val isUser = jwt.claims["userId"].toString() == review.userId
         return run {
             review.reviewId?.takeIf {
@@ -94,12 +80,11 @@ class LibraryService(
 
     fun updateReview(jwt: Jwt, reviewRequest: ReviewRequestDTO): ReviewResponseDTO {
         val review = reviewService.findById(reviewRequest.reviewId!!)
-            ?: throw IllegalArgumentException("No review found")
-
         val isUser = jwt.claims["userId"].toString() == review.userId
         val updatedReview = review.takeIf { isUser }?.toUpdatedReview(reviewRequest)
+
         val response =
-            updatedReview?.let { reviewService.save(updatedReview) }
+            updatedReview?.let { reviewService.save(it) }
                 ?: throw IllegalArgumentException("UserId and userId on review did not match")
 
         return response.toReviewResponseDTO()

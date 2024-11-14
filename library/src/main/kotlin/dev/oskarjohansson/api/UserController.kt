@@ -22,7 +22,9 @@ class UserController(private val userService: UserService, private val apiServic
     @PostMapping("/v1/login")
     fun login(@Valid @RequestBody loginRequest: LoginRequestDTO): ResponseEntity<String> {
         return runCatching {
-            ResponseEntity.status(HttpStatus.OK).body(runBlocking { userService.loginUser(loginRequest) })
+            ResponseEntity.status(HttpStatus.OK).body(runBlocking {
+                userService.loginUser(loginRequest)
+            })
         }.getOrElse {
             ResponseEntity.badRequest().body("Could not login user: ${it.message}")
         }

@@ -7,6 +7,7 @@ import dev.oskarjohansson.respository.ReviewRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 
 
 @Service
@@ -29,8 +30,8 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
 
     fun save(review: Review): Review = reviewRepository.save(review)
 
-    fun findById(reviewId: String): Review? {
-        return reviewRepository.findByReviewId(reviewId)
+    fun findById(reviewId: String): Review {
+        return reviewRepository.findByReviewId(reviewId) ?: throw IllegalArgumentException("Could not find Review with reviewId: $reviewId")
     }
 
     fun deleteById(reviewId: String) {

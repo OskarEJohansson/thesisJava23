@@ -37,11 +37,8 @@ class AuthorController(private val libraryService: LibraryService) {
         }
     }
 
-
-    // TODO: authors, a controller that sends all authors in a pageable object to the caller
     @GetMapping("/v1/authors")
     fun authors(pageable: Pageable): ResponseEntity<ResponseDTO<Page<AuthorResponseDTO>>> {
-
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(

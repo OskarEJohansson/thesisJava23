@@ -24,10 +24,12 @@ class ReviewController(private val libraryService: LibraryService) {
         @AuthenticationPrincipal jwt: Jwt,
         @Valid @RequestBody review: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<Review>> {
-
-        review.bookId ?: throw IllegalArgumentException("BookId must not be null")
-
         return runCatching {
+
+            require(!review.bookId.isNullOrBlank()) {
+                "BookId must not be null"
+            }
+
             ResponseEntity.status(HttpStatus.CREATED)
                 .body(
                     ResponseDTO(
@@ -36,32 +38,28 @@ class ReviewController(private val libraryService: LibraryService) {
                         libraryService.saveReview(review, jwt)
                     )
                 )
-
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not save review: ${it.message}"))
         }
-
-
     }
 
-    // TODO: LOOK AT REVIEWREQUETDTO for all controllers of review
-    // TODO: Change ReviewRequestDTO as it has bookId in get and ReviewId in delete
     @GetMapping("/v1/get-reviews")
     fun getReviews(
         pageable: Pageable,
         @RequestBody request: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<Page<ReviewResponseDTO>>> {
-
-
         return runCatching {
-            val bookId = request.bookId ?: throw IllegalArgumentException("BookId must not be null")
+
+            require(!request.bookId.isNullOrBlank()) {
+                "BookId must not be null"
+            }
 
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "All reviews for book:  ${libraryService.getBook(bookId).title}",
-                    libraryService.getReviews(pageable, bookId)
+                    "All reviews for book:  ${libraryService.getBook(request.bookId!!).title}",
+                    libraryService.getReviews(pageable, request.bookId!!)
                 )
             )
 
@@ -75,54 +73,51 @@ class ReviewController(private val libraryService: LibraryService) {
         }
     }
 
-    // TODO: Does not work 
+    @PutMapping("/v1/update-review")
+    fun updateReview(
+        @AuthenticationPrincipal jwt: Jwt,
+        @RequestBody request: ReviewRequestDTO
+    ): ResponseEntity<ResponseDTO<ReviewResponseDTO>> {
+        return runCatching {
+
+            require(!request.reviewId.isNullOrBlank()) {
+                "RequestId must no be null"
+            }
+
+            ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDTO(HttpStatus.OK.value(), "Review updated", libraryService.updateReview(jwt, request)))
+
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Could not update review: ${it.message}"))
+        }
+    }
+
     @DeleteMapping("/v1/delete-review")
     fun deleteReview(
         @AuthenticationPrincipal jwt: Jwt,
         @Valid @RequestBody request: ReviewRequestDTO
     ): ResponseEntity<ResponseDTO<Unit>> {
-
-        println("Inside delete")
         return runCatching {
 
-            val reviewId = request.reviewId ?: throw IllegalArgumentException("ReviewId must not be null")
+        require(!request.reviewId.isNullOrBlank()) {
+            "ReviewId must not be null"}
 
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Review deleted successfully",
-                    libraryService.deleteReview(jwt, reviewId)
+                    libraryService.deleteReview(jwt, request.reviewId!!)
                 )
             )
-
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(
                     ResponseDTO(
                         HttpStatus.BAD_REQUEST.value(),
-                        "Error deleting review with id ${request.reviewId} "
+                        "Error deleting review with id ${request.reviewId}, message: ${it.message}",
                     )
                 )
-        }
-    }
-
-    @PutMapping("/v1/update-review")
-    fun updateReview(
-        @AuthenticationPrincipal jwt: Jwt,
-       @RequestBody request: ReviewRequestDTO
-    ): ResponseEntity<ResponseDTO<ReviewResponseDTO>> {
-
-        return runCatching {
-
-            request.reviewId ?: throw IllegalArgumentException("ReviewId must not be null")
-
-            ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDTO(HttpStatus.OK.value(), "Review updated", libraryService.updateReview(jwt, request)))
-
-
-        }.getOrElse {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Could not update review: ${it.message}"))
         }
     }
 }
