@@ -3,7 +3,6 @@ package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.BookInAuthorResponseDTO
 import dev.oskarjohansson.api.dto.BookRequestDTO
-import dev.oskarjohansson.api.dto.BookResponseDTO
 import dev.oskarjohansson.api.dto.RegisterBookRequestDTO
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.respository.BookRepository
@@ -31,16 +30,15 @@ class BookService(private val bookRepository: BookRepository) {
             bookRepository.findByTitle(it)
         } ?: bookRequestDTO.bookId?.let {
             bookRepository.findByBookId(it)
-        } ?: throw IllegalStateException("Could not find book")
+        } ?: throw IllegalStateException("Could not find book with id ${bookRequestDTO.bookId} or title ${bookRequestDTO.title}")
     }
 
 
-fun findAllBooksPageable(pageable: Pageable): Page<Book> = bookRepository.findAll(pageable)
+    fun findAllBooksPageable(pageable: Pageable): Page<Book> = bookRepository.findAll(pageable)
 
-// TODO: books in author does not work
-fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO>? {
-    return bookRepository.findByAuthorIds(authorId)?.map { book ->
-        BookInAuthorResponseDTO(book.bookId!!, book.title)
+    fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO>? {
+        return bookRepository.findByAuthorIds(authorId)?.map { book ->
+            BookInAuthorResponseDTO(book.bookId!!, book.title)
+        }
     }
-}
 }

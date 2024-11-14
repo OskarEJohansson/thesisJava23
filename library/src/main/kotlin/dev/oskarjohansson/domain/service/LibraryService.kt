@@ -18,9 +18,9 @@ class LibraryService(
 ) {
 
     fun saveBook(bookRequest: RegisterBookRequestDTO): BookResponseDTO {
-       return authorService.getOrCreateAuthors(bookRequest.authors)
+        return authorService.getOrCreateAuthors(bookRequest.authors)
             .map { author -> author.authorId!! }
-            .let {authorList ->
+            .let { authorList ->
                 bookService.saveBook(bookRequest, authorList).toBookResponseDTO(
                     authorService.createAuthorResponseDTO(authorList)
                 )
@@ -31,38 +31,35 @@ class LibraryService(
         return authorService.saveAuthor(authorName).toAuthorResponseDTO(emptyList())
     }
 
-    // TODO: refactor
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
         val book = bookService.findBookById(review.bookId!!) // null check in controller
         val userId = jwt.claims["userId"].toString()
-        val existingReview = book.bookId?.let { reviewService.findByBookIdAndUserId(it, userId) }
 
-        return review.takeIf { existingReview == null }?.let {
-            reviewService.createReview(review, userId)
-        } ?: throw IllegalArgumentException("Review already exist for user, ${existingReview?.reviewId}")
+        val existingReview = book.bookId?.let { reviewService.findByBookIdAndUserId(it, userId) }
+            ?: return reviewService.createReview(review, userId)
+
+        throw IllegalArgumentException("Review already exist for user, reviewId: ${existingReview.reviewId}")
     }
 
-    fun getBookByIdOrTitle(bookRequestDTO: BookRequestDTO): BookResponseDTO{
-        val book = bookService.findBookByIdOrTitle(bookRequestDTO)
-        val authors = authorService.createAuthorResponseDTO(book.authorIds)
-       return book.toBookResponseDTO(authors)
-
+    fun getBookByIdOrTitle(bookRequestDTO: BookRequestDTO): BookResponseDTO {
+        return bookService.findBookByIdOrTitle(bookRequestDTO).let { book ->
+            book.toBookResponseDTO(
+                authorService.createAuthorResponseDTO(book.authorIds)
+            )
+        }
     }
 
     fun getBookById(bookId: String): Book =
         bookService.findBookById(bookId)
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
-        return runCatching {
-            bookService.findAllBooksPageable(pageable).map { book ->
-                book.toBookResponseDTO(
-                    authorService.createAuthorResponseDTO(book.authorIds)
-                )
-            }
-        }.getOrElse { throw IllegalStateException("Error while loading books: ${it.message}") }
+        return bookService.findAllBooksPageable(pageable).map { book ->
+            book.toBookResponseDTO(
+                authorService.createAuthorResponseDTO(book.authorIds)
+            )
+        }
     }
 
-    // TODO: books in authors does not work
     fun getAuthors(pageable: Pageable): Page<AuthorResponseDTO> {
         return authorService.getAuthors(pageable).map { author ->
             bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
@@ -80,13 +77,11 @@ class LibraryService(
 
     fun deleteReview(jwt: Jwt, reviewId: String) {
         val review = reviewService.findById(reviewId)
-        val isUser = jwt.claims["userId"].toString() == review.userId
         return run {
             review.reviewId?.takeIf {
-                isUser
+                jwt.claims["userId"].toString() == review.userId
             }?.let { reviewService.deleteById(it) }
         }
-
     }
 
     fun updateReview(jwt: Jwt, reviewRequest: ReviewRequestDTO): ReviewResponseDTO {

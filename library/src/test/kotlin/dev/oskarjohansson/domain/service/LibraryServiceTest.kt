@@ -1,5 +1,7 @@
 package dev.oskarjohansson.domain.service
 
+import dev.oskarjohansson.api.dto.BookResponseDTO
+import dev.oskarjohansson.api.dto.RegisterBookRequestDTO
 import dev.oskarjohansson.api.dto.ReviewRequestDTO
 import dev.oskarjohansson.domain.enums.Genres
 import dev.oskarjohansson.domain.model.Book
