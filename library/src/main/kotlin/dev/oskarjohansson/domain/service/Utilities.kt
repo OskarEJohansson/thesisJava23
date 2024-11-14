@@ -41,7 +41,7 @@ fun Review.toReviewResponseDTO(): ReviewResponseDTO = ReviewResponseDTO(
 
 )
 
-fun BookRequestDTO.toBook(authorList: List<String>) = Book(
+fun RegisterBookRequestDTO.toBook(authorList: List<String>) = Book(
     null,
     title = this.title,
     authorIds = authorList,

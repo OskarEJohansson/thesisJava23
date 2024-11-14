@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
-import java.lang.IllegalArgumentException
 
 @RestController
 @RequestMapping("/review")
@@ -58,7 +57,7 @@ class ReviewController(private val libraryService: LibraryService) {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "All reviews for book:  ${libraryService.getBook(request.bookId!!).title}",
+                    "All reviews for book:  ${libraryService.getBookById(request.bookId!!).title}",
                     libraryService.getReviews(pageable, request.bookId!!)
                 )
             )

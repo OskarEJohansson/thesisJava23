@@ -17,7 +17,7 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
-    fun saveBook(bookRequest: BookRequestDTO): BookResponseDTO {
+    fun saveBook(bookRequest: RegisterBookRequestDTO): BookResponseDTO {
        return authorService.getOrCreateAuthors(bookRequest.authors)
             .map { author -> author.authorId!! }
             .let {authorList ->
@@ -31,6 +31,7 @@ class LibraryService(
         return authorService.saveAuthor(authorName).toAuthorResponseDTO(emptyList())
     }
 
+    // TODO: refactor
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
         val book = bookService.findBookById(review.bookId!!) // null check in controller
         val userId = jwt.claims["userId"].toString()
@@ -41,7 +42,14 @@ class LibraryService(
         } ?: throw IllegalArgumentException("Review already exist for user, ${existingReview?.reviewId}")
     }
 
-    fun getBook(bookId: String): Book =
+    fun getBookByIdOrTitle(bookRequestDTO: BookRequestDTO): BookResponseDTO{
+        val book = bookService.findBookByIdOrTitle(bookRequestDTO)
+        val authors = authorService.createAuthorResponseDTO(book.authorIds)
+       return book.toBookResponseDTO(authors)
+
+    }
+
+    fun getBookById(bookId: String): Book =
         bookService.findBookById(bookId)
 
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
