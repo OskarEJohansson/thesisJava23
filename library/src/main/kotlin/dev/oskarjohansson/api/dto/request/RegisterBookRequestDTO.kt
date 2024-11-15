@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api.dto
+package dev.oskarjohansson.api.dto.request
 
 import dev.oskarjohansson.domain.enums.Genres
 import org.springframework.validation.annotation.Validated

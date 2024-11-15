@@ -1,6 +1,10 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.*
+import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
+import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
+import dev.oskarjohansson.api.dto.response.AuthorInBookResponseDTO
+import dev.oskarjohansson.api.dto.response.BookInAuthorResponseDTO
+import dev.oskarjohansson.api.dto.response.ReviewResponseDTO
 import dev.oskarjohansson.domain.enums.Genres
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
@@ -13,6 +17,8 @@ import java.time.LocalDateTime
 import kotlin.test.*
 
 class UtilitiesKtTest {
+
+    // TODO: Add edge cases with empty lists and missing
 
     @Test
     fun `Test that toReviewWithReviewIdNull converts ReviewRequestDTO correctly with valid inputs`() {
@@ -126,7 +132,10 @@ class UtilitiesKtTest {
     @Test
     fun `Test that toBookResponseDTO converts Book correctly with multiple authors`() {
         val book = Book("BookId", "Book Title", listOf("Author 1"), Genres.FANTASY)
-        val bookResponse = book.toBookResponseDTO(listOf(AuthorInBookResponseDTO("AuthorId", "Author 1"),AuthorInBookResponseDTO("AuthorId", "Author 2")))
+        val bookResponse = book.toBookResponseDTO(listOf(
+            AuthorInBookResponseDTO("AuthorId", "Author 1"),
+            AuthorInBookResponseDTO("AuthorId", "Author 2")
+        ))
 
         assertEquals("BookId", bookResponse.bookId)
         assertEquals("Book Title", bookResponse.title)
@@ -152,7 +161,10 @@ class UtilitiesKtTest {
     fun `Test that toAuthorResponseDTO converts Author correctly with many books`() {
 
         val author = Author("AuthorId", "Author1")
-        val authorResponse = author.toAuthorResponseDTO(listOf(BookInAuthorResponseDTO("BookId", "Book1"),BookInAuthorResponseDTO("BookId", "Book2")))
+        val authorResponse = author.toAuthorResponseDTO(listOf(
+            BookInAuthorResponseDTO("BookId", "Book1"),
+            BookInAuthorResponseDTO("BookId", "Book2")
+        ))
 
         assertEquals("AuthorId", authorResponse.authorID)
         assertEquals("Author1", authorResponse.authorName)

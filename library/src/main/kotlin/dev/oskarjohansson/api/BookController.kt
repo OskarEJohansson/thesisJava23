@@ -1,8 +1,8 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.api.dto.BookRequestDTO
-import dev.oskarjohansson.api.dto.RegisterBookRequestDTO
-import dev.oskarjohansson.api.dto.BookResponseDTO
+import dev.oskarjohansson.api.dto.request.BookRequestDTO
+import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
+import dev.oskarjohansson.api.dto.response.BookResponseDTO
 import dev.oskarjohansson.domain.service.LibraryService
 import dev.oskarjohansson.model.ResponseDTO
 import jakarta.validation.Valid
@@ -63,7 +63,7 @@ class BookController(private val libraryService: LibraryService) {
     }
 
     @GetMapping("/v1/get-book")
-    fun getBook(@Valid @RequestBody request:BookRequestDTO): ResponseEntity<ResponseDTO<BookResponseDTO>>{
+    fun getBook(@Valid @RequestBody request: BookRequestDTO): ResponseEntity<ResponseDTO<BookResponseDTO>>{
 
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(ResponseDTO(HttpStatus.OK.value(),"Requested Book:", libraryService.getBookByIdOrTitle(request)))

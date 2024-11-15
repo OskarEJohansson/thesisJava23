@@ -1,6 +1,8 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.*
+import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
+import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
+import dev.oskarjohansson.api.dto.response.*
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review

@@ -1,13 +1,12 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.AuthorInBookResponseDTO
+import dev.oskarjohansson.api.dto.response.AuthorInBookResponseDTO
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.respository.AuthorRepository
 import io.ktor.util.reflect.*
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.*
 

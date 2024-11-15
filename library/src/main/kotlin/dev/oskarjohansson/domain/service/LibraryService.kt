@@ -1,6 +1,11 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.*
+import dev.oskarjohansson.api.dto.request.BookRequestDTO
+import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
+import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
+import dev.oskarjohansson.api.dto.response.AuthorResponseDTO
+import dev.oskarjohansson.api.dto.response.BookResponseDTO
+import dev.oskarjohansson.api.dto.response.ReviewResponseDTO
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
 import org.springframework.data.domain.Page

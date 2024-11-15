@@ -1,9 +1,9 @@
 package dev.oskarjohansson.domain.service
 
 
-import dev.oskarjohansson.api.dto.BookInAuthorResponseDTO
-import dev.oskarjohansson.api.dto.BookRequestDTO
-import dev.oskarjohansson.api.dto.RegisterBookRequestDTO
+import dev.oskarjohansson.api.dto.response.BookInAuthorResponseDTO
+import dev.oskarjohansson.api.dto.request.BookRequestDTO
+import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.respository.BookRepository
 

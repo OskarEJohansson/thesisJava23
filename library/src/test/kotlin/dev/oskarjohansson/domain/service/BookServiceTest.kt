@@ -1,12 +1,11 @@
 package dev.oskarjohansson.domain.service
 
-import dev.oskarjohansson.api.dto.BookRequestDTO
+import dev.oskarjohansson.api.dto.request.BookRequestDTO
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.respository.BookRepository
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.assertThrows
-import org.mockito.ArgumentMatchers.any
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

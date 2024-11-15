@@ -1,7 +1,7 @@
 package dev.oskarjohansson.domain.service
 
 
-import dev.oskarjohansson.api.dto.AuthorInBookResponseDTO
+import dev.oskarjohansson.api.dto.response.AuthorInBookResponseDTO
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.respository.AuthorRepository
 import org.springframework.data.domain.Page

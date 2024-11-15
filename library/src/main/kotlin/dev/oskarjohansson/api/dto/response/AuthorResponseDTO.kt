@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api.dto
+package dev.oskarjohansson.api.dto.response
 
 data class AuthorResponseDTO(
     val authorID: String,

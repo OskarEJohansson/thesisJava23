@@ -1,7 +1,7 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.api.dto.ReviewRequestDTO
-import dev.oskarjohansson.api.dto.ReviewResponseDTO
+import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
+import dev.oskarjohansson.api.dto.response.ReviewResponseDTO
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.domain.service.LibraryService
 import dev.oskarjohansson.model.ResponseDTO

@@ -1,7 +1,7 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.api.dto.AuthorRequestDTO
-import dev.oskarjohansson.api.dto.AuthorResponseDTO
+import dev.oskarjohansson.api.dto.request.AuthorRequestDTO
+import dev.oskarjohansson.api.dto.response.AuthorResponseDTO
 import dev.oskarjohansson.domain.service.LibraryService
 import dev.oskarjohansson.model.ResponseDTO
 import jakarta.validation.Valid
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthorController(private val libraryService: LibraryService) {
 
     @PostMapping("/v1/register-author")
-    fun registerAuthor(@Valid @RequestBody authorRequestDTO: AuthorRequestDTO ): ResponseEntity<ResponseDTO<AuthorResponseDTO>> {
+    fun registerAuthor(@Valid @RequestBody authorRequestDTO: AuthorRequestDTO): ResponseEntity<ResponseDTO<AuthorResponseDTO>> {
 
         return runCatching {
             ResponseEntity.status(HttpStatus.CREATED)

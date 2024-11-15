@@ -1,6 +1,6 @@
 package dev.oskarjohansson.api
 
-import dev.oskarjohansson.api.dto.LoginRequestDTO
+import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.UserDTO
 import dev.oskarjohansson.service.ApiService
 import dev.oskarjohansson.service.UserService
