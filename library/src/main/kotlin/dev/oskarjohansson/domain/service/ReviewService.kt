@@ -14,8 +14,8 @@ import java.lang.IllegalArgumentException
 class ReviewService(private val reviewRepository: ReviewRepository) {
 
     fun createReview(reviewRequest: ReviewRequestDTO, userId: String): Review {
-        return reviewRequest.toReview(userId)
-            .let { reviewRepository.save(it) }
+        return reviewRequest.toReviewWithReviewIdNull(userId)
+            .let { review -> reviewRepository.save(review) }
     }
 
     fun findByBookIdAndUserId(bookId: String, userId: String): Review? {

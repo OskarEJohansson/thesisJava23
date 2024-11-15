@@ -62,8 +62,6 @@ class BookController(private val libraryService: LibraryService) {
         }
     }
 
-
-    // TODO: Finding book by ID works, not by title 
     @GetMapping("/v1/get-book")
     fun getBook(@Valid @RequestBody request:BookRequestDTO): ResponseEntity<ResponseDTO<BookResponseDTO>>{
 

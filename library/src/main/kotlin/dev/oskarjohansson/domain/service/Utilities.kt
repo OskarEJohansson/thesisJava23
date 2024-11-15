@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
 
 import java.time.LocalDateTime
 
-fun ReviewRequestDTO.toReview(userId: String): Review = Review(
+fun ReviewRequestDTO.toReviewWithReviewIdNull(userId: String): Review = Review(
     null,
     this.text ?: throw IllegalArgumentException("Review text must not be null"),
     this.rating ?: throw IllegalArgumentException("Review rating must not be null"),
@@ -16,36 +16,6 @@ fun ReviewRequestDTO.toReview(userId: String): Review = Review(
     null,
     userId,
     this.bookId ?: throw IllegalArgumentException("BookId in Review must nut be null")
-)
-
-fun Book.toBookResponseDTO(authors: List<AuthorInBookResponseDTO>): BookResponseDTO =
-    BookResponseDTO(
-        bookId = this.bookId!!,
-        title = this.title,
-        authors = authors,
-        genres = this.genres
-    )
-
-fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>): AuthorResponseDTO =
-    AuthorResponseDTO(
-        this.authorId!!,
-        this.authorName,
-        publishedBooks = books
-    )
-
-fun Review.toReviewResponseDTO(): ReviewResponseDTO = ReviewResponseDTO(
-    text = this.text,
-    rating = this.rating,
-    userId = this.userId,
-    reviewId = this.reviewId!!
-
-)
-
-fun RegisterBookRequestDTO.toBook(authorList: List<String>) = Book(
-    null,
-    title = this.title,
-    authorIds = authorList,
-    genres = this.genre
 )
 
 fun Review.toUpdatedReview(reviewRequest: ReviewRequestDTO) =
@@ -58,3 +28,35 @@ fun Review.toUpdatedReview(reviewRequest: ReviewRequestDTO) =
         this.userId,
         this.bookId
     )
+
+fun Review.toReviewResponseDTO(): ReviewResponseDTO = ReviewResponseDTO(
+    text = this.text,
+    rating = this.rating,
+    userId = this.userId,
+    reviewId = this.reviewId!! //ReviewId is created when Review is persisted
+)
+
+fun Book.toBookResponseDTO(authors: List<AuthorInBookResponseDTO>): BookResponseDTO =
+    BookResponseDTO(
+        bookId = this.bookId!!, //BookId is created when Book is persisted
+        title = this.title,
+        authors = authors,
+        genres = this.genres
+    )
+
+fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>): AuthorResponseDTO =
+    AuthorResponseDTO(
+        this.authorId!!, //AuthorId is created when Author is persisted
+        this.authorName,
+        publishedBooks = books
+    )
+
+
+
+fun RegisterBookRequestDTO.toBook(authorIds: List<String>) = Book(
+    null,
+    title = this.title,
+    authorIds = authorIds,
+    genres = this.genre
+)
+

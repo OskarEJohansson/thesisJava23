@@ -17,12 +17,14 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
+    // TODO: Rename to something more describing or split into multiple methods?
+    // TODO: Write test
     fun saveBook(bookRequest: RegisterBookRequestDTO): BookResponseDTO {
         return authorService.getOrCreateAuthors(bookRequest.authors)
             .map { author -> author.authorId!! }
-            .let { authorList ->
-                bookService.saveBook(bookRequest, authorList).toBookResponseDTO(
-                    authorService.createAuthorResponseDTO(authorList)
+            .let { authorIds ->
+                bookService.saveBook(bookRequest, authorIds).toBookResponseDTO(
+                    authorService.createAuthorResponseDTO(authorIds)
                 )
             }
     }
