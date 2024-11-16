@@ -23,10 +23,11 @@ class LibraryService(
 ) {
 
     // TODO: Rename to something more describing or split into multiple methods?
-    // TODO: Write test
+
+    // TODO: IntegrationTest?
     fun saveBook(bookRequest: RegisterBookRequestDTO): BookResponseDTO {
         return authorService.getOrCreateAuthors(bookRequest.authors)
-            .map { author -> author.authorId!! }
+            .map { author -> author.authorId!! }// authorId is persisted or created in getOrCreateAuthors
             .let { authorIds ->
                 bookService.saveBook(bookRequest, authorIds).toBookResponseDTO(
                     authorService.createAuthorResponseDTO(authorIds)
@@ -38,6 +39,7 @@ class LibraryService(
         return authorService.saveAuthor(authorName).toAuthorResponseDTO(emptyList())
     }
 
+    // TODO: Write test
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
         val book = bookService.findBookById(review.bookId!!) // null check in controller
         val userId = jwt.claims["userId"].toString()
@@ -48,6 +50,7 @@ class LibraryService(
         throw IllegalArgumentException("Review already exist for user, reviewId: ${existingReview.reviewId}")
     }
 
+    // TODO: Write Test
     fun getBookByIdOrTitle(bookRequestDTO: BookRequestDTO): BookResponseDTO {
         return bookService.findBookByIdOrTitle(bookRequestDTO).let { book ->
             book.toBookResponseDTO(
@@ -56,9 +59,11 @@ class LibraryService(
         }
     }
 
+    // TODO: Write Test
     fun getBookById(bookId: String): Book =
         bookService.findBookById(bookId)
 
+    // TODO: Write Tests
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
         return bookService.findAllBooksPageable(pageable).map { book ->
             book.toBookResponseDTO(
@@ -67,6 +72,7 @@ class LibraryService(
         }
     }
 
+    // TODO: Write Tests
     fun getAuthors(pageable: Pageable): Page<AuthorResponseDTO> {
         return authorService.getAuthors(pageable).map { author ->
             bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
@@ -76,12 +82,14 @@ class LibraryService(
         }
     }
 
+    // TODO: Write tests
     fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
         return bookService.findBookById(bookId).let { book ->
             reviewService.createPageableReviews(pageable, book.bookId!!)
         }
     }
 
+    // TODO: Write tests
     fun deleteReview(jwt: Jwt, reviewId: String) {
         val review = reviewService.findById(reviewId)
         return run {
@@ -91,6 +99,7 @@ class LibraryService(
         }
     }
 
+    // TODO: Write tests
     fun updateReview(jwt: Jwt, reviewRequest: ReviewRequestDTO): ReviewResponseDTO {
         val review = reviewService.findById(reviewRequest.reviewId!!)
         val isUser = jwt.claims["userId"].toString() == review.userId

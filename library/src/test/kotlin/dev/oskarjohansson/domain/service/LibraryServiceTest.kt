@@ -1,9 +1,15 @@
 package dev.oskarjohansson.domain.service
 
+import dev.oskarjohansson.api.dto.request.BookRequestDTO
+import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
 import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
+import dev.oskarjohansson.api.dto.response.AuthorInBookResponseDTO
+import dev.oskarjohansson.api.dto.response.BookResponseDTO
 import dev.oskarjohansson.domain.enums.Genres
+import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
 import dev.oskarjohansson.domain.model.Review
+import io.ktor.util.reflect.*
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
@@ -11,6 +17,8 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.springframework.security.oauth2.jwt.Jwt
 import java.time.LocalDateTime
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 class LibraryServiceTest {
@@ -84,6 +92,27 @@ class LibraryServiceTest {
         assertThrows<IllegalStateException>{ libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
+    @Test
+    fun`Test saveBook`(){
+
+        every { authorService.getOrCreateAuthors(any()) } returns listOf(Author("Author", "Author"))
+        every { bookService.saveBook(any(), any()) } returns Book("New Book", "New Book", listOf("Author"), Genres.FANTASY)
+        every { authorService.createAuthorResponseDTO(any()) } returns listOf(AuthorInBookResponseDTO("Author", "Author"))
+        val bookRequest = RegisterBookRequestDTO("Book",listOf("Author"), Genres.FANTASY)
+
+        assertDoesNotThrow { libraryService.saveBook(bookRequest) }
+    }
+
+    @Test
+    fun `test that save Author does not throw error when converting Author to AuthorResponseDTO`(){
+        every { authorService.saveAuthor(any()) } returns Author("AuthorId", "Author")
+
+        val authorDto = libraryService.saveAuthor("Author")
+
+        assertEquals("AuthorId", authorDto.authorID)
+        assertEquals("Author", authorDto.authorName)
+        assertDoesNotThrow { libraryService.saveAuthor("Author") }
+    }
 
 
 }
