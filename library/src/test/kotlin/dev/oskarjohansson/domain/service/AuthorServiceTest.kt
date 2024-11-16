@@ -32,7 +32,7 @@ class AuthorServiceTest {
     fun `Test that save does not throw error if author does not exist`() {
         every { authorRepository.findByAuthorName(any()) } returns null
         every { authorRepository.save(any()) } returns existingAuthor
-        assertEquals(existingAuthor, authorService.saveAuthor(author) )
+        assertEquals(existingAuthor, authorService.saveAuthor(author))
     }
 
 
@@ -47,7 +47,6 @@ class AuthorServiceTest {
     @Test
     fun `test that createAuthorResponseDTO throws error if no Author is found`() {
         every { authorRepository.findById(any()) } returns Optional.empty()
-
         assertDoesNotThrow { authorService.createAuthorResponseDTO(listOfTwoAuthors) }
     }
 
@@ -55,7 +54,6 @@ class AuthorServiceTest {
     @Test
     fun `test that createAuthorResponseDTO returns a AuthorResponseDTO when called with one author`() {
         val author = Author("1234", "AuthorSuccess")
-        val authorDto = AuthorInBookResponseDTO("1234", "AuthorSuccess")
 
         every { authorRepository.findById(any()) } returns Optional.of(author)
 
@@ -96,4 +94,38 @@ class AuthorServiceTest {
         assertEquals(response.size, 2)
 
     }
+
+    @org.junit.jupiter.api.Test
+    fun `test that getOrCreateAuthors create a new Author when no author is found in repository`() {
+        val newAuthor = Author("New Author", "New Author")
+        every { authorRepository.findByAuthorName(any()) } returns null
+        every { authorRepository.save(any()) } returns newAuthor
+        val authorsList =  authorService.getOrCreateAuthors(listOfTwoAuthors)
+
+
+        assertEquals(2 ,authorsList.size)
+        assertTrue(authorsList[0].instanceOf(Author::class))
+    }
+
+    @Test
+    fun `test that getOrCreateAuthors create one new Author when one author is found in repository and returns one author from repository`() {
+
+        val input = listOf("New Author","Existing Author")
+        val newAuthor = Author("New Author", "New Author")
+        val existingAuthor = Author("Existing Author", "Existing Author")
+
+
+        every { authorRepository.findByAuthorName("New Author") } returns null
+        every { authorRepository.findByAuthorName("Existing Author") } returns existingAuthor
+        every { authorRepository.save(any()) } returns newAuthor
+        val authorsList =  authorService.getOrCreateAuthors(input)
+
+
+
+        assertEquals(newAuthor, authorsList[0])
+        assertEquals(existingAuthor, authorsList[1])
+        assertEquals(2 ,authorsList.size)
+        assertTrue(authorsList[0].instanceOf(Author::class))
+    }
+
 }
