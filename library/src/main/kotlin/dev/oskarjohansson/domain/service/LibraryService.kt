@@ -87,17 +87,15 @@ class LibraryService(
         }
     }
 
-    // TODO: Write tests
+
     fun deleteReview(jwt: Jwt, reviewId: String) {
         val review = reviewService.findById(reviewId)
-        return run {
-            review.reviewId?.takeIf {
+        return review.reviewId?.takeIf {
                 jwt.claims["userId"].toString() == review.userId
             }?.let { reviewService.deleteById(it) }
-        }
+            ?: throw IllegalArgumentException("Could not delete review")
     }
 
-    // TODO: Write tests
     fun updateReview(jwt: Jwt, reviewRequest: ReviewRequestDTO): ReviewResponseDTO {
         val review = reviewService.findById(reviewRequest.reviewId!!)
         val isUser = jwt.claims["userId"].toString() == review.userId
@@ -108,6 +106,5 @@ class LibraryService(
                 ?: throw IllegalArgumentException("UserId and userId on review did not match")
 
         return response.toReviewResponseDTO()
-
     }
 }

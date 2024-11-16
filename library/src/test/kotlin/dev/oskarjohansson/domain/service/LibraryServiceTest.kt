@@ -11,6 +11,7 @@ import dev.oskarjohansson.domain.model.Review
 import io.ktor.util.reflect.*
 import io.mockk.every
 import io.mockk.mockk
+import net.bytebuddy.asm.Advice.Local
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -69,7 +70,7 @@ class LibraryServiceTest {
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { reviewService.createReview(any(), any()) } returns review
-        assertDoesNotThrow{ libraryService.saveReview(reviewRequestDto, jwt) }
+        assertDoesNotThrow { libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
@@ -79,7 +80,7 @@ class LibraryServiceTest {
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { reviewService.createReview(any(), any()) } returns review
-        assertThrows<IllegalStateException>{ libraryService.saveReview(reviewRequestDto, jwt) }
+        assertThrows<IllegalStateException> { libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
@@ -88,22 +89,32 @@ class LibraryServiceTest {
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { reviewService.createReview(any(), any()) } throws IllegalStateException()
-        assertThrows<IllegalStateException>{ libraryService.saveReview(reviewRequestDto, jwt) }
+        assertThrows<IllegalStateException> { libraryService.saveReview(reviewRequestDto, jwt) }
     }
 
     @Test
-    fun`Test saveBook`(){
+    fun `Test saveBook`() {
 
         every { authorService.getOrCreateAuthors(any()) } returns listOf(Author("Author", "Author"))
-        every { bookService.saveBook(any(), any()) } returns Book("New Book", "New Book", listOf("Author"), Genres.FANTASY)
-        every { authorService.createAuthorInBookResponseDTO(any()) } returns listOf(AuthorInBookResponseDTO("Author", "Author"))
-        val bookRequest = RegisterBookRequestDTO("Book",listOf("Author"), Genres.FANTASY)
+        every { bookService.saveBook(any(), any()) } returns Book(
+            "New Book",
+            "New Book",
+            listOf("Author"),
+            Genres.FANTASY
+        )
+        every { authorService.createAuthorInBookResponseDTO(any()) } returns listOf(
+            AuthorInBookResponseDTO(
+                "Author",
+                "Author"
+            )
+        )
+        val bookRequest = RegisterBookRequestDTO("Book", listOf("Author"), Genres.FANTASY)
 
         assertDoesNotThrow { libraryService.saveBook(bookRequest) }
     }
 
     @Test
-    fun `test that save Author does not throw error when converting Author to AuthorResponseDTO`(){
+    fun `test that save Author does not throw error when converting Author to AuthorResponseDTO`() {
         every { authorService.saveAuthor(any()) } returns Author("AuthorId", "Author")
 
         val authorDto = libraryService.saveAuthor("Author")
@@ -114,9 +125,14 @@ class LibraryServiceTest {
     }
 
     @Test
-    fun`test that getBookByIdOrTitle logical flow `(){
+    fun `test that getBookByIdOrTitle logical flow `() {
         every { bookService.findBookByIdOrTitle(any()) } returns book
-        every { authorService.createAuthorInBookResponseDTO(any()) } returns listOf(AuthorInBookResponseDTO("AuthorId", "Author"))
+        every { authorService.createAuthorInBookResponseDTO(any()) } returns listOf(
+            AuthorInBookResponseDTO(
+                "AuthorId",
+                "Author"
+            )
+        )
         val bookRequest = BookRequestDTO("BookId")
         val bookResponse = libraryService.getBookByIdOrTitle(bookRequest)
 
@@ -124,4 +140,90 @@ class LibraryServiceTest {
         assertDoesNotThrow { libraryService.getBookByIdOrTitle(bookRequest) }
     }
 
+    @Test
+    fun `test getBooks-Authors-Reviews`() {
+// TODO: research testing pageable
+
+    }
+
+    @Test
+    fun `test that deleteReview does not throw error when userId matches`(){
+        val time = LocalDateTime.now()
+        val review = Review(
+            "ReviewId",
+            "Review Text",
+            5,
+            time,
+            null,
+            "UserId",
+            "BookId"
+        )
+        every {reviewService.findById(any())} returns review
+        every { jwt.claims } returns mapOf("userId" to "UserId")
+        every { reviewService.deleteById(any()) } returns Unit
+
+        assertDoesNotThrow { libraryService.deleteReview(jwt, reviewId = "123") }
+    }
+
+    @Test
+    fun `test that deleteReview throws error when userId does not match`(){
+        val time = LocalDateTime.now()
+        val review = Review(
+            "ReviewId",
+            "Review Text",
+            5,
+            time,
+            null,
+            "UserId",
+            "BookId"
+        )
+        every {reviewService.findById(any())} returns review
+        every { jwt.claims } returns mapOf("userId" to null)
+        every { reviewService.deleteById(any()) } returns Unit
+
+        assertThrows<IllegalArgumentException> { libraryService.deleteReview(jwt, reviewId = "123") }
+    }
+
+    @Test
+    fun `test updateReview does not throw error when isUser is true`() {
+        val time = LocalDateTime.now()
+        val review = Review(
+            "ReviewId",
+            "Review Text",
+            5,
+            time,
+            null,
+            "UserId",
+            "BookId"
+        )
+
+        val request = ReviewRequestDTO("Updated Text", 5, reviewId = "123")
+        every { reviewService.findById(any()) } returns review
+        every { jwt.claims } returns mapOf("userId" to "UserId")
+        every { reviewService.save(any()) } returns review
+        assertDoesNotThrow { libraryService.updateReview(jwt, request) }
+    }
+
+
+
+
+    @Test
+    fun `test updateReview throws error when isUser is false`() {
+        val time = LocalDateTime.now()
+        val review = Review(
+            "ReviewId",
+            "Review Text",
+            5,
+            time,
+            null,
+            "UserId",
+            "BookId"
+        )
+
+        val request = ReviewRequestDTO("Updated Text", 5, reviewId = "123")
+        every { reviewService.findById(any()) } returns review
+        every { jwt.claims } returns mapOf("userId" to null)
+        every { reviewService.save(any()) } returns review
+        assertThrows<IllegalArgumentException> { libraryService.updateReview(jwt, request) }
+    }
 }
