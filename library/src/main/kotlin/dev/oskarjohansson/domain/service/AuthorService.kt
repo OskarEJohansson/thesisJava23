@@ -21,7 +21,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     fun findExistingAuthor(authorName: String): Author? =
         authorRepository.findByAuthorName(authorName)
 
-    fun createAuthorResponseDTO(listOfAuthorIds: List<String>): List<AuthorInBookResponseDTO> {
+    fun createAuthorInBookResponseDTO(listOfAuthorIds: List<String>): List<AuthorInBookResponseDTO> {
         return listOfAuthorIds.mapNotNull { authorId ->
             authorRepository.findById(authorId).getOrNull()?.let {
                 AuthorInBookResponseDTO(it.authorId!!, it.authorName)

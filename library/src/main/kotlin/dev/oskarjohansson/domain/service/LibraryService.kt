@@ -30,7 +30,7 @@ class LibraryService(
             .map { author -> author.authorId!! }// authorId is persisted or created in getOrCreateAuthors
             .let { authorIds ->
                 bookService.saveBook(bookRequest, authorIds).toBookResponseDTO(
-                    authorService.createAuthorResponseDTO(authorIds)
+                    authorService.createAuthorInBookResponseDTO(authorIds)
                 )
             }
     }
@@ -39,7 +39,6 @@ class LibraryService(
         return authorService.saveAuthor(authorName).toAuthorResponseDTO(emptyList())
     }
 
-    // TODO: Write test
     fun saveReview(review: ReviewRequestDTO, jwt: Jwt): Review {
         val book = bookService.findBookById(review.bookId!!) // null check in controller
         val userId = jwt.claims["userId"].toString()
@@ -50,16 +49,15 @@ class LibraryService(
         throw IllegalArgumentException("Review already exist for user, reviewId: ${existingReview.reviewId}")
     }
 
-    // TODO: Write Test
+
     fun getBookByIdOrTitle(bookRequestDTO: BookRequestDTO): BookResponseDTO {
         return bookService.findBookByIdOrTitle(bookRequestDTO).let { book ->
             book.toBookResponseDTO(
-                authorService.createAuthorResponseDTO(book.authorIds)
+                authorService.createAuthorInBookResponseDTO(book.authorIds)
             )
         }
     }
 
-    // TODO: Write Test
     fun getBookById(bookId: String): Book =
         bookService.findBookById(bookId)
 
@@ -67,7 +65,7 @@ class LibraryService(
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
         return bookService.findAllBooksPageable(pageable).map { book ->
             book.toBookResponseDTO(
-                authorService.createAuthorResponseDTO(book.authorIds)
+                authorService.createAuthorInBookResponseDTO(book.authorIds)
             )
         }
     }

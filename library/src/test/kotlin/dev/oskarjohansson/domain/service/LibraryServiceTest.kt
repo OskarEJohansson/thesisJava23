@@ -4,7 +4,6 @@ import dev.oskarjohansson.api.dto.request.BookRequestDTO
 import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
 import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
 import dev.oskarjohansson.api.dto.response.AuthorInBookResponseDTO
-import dev.oskarjohansson.api.dto.response.BookResponseDTO
 import dev.oskarjohansson.domain.enums.Genres
 import dev.oskarjohansson.domain.model.Author
 import dev.oskarjohansson.domain.model.Book
@@ -35,7 +34,7 @@ class LibraryServiceTest {
 
 
     @Test
-    fun `assertDoesNotThrow that createReview does not throw exception with valid inputs`() {
+    fun `assertDoesNotThrow that saveReview does not throw exception with valid inputs`() {
 
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { bookService.findBookById(any()) } returns book
@@ -45,7 +44,7 @@ class LibraryServiceTest {
     }
 
     @Test
-    fun `test that createReview throws exception when user has an existing review`() {
+    fun `test that saveReview throws exception when user has an existing review`() {
 
         every { jwt.claims } returns mapOf("userId" to "user123")
         every { bookService.findBookById(any()) } returns book
@@ -55,7 +54,7 @@ class LibraryServiceTest {
 
 
     @Test
-    fun `test that createReview throws IllegalArgumentException when user already has registered a review`() {
+    fun `test that saveReview throws IllegalArgumentException when user already has registered a review`() {
 
         every { bookService.findBookById(any()) } returns book
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns review
@@ -64,7 +63,7 @@ class LibraryServiceTest {
     }
 
     @Test
-    fun `test that createReview does not throw IllegalArgumentException when user has no review registered`() {
+    fun `test that saveReview does not throw IllegalArgumentException when user has no review registered`() {
 
         every { bookService.findBookById(any()) } returns book
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
@@ -74,7 +73,7 @@ class LibraryServiceTest {
     }
 
     @Test
-    fun `test that createReview throws IllegalArgumentException when Book is not found`() {
+    fun `test that saveReview throws IllegalArgumentException when Book is not found`() {
 
         every { bookService.findBookById(any()) } throws IllegalStateException()
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
@@ -84,7 +83,7 @@ class LibraryServiceTest {
     }
 
     @Test
-    fun `test that createReview throws IllegalArgumentException review can't be persisted`() {
+    fun `test that saveReview throws IllegalArgumentException review can't be persisted`() {
         every { bookService.findBookById(any()) } returns book
         every { reviewService.findByBookIdAndUserId(any(), any()) } returns null
         every { jwt.claims } returns mapOf("userId" to "user123")
@@ -97,7 +96,7 @@ class LibraryServiceTest {
 
         every { authorService.getOrCreateAuthors(any()) } returns listOf(Author("Author", "Author"))
         every { bookService.saveBook(any(), any()) } returns Book("New Book", "New Book", listOf("Author"), Genres.FANTASY)
-        every { authorService.createAuthorResponseDTO(any()) } returns listOf(AuthorInBookResponseDTO("Author", "Author"))
+        every { authorService.createAuthorInBookResponseDTO(any()) } returns listOf(AuthorInBookResponseDTO("Author", "Author"))
         val bookRequest = RegisterBookRequestDTO("Book",listOf("Author"), Genres.FANTASY)
 
         assertDoesNotThrow { libraryService.saveBook(bookRequest) }
@@ -114,5 +113,15 @@ class LibraryServiceTest {
         assertDoesNotThrow { libraryService.saveAuthor("Author") }
     }
 
+    @Test
+    fun`test that getBookByIdOrTitle logical flow `(){
+        every { bookService.findBookByIdOrTitle(any()) } returns book
+        every { authorService.createAuthorInBookResponseDTO(any()) } returns listOf(AuthorInBookResponseDTO("AuthorId", "Author"))
+        val bookRequest = BookRequestDTO("BookId")
+        val bookResponse = libraryService.getBookByIdOrTitle(bookRequest)
+
+        assertTrue { bookResponse.authors!![0].instanceOf(AuthorInBookResponseDTO::class) }
+        assertDoesNotThrow { libraryService.getBookByIdOrTitle(bookRequest) }
+    }
 
 }

@@ -47,7 +47,7 @@ class AuthorServiceTest {
     @Test
     fun `test that createAuthorResponseDTO throws error if no Author is found`() {
         every { authorRepository.findById(any()) } returns Optional.empty()
-        assertDoesNotThrow { authorService.createAuthorResponseDTO(listOfTwoAuthors) }
+        assertDoesNotThrow { authorService.createAuthorInBookResponseDTO(listOfTwoAuthors) }
     }
 
 
@@ -57,7 +57,7 @@ class AuthorServiceTest {
 
         every { authorRepository.findById(any()) } returns Optional.of(author)
 
-        val response = authorService.createAuthorResponseDTO(listOf("1234"))
+        val response = authorService.createAuthorInBookResponseDTO(listOf("1234"))
 
         assertTrue { response[0].instanceOf(AuthorInBookResponseDTO::class) }
         assertTrue { response.size == 1 }
@@ -74,8 +74,8 @@ class AuthorServiceTest {
         )
         every { authorRepository.findById(any()) } returns Optional.of(author)
 
-        assertDoesNotThrow { authorService.createAuthorResponseDTO(listOfTwoAuthors) }
-        assertTrue { authorService.createAuthorResponseDTO(listOfTwoAuthors).size == 2 }
+        assertDoesNotThrow { authorService.createAuthorInBookResponseDTO(listOfTwoAuthors) }
+        assertTrue { authorService.createAuthorInBookResponseDTO(listOfTwoAuthors).size == 2 }
 
     }
 
@@ -89,7 +89,7 @@ class AuthorServiceTest {
         every { authorRepository.findById("Invalid") } returns Optional.empty()
         every { authorRepository.findById("2345") } returns Optional.of(anotherAuthor)
 
-        val response = authorService.createAuthorResponseDTO(authorsPartFailure)
+        val response = authorService.createAuthorInBookResponseDTO(authorsPartFailure)
 
         assertEquals(response.size, 2)
 
