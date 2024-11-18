@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 interface BookRepository :MongoRepository<Book, String> {
 
 
-    fun findByAuthorId(authorId:String): List<Book>?
+    fun findByAuthorIds(authorId:List<String>): List<Book>?
 
     fun findByBookId(bookId: String): Book?
 
