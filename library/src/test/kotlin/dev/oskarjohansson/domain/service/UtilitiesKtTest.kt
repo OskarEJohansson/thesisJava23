@@ -18,8 +18,6 @@ import kotlin.test.*
 
 class UtilitiesKtTest {
 
-    // TODO: Add edge cases with empty lists and missing
-
     @Test
     fun `Test that toReviewWithReviewIdNull converts ReviewRequestDTO correctly with valid inputs`() {
 

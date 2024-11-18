@@ -42,15 +42,4 @@ class UserController(private val userService: UserService, private val apiServic
         }
     }
 
-
-//    @PutMapping
-//    fun updateUser() {
-//        TODO("Add logic for updating a user")
-//    }
-//
-//    @DeleteMapping
-//    fun deleteUser() {
-//        TODO("Add logic for deleting a user")
-//    }
-
 }

@@ -15,7 +15,8 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class AuthorService(private val authorRepository: AuthorRepository) {
 
-    fun saveAuthor(authorName: String): Author = authorRepository.save(Author(authorName = authorName))
+    fun saveAuthor(authorName: String): Author =
+        authorRepository.save(Author(authorName = authorName))
 
     fun findAuthorByName(authorName: String): Author? =
         authorRepository.findByAuthorName(authorName)
