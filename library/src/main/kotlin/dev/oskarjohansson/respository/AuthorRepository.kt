@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository
 interface AuthorRepository: MongoRepository<Author, String> {
 
     fun findByAuthorName(author: String): Author?
-
-
+    fun findByAuthorId(authorId: String): Author?
 }

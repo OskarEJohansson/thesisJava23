@@ -11,7 +11,6 @@ import dev.oskarjohansson.domain.model.Review
 import io.ktor.util.reflect.*
 import io.mockk.every
 import io.mockk.mockk
-import net.bytebuddy.asm.Advice.Local
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows

@@ -1,5 +1,6 @@
 package dev.oskarjohansson.api
 
+import dev.oskarjohansson.api.dto.request.AddAuthorRequestDTO
 import dev.oskarjohansson.api.dto.request.BookRequestDTO
 import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
 import dev.oskarjohansson.api.dto.response.BookResponseDTO
@@ -70,7 +71,19 @@ class BookController(private val libraryService: LibraryService) {
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Error while loading book: ${it.message}"))
         }
+    }
 
+    @PostMapping("/v1/add-author")
+    fun addAuthor(@Valid @RequestBody authorRequest: AddAuthorRequestDTO ): ResponseEntity<ResponseDTO<BookResponseDTO>>{
+
+        return runCatching {
+            require(authorRequest.authorName){
+                "Author name must not be null"
+            }
+            ResponseEntity.status(HttpStatus.CREATED).body(ResponseDTO(HttpStatus.CREATED.value(), "Author added", libraryService.addAuthor(authorRequest)))
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not register author, ${it.message} "))
+        }
     }
 
 }

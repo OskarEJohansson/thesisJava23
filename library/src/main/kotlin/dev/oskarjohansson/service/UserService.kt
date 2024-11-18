@@ -1,7 +1,7 @@
 package dev.oskarjohansson.service
 
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
-import dev.oskarjohansson.api.dto.UserDTO
+import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.model.User
 import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*
@@ -36,11 +36,11 @@ class UserService(
         }
     }
 
-    fun registerUser(userDTO: UserDTO): User {
-        userRepository.findUserByUsernameOrEmail(userDTO.username, userDTO.email)
+    fun registerUser(userRequestDTO: UserRequestDTO): User {
+        userRepository.findUserByUsernameOrEmail(userRequestDTO.username, userRequestDTO.email)
             ?.let { throw IllegalArgumentException("Username or Email already exist") }
 
-        return userRepository.save(createUserObject(userDTO, passwordEncoder))
+        return userRepository.save(createUserObject(userRequestDTO, passwordEncoder))
     }
 
     fun getUsers(): List<User> {

@@ -1,7 +1,7 @@
 package dev.oskarjohansson.api
 
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
-import dev.oskarjohansson.api.dto.UserDTO
+import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.service.ApiService
 import dev.oskarjohansson.service.UserService
 
@@ -31,7 +31,7 @@ class UserController(private val userService: UserService, private val apiServic
     }
 
     @PostMapping("/v1/register-user")
-    fun registerUser(@Valid @RequestBody registerUser: UserDTO): ResponseEntity<String> {
+    fun registerUser(@Valid @RequestBody registerUser: UserRequestDTO): ResponseEntity<String> {
 
         return runCatching {
             userService.registerUser(registerUser)

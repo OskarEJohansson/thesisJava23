@@ -1,6 +1,6 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.api.dto.UserDTO
+import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -19,7 +19,7 @@ class UserServiceTest {
     fun `Test that register user throws IllegalArgumentException when trying to register a username that already exist`(){
 
         every { repository.findUserByUsernameOrEmail(any(),any()) } returns mockk()
-        assertThrows<IllegalArgumentException> { userService.registerUser(UserDTO("123","123","123"))  }
+        assertThrows<IllegalArgumentException> { userService.registerUser(UserRequestDTO("123","123","123"))  }
 
     }
 }
