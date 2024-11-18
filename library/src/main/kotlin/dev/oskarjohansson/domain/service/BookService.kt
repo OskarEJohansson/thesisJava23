@@ -48,7 +48,7 @@ class BookService(private val bookRepository: BookRepository) {
     fun findAllBooksPageable(pageable: Pageable): Page<Book> = bookRepository.findAll(pageable)
 
     fun createBookInAuthorResponseDTO(authorId: String): List<BookInAuthorResponseDTO>? {
-        return bookRepository.findByAuthorIds(authorId)?.map { book ->
+        return bookRepository.findByAuthorId(authorId)?.map { book ->
             BookInAuthorResponseDTO(book.bookId!!, book.title)
         }
     }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ReviewRepository:MongoRepository<Review, String> {
 
-    fun findByUserId(userId:String): Review?
     fun findByBookId(pageable: Pageable, bookId:String): Page<Review>?
     fun findByBookIdAndUserId(bookId: String, userId: String): Review?
     fun findByReviewId(reviewId:String): Review?
