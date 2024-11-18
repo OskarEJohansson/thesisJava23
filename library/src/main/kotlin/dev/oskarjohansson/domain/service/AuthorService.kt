@@ -8,17 +8,14 @@ import dev.oskarjohansson.respository.AuthorRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 import kotlin.jvm.optionals.getOrNull
 
 
 @Service
 class AuthorService(private val authorRepository: AuthorRepository) {
 
-    // TODO: move logic to library service 
-    fun saveAuthor(authorName: String): Author {
-        return findAuthorByName(authorName)
-            ?: authorRepository.save(Author(authorName = authorName))
-    }
+    fun saveAuthor(authorName: String): Author = authorRepository.save(Author(authorName = authorName))
 
     fun findAuthorByName(authorName: String): Author? =
         authorRepository.findByAuthorName(authorName)
@@ -33,9 +30,9 @@ class AuthorService(private val authorRepository: AuthorRepository) {
             }
         }
     }
-    
-    fun getOrCreateAuthor(author: AddAuthorRequestDTO): Author{
-       return author.authorName?.let { findAuthorByName(it) }
+
+    fun getOrCreateAuthor(author: AddAuthorRequestDTO): Author {
+        return author.authorName?.let { findAuthorByName(it) }
             ?: author.authorId?.let { findAuthorById(it) }
             ?: saveAuthor(author.authorName!!) //Null check in controller
     }

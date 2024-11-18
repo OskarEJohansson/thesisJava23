@@ -116,12 +116,21 @@ class LibraryServiceTest {
     @Test
     fun `test that save Author does not throw error when converting Author to AuthorResponseDTO`() {
         every { authorService.saveAuthor(any()) } returns Author("AuthorId", "Author")
+        every { authorService.findAuthorByName(any()) } returns null
 
         val authorDto = libraryService.saveAuthor("Author")
 
         assertEquals("AuthorId", authorDto.authorID)
         assertEquals("Author", authorDto.authorName)
         assertDoesNotThrow { libraryService.saveAuthor("Author") }
+    }
+
+    @Test
+    fun `test that saveAuthor throws error when author exist`(){
+        every { authorService.findAuthorByName(any()) } returns Author("123", "ABC")
+        every { authorService.saveAuthor(any()) } returns Author("AuthorId", "Author")
+
+        assertThrows<IllegalArgumentException> { libraryService.saveAuthor("author")  }
     }
 
     @Test

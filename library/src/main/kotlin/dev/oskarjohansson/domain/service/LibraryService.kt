@@ -37,6 +37,12 @@ class LibraryService(
     }
 
     fun saveAuthor(authorName: String): AuthorResponseDTO {
+        authorService.findAuthorByName(authorName).let {
+            if (it != null) {
+                throw IllegalArgumentException("Author already exist: Author id: ${it.authorId!!}")
+            }
+        }
+
         return authorService.saveAuthor(authorName).toAuthorResponseDTO(emptyList())
     }
 

@@ -23,12 +23,6 @@ class AuthorServiceTest {
 
 
     @Test
-    fun `Test that saveAuthor return existing author if author exist `() {
-        every { authorRepository.findByAuthorName(any()) } returns existingAuthor
-        assertEquals(existingAuthor, authorService.saveAuthor(author))
-    }
-
-    @Test
     fun `Test that save does not throw error if author does not exist`() {
         every { authorRepository.findByAuthorName(any()) } returns null
         every { authorRepository.save(any()) } returns existingAuthor
