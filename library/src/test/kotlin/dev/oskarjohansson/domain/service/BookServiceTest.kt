@@ -6,6 +6,7 @@ import dev.oskarjohansson.respository.BookRepository
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,5 +40,11 @@ class BookServiceTest {
         every {bookRepository.findByBookId(any())} returns null
 
         assertThrows<IllegalStateException> { bookService.findBookByIdOrTitle(bookId) }
+    }
+
+    @Test
+    fun`Test that validateAuthorExistenceInBook throws error when authorId is persisted in book`(){
+        every {bookRepository.findByBookId(any())?.authorIds?.contains(any()) } returns true
+        assertThrows<IllegalArgumentException> { bookService.validateAuthorExistenceInBook("123", "ABD")  }
     }
 }

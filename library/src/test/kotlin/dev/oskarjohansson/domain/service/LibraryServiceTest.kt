@@ -231,11 +231,14 @@ class LibraryServiceTest {
     fun`test addAuthor throws no errors with valid inputs`(){
         val addAuthor = AddAuthorRequestDTO("123", "ABC")
         val bookWithOneAuthor = Book("123", "Book", listOf("123ABC"),Genres.FANTASY)
+        val bookWithTwoAuthor = Book("123", "Book", listOf("ABC","123ABC"),Genres.FANTASY)
+        val authorsDTO = listOf(AuthorInBookResponseDTO("ABC", "Author"), AuthorInBookResponseDTO("ABC123", "Author"))
+
         every {bookService.findBookById(addAuthor.bookId)} returns bookWithOneAuthor
-        every { authorService.getOrCreateAuthor(addAuthor) } returns Author("ABC123", "ABC")
+        every {authorService.getOrCreateAuthor(addAuthor) } returns Author("ABC123", "ABC")
         every {bookService.validateAuthorExistenceInBook(any(),any())} returns Unit
-        every {bookService.saveBookWithNewAuthor(any())} returns mockk<Book>()
-        every {  }
+        every {bookService.saveBookWithNewAuthor(any())} returns bookWithTwoAuthor
+        every {authorService.createAuthorInBookResponseDTO(any()) } returns authorsDTO
 
         assertDoesNotThrow { libraryService.addAuthor(addAuthor) }
     }
