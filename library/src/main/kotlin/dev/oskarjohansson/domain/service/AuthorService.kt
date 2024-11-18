@@ -35,7 +35,9 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     }
     
     fun getOrCreateAuthor(author: AddAuthorRequestDTO): Author{
-        findAuthorByName(author.authorName) ?: findAuthorById(author.authorId) ?: saveAuthor(author)
+       return author.authorName?.let { findAuthorByName(it) }
+            ?: author.authorId?.let { findAuthorById(it) }
+            ?: saveAuthor(author.authorName!!) //Null check in controller
     }
 
     fun getOrCreateAuthors(authors: List<String>): List<Author> {

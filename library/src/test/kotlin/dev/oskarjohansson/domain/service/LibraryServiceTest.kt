@@ -1,5 +1,6 @@
 package dev.oskarjohansson.domain.service
 
+import dev.oskarjohansson.api.dto.request.AddAuthorRequestDTO
 import dev.oskarjohansson.api.dto.request.BookRequestDTO
 import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
 import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
@@ -225,4 +226,18 @@ class LibraryServiceTest {
         every { reviewService.save(any()) } returns review
         assertThrows<IllegalArgumentException> { libraryService.updateReview(jwt, request) }
     }
+
+    @Test
+    fun`test addAuthor throws no errors with valid inputs`(){
+        val addAuthor = AddAuthorRequestDTO("123", "ABC")
+        val bookWithOneAuthor = Book("123", "Book", listOf("123ABC"),Genres.FANTASY)
+        every {bookService.findBookById(addAuthor.bookId)} returns bookWithOneAuthor
+        every { authorService.getOrCreateAuthor(addAuthor) } returns Author("ABC123", "ABC")
+        every {bookService.validateAuthorExistenceInBook(any(),any())} returns Unit
+        every {bookService.saveBookWithNewAuthor(any())} returns mockk<Book>()
+        every {  }
+
+        assertDoesNotThrow { libraryService.addAuthor(addAuthor) }
+    }
+
 }

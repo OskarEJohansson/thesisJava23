@@ -109,36 +109,16 @@ class LibraryService(
         return response.toReviewResponseDTO()
     }
 
-    fun addAuthor(bookRequest: AddAuthorRequestDTO): Book {
-
-
-        // TODO: Check if book exist
-        // TODO: Check if author exist
-        // TODO: If: check if author exist in book, {
-        //      TODO: If: return that author already exist
-        //      TODO: Else: add author id to book }
-        // TODO: Else: save author and add to book
-
-
+    fun addAuthor(bookRequest: AddAuthorRequestDTO): BookResponseDTO {
         val book = bookRequest.bookId.let { bookService.findBookById(it) }
+        val authorList = book.authorIds.toMutableList()
+        val author = authorService.getOrCreateAuthor(bookRequest)
 
-        val author = bookRequest.authorId?.let {
-            authorService.findAuthorById(it) }
-            ?: authorService.findAuthorByName(bookRequest.authorName!!) //null check in controller
+        bookService.validateAuthorExistenceInBook(book.bookId!!, author.authorId!!) // Values null checked above
+        authorList.add(author.authorId)
+        val updatedBook = bookService.saveBookWithNewAuthor(book.copy(authorIds = authorList.toList()))
+        val authors = authorService.createAuthorInBookResponseDTO(updatedBook.authorIds)
 
-        when (author) {
-            null -> {
-                authorService.saveAuthor(bookRequest.authorName!!).let { author ->
-                    val authorList = book.authorIds.toMutableList()
-                    authorList.add(author.authorId!!) //null check in controller
-                    val updatedBook = book.copy(authorIds = authorList)
-                    bookService.saveBook(updatedBook)
-                }
-            }
-
-        }
-
-        val isAuthor = book.authorIds.contains(author?.authorId!!)
-
+        return updatedBook.toBookResponseDTO(authors)
     }
 }

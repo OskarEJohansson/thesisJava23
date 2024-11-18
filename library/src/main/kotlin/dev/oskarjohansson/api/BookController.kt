@@ -77,7 +77,7 @@ class BookController(private val libraryService: LibraryService) {
     fun addAuthor(@Valid @RequestBody authorRequest: AddAuthorRequestDTO ): ResponseEntity<ResponseDTO<BookResponseDTO>>{
 
         return runCatching {
-            require(authorRequest.authorName){
+            require(!authorRequest.authorName.isNullOrBlank()){
                 "Author name must not be null"
             }
             ResponseEntity.status(HttpStatus.CREATED).body(ResponseDTO(HttpStatus.CREATED.value(), "Author added", libraryService.addAuthor(authorRequest)))
