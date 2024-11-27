@@ -16,7 +16,6 @@ import java.util.*
 class PublicKeyController(val rsaKey: RSAKey) {
 
 
-    // TODO: Rename logger 
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
     @GetMapping("/v1/public-key")
