@@ -48,7 +48,6 @@ class UserService(
     }
 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
-
         val response = runBlocking {
             client.post("http://localhost:8081/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
