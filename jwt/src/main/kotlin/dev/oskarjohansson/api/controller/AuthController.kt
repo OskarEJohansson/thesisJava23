@@ -3,7 +3,6 @@ package dev.oskarjohansson.api.controller
 import dev.oskarjohansson.model.ResponseDTO
 import dev.oskarjohansson.model.LoginRequestDTO
 import dev.oskarjohansson.service.TokenService
-import io.ktor.util.*
 import jakarta.validation.Valid
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm") version "1.9.25" apply false
     kotlin("plugin.spring") version "1.9.25" apply false
@@ -15,7 +17,6 @@ allprojects{
 }
 
 subprojects {
-
     apply{
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.springframework.boot")
@@ -25,5 +26,14 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+    }
+
+    if(project.name == "commons"){
+        tasks.withType<BootJar> { enabled = false }
+
+        tasks.withType<Jar> {
+            archiveBaseName.set("commons")
+            archiveVersion.set("1.0")
+        }
     }
 }

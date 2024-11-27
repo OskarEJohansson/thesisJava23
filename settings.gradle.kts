@@ -1,3 +1,7 @@
 rootProject.name = "thesis-java23"
 
-include(":library", ":jwt", ":commons")
+include(":library")
+include(":jwt")
+include(":commons")
+
+

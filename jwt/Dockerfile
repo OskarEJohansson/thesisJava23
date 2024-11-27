@@ -2,7 +2,7 @@ FROM openjdk:21-jdk-slim AS build
 
 WORKDIR /app
 
-COPY jwt/build/libs/jwt.jar /app
+COPY build/libs/jwt.jar /app
 
 EXPOSE 8081
 

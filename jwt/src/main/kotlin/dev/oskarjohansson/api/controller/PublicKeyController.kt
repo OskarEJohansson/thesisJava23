@@ -2,6 +2,7 @@ package dev.oskarjohansson.api.controller
 
 import com.nimbusds.jose.jwk.RSAKey
 import dev.oskarjohansson.api.dto.PublicKeyResponseDTO
+import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -17,17 +18,21 @@ class PublicKeyController(val rsaKey: RSAKey) {
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
     @GetMapping("/v1/public-key")
-    fun publicKey(): ResponseEntity<PublicKeyResponseDTO> =
+    fun publicKey(request: HttpServletRequest): ResponseEntity<PublicKeyResponseDTO> =
         runCatching {
+
+            LOG.info("Request: ${request.method}")
+            LOG.info("Headers: ${request.headerNames.toList()}")
+            LOG.info("Parameters: ${request.parameterMap}")
+
             val publicKeyData = rsaKey.toPublicJWK().toJSONObject()
             val keyID = UUID.randomUUID().toString()
 
-            LOG.debug("KeyID: $keyID, PublicKeyData: $publicKeyData")
+            LOG.info("KeyID: $keyID, PublicKeyData: $publicKeyData")
 
-            ResponseEntity.ok(
-                PublicKeyResponseDTO(keyID, publicKeyData)
+            ResponseEntity.ok().body(PublicKeyResponseDTO(keyID, publicKeyData))
 
-            )
+
         }.getOrElse {
             LOG.error("Error retrieving public RSA key: ${it.message}", it)
             throw IllegalStateException("Internal Server error: ${it.message}")
