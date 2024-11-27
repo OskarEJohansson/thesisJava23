@@ -19,6 +19,7 @@ import java.security.interfaces.RSAPublicKey
 @Service
 class ApiService() {
 
+    // TODO: rename logger 
     private val LOG: Logger = LoggerFactory.getLogger(ApiService::class.java)
 
     val client = HttpClient(CIO) {
