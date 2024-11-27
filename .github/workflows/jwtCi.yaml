@@ -1,10 +1,9 @@
-
 name: JwtCI
 
 env:
-  PROJECT_ID: 'cicdtest-438007' # TODO: update to your Google Cloud project ID
-  REGION: 'eu-north1' # TODO: update to your region
-  SERVICE: 'my-service' # TODO: update to your service name
+  PROJECT_ID: 'cicdtest-438007'
+  REGION: 'eu-north1'
+  SERVICE: 'javathesis23'
   WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis' # TODO: update to your workload identity provider
 
 on:
@@ -22,8 +21,9 @@ jobs:
       id-token: 'write'
 
     steps:
-      - name: Checkout 
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Kotlin
         uses: actions/setup-java@v4
         with:
@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew :jwt:test
         continue-on-error: false
 
-     # actions/checkout@v4
+      # actions/checkout@v4
 
       # Configure Workload Identity Federation and generate an access token.
       #
@@ -65,4 +65,3 @@ jobs:
           DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
           docker build --tag "${DOCKER_TAG}" .
           docker push "${DOCKER_TAG}"
-
