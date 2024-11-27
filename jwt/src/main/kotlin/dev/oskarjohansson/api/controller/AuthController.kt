@@ -24,7 +24,6 @@ class AuthController(
     private val authenticationManager: AuthenticationManager,
 ) {
 
-    //todo  rename LOG
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
     @PostMapping("/v1/login")
