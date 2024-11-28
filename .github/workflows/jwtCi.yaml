@@ -49,13 +49,17 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+          workload_identity_provider: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
+          service_account: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
 
       - name: Check Credentials File
         run: ls -l "${GOOGLE_APPLICATION_CREDENTIALS}"
 
       - name: Verify authentication
         run: gcloud auth list
+
+      - name: Debug Access Token
+        run: echo "${{ steps.auth.outputs.auth_token }}"
 
       # BEGIN - Docker auth and build
       #
@@ -64,7 +68,7 @@ jobs:
         uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
         with:
           username: 'oauth2accesstoken'
-          password: '${{ secrets.GOOGLE_CREDENTIALS }}'
+          password: '${{ steps.auth.outputs.auth_token }}'
           registry: '${{ env.REGION }}-docker.pkg.dev'
 
       - name: 'Build and Push Container'
