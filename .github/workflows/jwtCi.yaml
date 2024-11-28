@@ -40,8 +40,8 @@ jobs:
 #        run: ./gradlew :jwt:test
 #        continue-on-error: false
 
-#      - name: Build JWT Jar
-#        run: ./gradlew :jwt:build
+      - name: Build JWT Jar
+        run: ./gradlew :jwt:build
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
