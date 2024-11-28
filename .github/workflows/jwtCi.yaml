@@ -5,6 +5,7 @@ env:
   REGION: 'europe-north1'
   SERVICE: 'javathesis23'
   WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
+  SERVICE_ACCOUNT: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
 
 on:
   push:
@@ -49,7 +50,10 @@ jobs:
         uses: 'google-github-actions/auth@f112390a2df9932162083945e46d439060d66ec2' # google-github-actions/auth@v2
         with:
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
-          service_account: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
+          service_account: '${{ env.SERVICE_ACCOUNT }}'
+
+      - name: Activate Google Cloud credentials
+        run: gcloud auth activate-service-account --key-file="${GOOGLE_APPLICATION_CREDENTIALS}"
 
       - name: Verify authentication
         run: gcloud auth list
