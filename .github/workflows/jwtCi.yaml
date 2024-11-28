@@ -51,8 +51,6 @@ jobs:
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
           service_account: '${{ env.SERVICE_ACCOUNT }}'
 
-      - name: Debug Docker Login
-        run: docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" europe-north1-docker.pkg.dev
 
       # BEGIN - Docker auth and build
       #
@@ -66,5 +64,6 @@ jobs:
 
       - name: 'Build and Push Container'
         run: |-
-          docker build -f jwt/Dockerfile --tag europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:1 .
+          docker build -f jwt/Dockerfile --tag europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:latest
+  .
           docker push "${DOCKER_TAG}"
