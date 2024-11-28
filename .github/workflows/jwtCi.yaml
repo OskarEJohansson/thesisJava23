@@ -49,8 +49,7 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
-          service_account: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
+          credentials_json: '${{ secrets.GOOGLE_ADC }}'
 
       - name: Check Credentials File
         run: ls -l "${GOOGLE_APPLICATION_CREDENTIALS}"
