@@ -4,7 +4,7 @@ env:
   PROJECT_ID: 'cicdtest-438007'
   REGION: 'eu-north1'
   SERVICE: 'javathesis23'
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis' # TODO: update to your workload identity provider
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
 
 on:
   push:
@@ -40,6 +40,9 @@ jobs:
 
       - name: Build JWT Jar
         run: ./gradlew :jwt:build
+
+      - name: List files
+        run: ls -R
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
