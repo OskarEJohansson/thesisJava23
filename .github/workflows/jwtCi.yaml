@@ -26,15 +26,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 #
-#      - name: Set up Kotlin
-#        uses: actions/setup-java@v4
-#        with:
-#          distribution: 'temurin'
-#          java-version: '21'
-#          cache: gradle
-#
-#      - name: Set up Gradle
-#        uses: gradle/actions/setup-gradle@v4
+      - name: Set up Kotlin
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
 #      - name: Run tests
 #        run: ./gradlew :jwt:test
@@ -50,18 +50,23 @@ jobs:
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
           service_account: '${{ env.SERVICE_ACCOUNT }}'
 
-      - name: 'Docker Auth'
-        uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
-        with:
-          username: 'oauth2accesstoken'
-          password: '${{ steps.auth.outputs.auth_token }}'
-          registry: '${{ env.REGION }}-docker.pkg.dev'
+#      - name: 'Docker Auth'
+#        uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
+#        with:
+#          username: 'oauth2accesstoken'
+#          password: '${{ steps.auth.outputs.auth_token }}'
+#          registry: '${{ env.REGION }}-docker.pkg.dev'
+
+      - name: Manual Docker Login
+        run: |
+          TOKEN=$(gcloud auth print-access-token)
+          echo "$TOKEN" | docker login -u oauth2accesstoken --password-stdin ${{ env.REGION }}-docker.pkg.dev
 
       - name: 'Log token'
         run: |-
           gcloud auth print-access-token
 
-#      - name: 'Build and Push Container'
-#        run: |-
-#          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
-#          docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest
+      - name: 'Build and Push Container'
+        run: |-
+          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
+          docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest
