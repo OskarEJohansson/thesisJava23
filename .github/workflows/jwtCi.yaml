@@ -66,5 +66,5 @@ jobs:
 
       - name: 'Build and Push Container'
         run: |-
-          docker build -f jwt/Dockerfile --tag europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:latest .
+          docker build -f jwt/Dockerfile --tag europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:1 .
           docker push "${DOCKER_TAG}"
