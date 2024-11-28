@@ -2,7 +2,7 @@ name: JwtCI
 
 env:
   PROJECT_ID: 'cicdtest-438007'
-  REGION: 'eu-north1'
+  REGION: 'europe-north1'
   SERVICE: 'javathesis23'
   WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
 
