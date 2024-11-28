@@ -50,6 +50,9 @@ jobs:
         with:
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
 
+      - name: Verify authentication
+        run: gcloud auth list
+
       # BEGIN - Docker auth and build
       #
       # If you already have a container image, you can omit these steps.
