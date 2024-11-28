@@ -66,6 +66,5 @@ jobs:
 
       - name: 'Build and Push Container'
         run: |-
-          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/jwt:${{ github.sha }}"
-          docker build -f jwt/Dockerfile --tag "${DOCKER_TAG}" .
+          docker build -f jwt/Dockerfile --tag europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:latest .
           docker push "${DOCKER_TAG}"

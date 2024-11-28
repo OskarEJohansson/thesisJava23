@@ -23,7 +23,6 @@ class AuthController(
     private val tokenService: TokenService,
     private val authenticationManager: AuthenticationManager,
 ) {
-    // TODO: 12 
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
     @PostMapping("/v1/login")
