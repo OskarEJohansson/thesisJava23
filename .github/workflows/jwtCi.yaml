@@ -61,6 +61,9 @@ jobs:
       - name: Debug Access Token
         run: echo "${{ steps.auth.outputs.auth_token }}"
 
+      - name: Debug Docker Login
+        run: docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" europe-north1-docker.pkg.dev
+
       # BEGIN - Docker auth and build
       #
       # If you already have a container image, you can omit these steps.
@@ -73,6 +76,6 @@ jobs:
 
       - name: 'Build and Push Container'
         run: |-
-          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/jwt:${{ github.sha }}"
           docker build -f jwt/Dockerfile --tag "${DOCKER_TAG}" .
           docker push "${DOCKER_TAG}"
