@@ -23,8 +23,8 @@ jobs:
 
     steps:
 
-#      - name: Checkout code
-#        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 #
 #      - name: Set up Kotlin
 #        uses: actions/setup-java@v4
@@ -59,9 +59,6 @@ jobs:
 
       - name: 'Log token'
         run: |-
-          env
-          ls -la
-          cat {file-med-credentials}
           gcloud auth print-access-token
 
 #      - name: 'Build and Push Container'
