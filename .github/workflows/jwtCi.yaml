@@ -6,6 +6,7 @@ env:
   SERVICE: 'javathesis23'
   WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
   SERVICE_ACCOUNT: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
+  GHA_ENDPOINT_OVERRIDE_oauth2: 'https://oauth2.myapi.endpoint/v1'
 
 on:
   push:
@@ -27,7 +28,8 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '${{ secrets.GOOGLE_ADC }}'
+          workload_identity_provider: '${{ WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ SERVICE_ACCOUNT }}'
 
       - name: Checkout code
         uses: actions/checkout@v4
