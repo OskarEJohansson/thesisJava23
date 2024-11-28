@@ -18,6 +18,7 @@ class PublicKeyController(val rsaKey: RSAKey) {
 
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
+    // TODO: 123 
     @GetMapping("/v1/public-key")
     fun publicKey(request: HttpServletRequest): ResponseEntity<PublicKeyResponseDTO> =
         runCatching {
