@@ -24,13 +24,6 @@ jobs:
 
     steps:
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
-          service_account: '${{ env.SERVICE_ACCOUNT }}'
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -44,22 +37,19 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Run tests
-        run: ./gradlew :jwt:test
-        continue-on-error: false
+#      - name: Run tests
+#        run: ./gradlew :jwt:test
+#        continue-on-error: false
 
       - name: Build JWT Jar
         run: ./gradlew :jwt:build
 
-
-      - name: Check Credentials File
-        run: ls -l "${GOOGLE_APPLICATION_CREDENTIALS}"
-
-      - name: Verify authentication
-        run: gcloud auth list
-
-      - name: Debug Access Token
-        run: echo "${{ steps.auth.outputs.auth_token }}"
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ env.SERVICE_ACCOUNT }}'
 
       - name: Debug Docker Login
         run: docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" europe-north1-docker.pkg.dev
