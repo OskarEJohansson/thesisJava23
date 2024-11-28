@@ -6,7 +6,6 @@ env:
   SERVICE: 'javathesis23'
   WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
   SERVICE_ACCOUNT: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
-  GHA_ENDPOINT_OVERRIDE_oauth2: 'https://oauth2.myapi.endpoint/v1'
 
 on:
   push:
@@ -24,25 +23,25 @@ jobs:
 
     steps:
 
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Kotlin
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: gradle
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Kotlin
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: '21'
+#          cache: gradle
+#
+#      - name: Set up Gradle
+#        uses: gradle/actions/setup-gradle@v4
 
 #      - name: Run tests
 #        run: ./gradlew :jwt:test
 #        continue-on-error: false
 
-      - name: Build JWT Jar
-        run: ./gradlew :jwt:build
+#      - name: Build JWT Jar
+#        run: ./gradlew :jwt:build
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
@@ -51,10 +50,6 @@ jobs:
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
           service_account: '${{ env.SERVICE_ACCOUNT }}'
 
-
-      # BEGIN - Docker auth and build
-      #
-      # If you already have a container image, you can omit these steps.
       - name: 'Docker Auth'
         uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
         with:
@@ -62,7 +57,14 @@ jobs:
           password: '${{ steps.auth.outputs.auth_token }}'
           registry: '${{ env.REGION }}-docker.pkg.dev'
 
-      - name: 'Build and Push Container'
+      - name: 'Log token'
         run: |-
-          docker build -f jwt/Dockerfile --tag europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:latest .
-          docker push europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:latest
+          env
+          ls -la
+          cat {file-med-credentials}
+          gcloud auth print-access-token
+
+#      - name: 'Build and Push Container'
+#        run: |-
+#          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
+#          docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest
