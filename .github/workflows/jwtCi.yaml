@@ -37,7 +37,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run tests
-        run: ./gradlew :library:test
+        run: ./gradlew :jwt:test
 
       - name: Build JWT Jar
         run: ./gradlew :jwt:build
@@ -56,9 +56,6 @@ jobs:
           registry: ${{ env.REGION }}-docker.pkg.dev
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
-
-      - name: Inspect Docker Config
-        run: cat ~/.docker/config.json
 
       - name: Build and Push Container
         run: |-

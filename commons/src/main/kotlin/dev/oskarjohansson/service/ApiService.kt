@@ -36,7 +36,7 @@ class ApiService() {
        return runCatching {
            LOG.info("Sending request to JWT service: http://jwtv04-service.default.svc.cluster.local:8081/public-key-controller/v1/public-key")
             val json = Json.parseToJsonElement(
-                client.get("http://localhost:8081/public-key-controller/v1/public-key").bodyAsText()
+                client.get("http:/jwt-service:80/public-key-controller/v1/public-key").bodyAsText()
             ).jsonObject
 
 
