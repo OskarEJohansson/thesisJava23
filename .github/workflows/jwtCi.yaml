@@ -4,8 +4,8 @@ env:
   PROJECT_ID: 'cicdtest-438007'
   REGION: 'europe-north1'
   SERVICE: 'javathesis23'
-  WORKLOAD_IDENTITY_PROVIDER: '${{ secret.WORKLOAD_IDENTITY_PROVIDER }}'
-  SERVICE_ACCOUNT: '${{ secret.SERVICE_ACCOUNT }}'
+  WORKLOAD_IDENTITY_PROVIDER: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}'
+  SERVICE_ACCOUNT: '${{ secrets.SERVICE_ACCOUNT }}'
 
 on:
   push:
