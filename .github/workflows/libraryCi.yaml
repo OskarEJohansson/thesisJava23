@@ -60,6 +60,6 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/library:latest .
+          docker build -f library/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/library:latest .
           docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/library:latest
 
