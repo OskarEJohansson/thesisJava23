@@ -4,8 +4,8 @@ env:
   PROJECT_ID: 'cicdtest-438007'
   REGION: 'europe-north1'
   SERVICE: 'javathesis23'
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/775853616903/locations/global/workloadIdentityPools/github/providers/javathesis'
-  SERVICE_ACCOUNT: 'github-actions-sa@cicdtest-438007.iam.gserviceaccount.com'
+  WORKLOAD_IDENTITY_PROVIDER: '${{ secret.WORKLOAD_IDENTITY_PROVIDER }}'
+  SERVICE_ACCOUNT: '${{ secret.SERVICE_ACCOUNT }}'
 
 on:
   push:
@@ -36,9 +36,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-#      - name: Run tests
-#        run: ./gradlew :library:test
-##
+      - name: Run tests
+        run: ./gradlew :library:test
+
       - name: Build JWT Jar
         run: ./gradlew :jwt:build
 
@@ -60,11 +60,6 @@ jobs:
       - name: Inspect Docker Config
         run: cat ~/.docker/config.json
 
-#      - name: Manual Docker Login
-#        run: |
-#          TOKEN=$(gcloud auth print-access-token)
-#          echo "$TOKEN" | docker login -u oauth2accesstoken --password-stdin ${{ env.REGION }}-docker.pkg.dev
-#
       - name: Build and Push Container
         run: |-
           docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
