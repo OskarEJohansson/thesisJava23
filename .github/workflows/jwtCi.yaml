@@ -55,7 +55,7 @@ jobs:
         with:
           registry: ${{ env.REGION }}-docker.pkg.dev
           username: oauth2accesstoken
-          password: ${{ TOKEN }}
+          password: echo $TOKEN
 
 #      - name: Manual Docker Login
 #        run: |
