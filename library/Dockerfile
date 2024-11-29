@@ -6,4 +6,4 @@ COPY /library/build/libs/library.jar /app/library.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "app/library.jar"]
+CMD ["java", "-jar", "/app/library.jar"]
