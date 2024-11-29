@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/admin")
 class AdminController(private val userService: UserService) {
 
+    // TODO: Delete admin controller 
     @GetMapping("/v1/users")
     fun users():ResponseEntity<ResponseDTO<List<User>>> {
 
