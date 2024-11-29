@@ -54,6 +54,11 @@ jobs:
         run: |
           echo "${{ steps.auth.outputs.auth_token }}" | docker login -u oauth2accesstoken --password-stdin ${{ env.REGION }}-docker.pkg.dev
 
+      - name: Inspect Auth Token Scope
+        run: |
+          TOKEN="${{ steps.auth.outputs.auth_token }}"
+          curl -H "Authorization: Bearer $TOKEN" https://oauth2.googleapis.com/tokeninfo    
+
 #      - name: Test GCloud Token
 #        run: |
 #          TOKEN=$(gcloud auth print-access-token)
