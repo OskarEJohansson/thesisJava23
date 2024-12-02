@@ -49,7 +49,7 @@ class UserService(
 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
-            client.post("http://jwt-service:80/authentication/v1/login") {
+            client.post("http://jwt.default/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }
