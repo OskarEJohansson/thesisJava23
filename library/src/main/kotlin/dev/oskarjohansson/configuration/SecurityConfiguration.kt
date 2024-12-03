@@ -2,6 +2,7 @@ package dev.oskarjohansson.configuration
 
 import dev.oskarjohansson.service.ApiService
 import io.ktor.client.plugins.*
+import jakarta.servlet.http.HttpServletRequest
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -33,19 +34,22 @@ class SecurityConfiguration {
     @Bean
     fun getPublicKeyFromTokenService(): RSAPublicKey {
         return runCatching {
-            runBlocking { ApiService().getPublicKey() }
+            runBlocking { ApiService().getPublicKey()
+            }
         }.getOrElse {
-            LOG.error("Failed to retrieve RSA public key: ${it.message}, Stacktrace: ${it}")
             when (it) {
                 is HttpRequestTimeoutException -> {
+                    LOG.error("Failed to retrieve RSA public key: ${it.message}, Stacktrace: ${it.cause}")
                     throw IllegalStateException("Request timed out: ${it.message}")
                 }
 
                 is SocketTimeoutException, is IOException -> {
+                    LOG.error("Failed to retrieve RSA public key: ${it.message}, Stacktrace: ${it.cause}")
                     throw IllegalStateException("Connection issue: ${it.message}")
                 }
 
                 else -> {
+                    LOG.error("Failed to retrieve RSA public key: ${it.message}, Stacktrace: ${it.cause}")
                     throw IllegalStateException("Failed to retrieve RSA public key ${it.message}")
                 }
             }

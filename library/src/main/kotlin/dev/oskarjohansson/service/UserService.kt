@@ -7,6 +7,7 @@ import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -15,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.slf4j.Logger
+
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -24,9 +25,13 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder
 ) {
-    private val LOG: Logger = LoggerFactory.getLogger(UserService::class.java)
+    private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(UserService::class.java)
 
     val client = HttpClient(CIO) {
+        install(Logging){
+            logger = Logger.DEFAULT
+            level = LogLevel.ALL
+        }
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -49,7 +54,7 @@ class UserService(
 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
-            client.post("http://jwt.default/authentication/v1/login") {
+            client.post("http://jwt-service/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }

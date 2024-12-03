@@ -2,7 +2,7 @@ FROM openjdk:21-jdk-slim AS build
 
 WORKDIR /app
 
-COPY /library/build/libs/library.jar /app/library.jar
+COPY /build/libs/library.jar /app/library.jar
 
 EXPOSE 8080
 
