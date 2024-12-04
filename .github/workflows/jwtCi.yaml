@@ -23,6 +23,8 @@ jobs:
       id-token: write
 
     steps:
+      - name: Debug Environment
+        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}"
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,14 +42,8 @@ jobs:
 #      - name: Run tests
 #        run: ./gradlew :jwt:test
 
-      - name: Debug Environment
-        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}"
-
-      - name: Deploy Container
-        run: docker run -e MONGODB_URI="${{ secrets.MONGODB_URI }}"
-
-#      - name: Build JWT Jar
-#        run: ./gradlew :jwt:build
+      - name: Build JWT Jar
+        run: ./gradlew :jwt:build
 
 #      - name: Authenticate to Google Cloud
 #        id: auth
