@@ -2,7 +2,8 @@ FROM openjdk:21-jdk-slim AS build
 
 WORKDIR /app
 
-COPY /jwt/build/libs/jwt.jar /app/jwt.jar
+#set /jwt/ when using pipeline
+COPY /build/libs/jwt.jar /app/jwt.jar
 
 EXPOSE 8081
 

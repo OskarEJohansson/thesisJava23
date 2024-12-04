@@ -18,8 +18,8 @@ class PublicKeyController(val rsaKey: RSAKey) {
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
     @GetMapping("/v1/public-key")
-    fun publicKey(request: HttpServletRequest): ResponseEntity<PublicKeyResponseDTO> =
-        runCatching {
+    fun publicKey(request: HttpServletRequest): ResponseEntity<PublicKeyResponseDTO> {
+        return runCatching {
 
             LOG.info("Request: ${request.method}")
             LOG.info("Headers: ${request.headerNames.toList()}")
@@ -37,6 +37,7 @@ class PublicKeyController(val rsaKey: RSAKey) {
             LOG.error("Error retrieving public RSA key: ${it.message}", it)
             throw IllegalStateException("Internal Server error: ${it.message}")
         }
+    }
 
 }
 
