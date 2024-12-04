@@ -7,11 +7,16 @@ java {
 }
 
 kotlin {
-compilerOptions{ jvmTarget.set(JvmTarget.JVM_21)}
+    compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
 }
 
-plugins {
-    kotlin("plugin.serialization") version "1.9.25"
+group = "com.OskarJohansson"
+version = "0.0.1-SNAPSHOT"
+
+allprojects{
+    repositories {
+        mavenCentral()
+    }
 }
 
 dependencies {
@@ -26,9 +31,6 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0")
     implementation("io.ktor:ktor-client-logging:3.0.0")
     implementation("ch.qos.logback:logback-classic:1.5.12")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation(project(":commons"))
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

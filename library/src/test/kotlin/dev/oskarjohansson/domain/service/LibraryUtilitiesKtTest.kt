@@ -16,7 +16,7 @@ import java.lang.IllegalArgumentException
 import java.time.LocalDateTime
 import kotlin.test.*
 
-class UtilitiesKtTest {
+class LibraryUtilitiesKtTest {
 
     @Test
     fun `Test that toReviewWithReviewIdNull converts ReviewRequestDTO correctly with valid inputs`() {
