@@ -52,6 +52,8 @@ class UserService(
         return userRepository.findAll() ?: throw IllegalStateException("Could not find any users")
     }
 
+    //use "http://jwt-service/authentication/v1/login"
+    // TODO: Set configMap? 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
             client.post("http://jwt-service/authentication/v1/login") {
