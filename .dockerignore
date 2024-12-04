@@ -1,0 +1,4 @@
+# .dockerignore
+
+library/src/main/resources/secrets.properties
+jwt/src/main/resources/secrets.properties
