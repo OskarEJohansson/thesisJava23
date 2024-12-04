@@ -1,12 +1,12 @@
 name: JwtCI
 
 env:
-  PROJECT_ID: 'cicdtest-438007'
-  REGION: 'europe-north1'
-  SERVICE: 'javathesis23'
-  WORKLOAD_IDENTITY_PROVIDER: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}'
-  SERVICE_ACCOUNT: '${{ secrets.SERVICE_ACCOUNT }}'
-  MONGODB_URI: '${{ secrets.MONGODB_URI }}'
+  PROJECT_ID: cicdtest-438007
+  REGION: europe-north1
+  SERVICE: javathesis23
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+  SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
 on:
   push:
@@ -23,8 +23,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Debug Environment
-        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}"
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -45,22 +43,22 @@ jobs:
       - name: Build JWT Jar
         run: ./gradlew :jwt:build
 
-#      - name: Authenticate to Google Cloud
-#        id: auth
-#        uses: google-github-actions/auth@v2
-#        with:
-#          token_format: access_token
-#          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-#          service_account: ${{ env.SERVICE_ACCOUNT }}
-#
-#      - name: Login to GCR
-#        uses: docker/login-action@v3
-#        with:
-#          registry: ${{ env.REGION }}-docker.pkg.dev
-#          username: oauth2accesstoken
-#          password: ${{ steps.auth.outputs.access_token }}
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
-#      - name: Build and Push Container
-#        run: |-
-#          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
-#          docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest
+      - name: Login to GCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: Build and Push Container
+        run: |-
+          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
+          docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest
