@@ -48,9 +48,6 @@ class UserService(
         return userRepository.save(createUserObject(userRequestDTO, passwordEncoder))
     }
 
-    fun getUsers(): List<User> {
-        return userRepository.findAll() ?: throw IllegalStateException("Could not find any users")
-    }
 
     //use "http://jwt-service/authentication/v1/login"
     // TODO: Set configMap? 
@@ -62,7 +59,6 @@ class UserService(
             }
         }
 
-        LOG.debug("response in caller value: ${response.status.value}")
         if (response.status.isSuccess()) {
             LOG.debug("Response status for api call to login user,status: ${response.status.value}")
             return Json.parseToJsonElement(response.bodyAsText()).jsonObject["data"]?.jsonPrimitive?.content
