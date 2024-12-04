@@ -6,7 +6,6 @@ env:
   SERVICE: javathesis23
   WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-  MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
 on:
   push:
@@ -60,5 +59,5 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build --build-arg MONGODB_URI=$MONGODB_URI -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
+          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest .
           docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/jwt:latest
