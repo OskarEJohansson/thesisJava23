@@ -1,4 +1,4 @@
-package dev.oskarjohansson.model
+package dev.oskarjohansson.model.dto
 
 import jakarta.validation.constraints.NotBlank
 import kotlinx.serialization.Serializable

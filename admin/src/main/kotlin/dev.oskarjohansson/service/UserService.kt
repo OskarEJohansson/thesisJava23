@@ -1,6 +1,6 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.model.LoginRequestDTO
+import dev.oskarjohansson.model.dto.LoginRequestDTO
 import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class Adminservice(private val userRepository:UserRepository, private val passwordEncoder: PasswordEncoder) {
+class UserService(private val userRepository:UserRepository, private val passwordEncoder: PasswordEncoder) {
 
 
     val client = HttpClient(CIO){
@@ -36,7 +36,7 @@ class Adminservice(private val userRepository:UserRepository, private val passwo
         }
     }
 
-    fun registerAuthor(){
+    fun registerAdmin(){
         // TODO: write logic
     }
 
@@ -54,6 +54,5 @@ class Adminservice(private val userRepository:UserRepository, private val passwo
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
     }
-
 
 }

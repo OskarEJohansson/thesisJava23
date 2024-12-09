@@ -4,7 +4,7 @@ import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
 import dev.oskarjohansson.api.dto.response.ReviewResponseDTO
 import dev.oskarjohansson.domain.model.Review
 import dev.oskarjohansson.domain.service.LibraryService
-import dev.oskarjohansson.model.ResponseDTO
+import dev.oskarjohansson.model.dto.ResponseDTO
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api.dto.request
+package dev.oskarjohansson.config
 
 data class AdminRequestDTO(
     val email: String,

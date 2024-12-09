@@ -2,8 +2,7 @@ package dev.oskarjohansson.api
 
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
-import dev.oskarjohansson.model.ResponseDTO
-import dev.oskarjohansson.model.User
+import dev.oskarjohansson.model.dto.ResponseDTO
 import dev.oskarjohansson.model.UserResponseDTO
 import dev.oskarjohansson.service.UserService
 import dev.oskarjohansson.service.createUserResponseDTO

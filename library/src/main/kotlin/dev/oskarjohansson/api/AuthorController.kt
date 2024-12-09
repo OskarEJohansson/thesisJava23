@@ -3,7 +3,7 @@ package dev.oskarjohansson.api
 import dev.oskarjohansson.api.dto.request.AuthorRequestDTO
 import dev.oskarjohansson.api.dto.response.AuthorResponseDTO
 import dev.oskarjohansson.domain.service.LibraryService
-import dev.oskarjohansson.model.ResponseDTO
+import dev.oskarjohansson.model.dto.ResponseDTO
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

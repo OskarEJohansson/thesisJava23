@@ -1,6 +1,6 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.api.dto.request.AdminRequestDTO
+import dev.oskarjohansson.config.AdminRequestDTO
 import dev.oskarjohansson.model.Role
 import dev.oskarjohansson.model.User
 import org.springframework.security.crypto.password.PasswordEncoder

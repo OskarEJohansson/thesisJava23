@@ -5,7 +5,7 @@ import dev.oskarjohansson.api.dto.request.BookRequestDTO
 import dev.oskarjohansson.api.dto.request.RegisterBookRequestDTO
 import dev.oskarjohansson.api.dto.response.BookResponseDTO
 import dev.oskarjohansson.domain.service.LibraryService
-import dev.oskarjohansson.model.ResponseDTO
+import dev.oskarjohansson.model.dto.ResponseDTO
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
