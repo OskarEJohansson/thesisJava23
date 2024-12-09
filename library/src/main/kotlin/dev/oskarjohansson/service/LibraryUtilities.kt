@@ -3,6 +3,7 @@ package dev.oskarjohansson.service
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.model.Role
 import dev.oskarjohansson.model.User
+import dev.oskarjohansson.model.UserResponseDTO
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
@@ -17,3 +18,10 @@ fun createUserObject(user: UserRequestDTO, passwordEncoder: PasswordEncoder): Us
         LocalDateTime.now(),
         null
     )
+
+fun User.createUserResponseDTO(): UserResponseDTO = UserResponseDTO(
+        this.id,
+        this.email,
+        this.username,
+       this.role
+)
