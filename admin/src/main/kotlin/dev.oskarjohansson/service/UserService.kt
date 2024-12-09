@@ -1,5 +1,7 @@
 package dev.oskarjohansson.service
 
+import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
+import dev.oskarjohansson.model.User
 import dev.oskarjohansson.model.dto.LoginRequestDTO
 import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*
@@ -21,7 +23,6 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(private val userRepository:UserRepository, private val passwordEncoder: PasswordEncoder) {
 
-
     val client = HttpClient(CIO){
         install(Logging){
             logger = Logger.DEFAULT
@@ -36,8 +37,12 @@ class UserService(private val userRepository:UserRepository, private val passwor
         }
     }
 
-    fun registerAdmin(){
-        // TODO: write logic
+    fun registerAdmin(adminRequestDTO: AdminRequestDTO): User {
+
+        userRepository.findUserByUsernameOrEmail(adminRequestDTO.username, adminRequestDTO.email)
+            ?.let { throw java.lang.IllegalArgumentException("Username or Email already exist") }
+
+        return userRepository.save(createAdminObject(adminRequestDTO, passwordEncoder))
     }
 
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String{
@@ -54,5 +59,4 @@ class UserService(private val userRepository:UserRepository, private val passwor
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
     }
-
 }
