@@ -19,6 +19,9 @@ allprojects{
     }
 }
 
+plugins{
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
@@ -31,6 +34,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0")
     implementation("io.ktor:ktor-client-logging:3.0.0")
     implementation("ch.qos.logback:logback-classic:1.5.12")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation(project(":commons"))
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

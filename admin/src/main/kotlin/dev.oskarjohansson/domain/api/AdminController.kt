@@ -2,6 +2,7 @@ package dev.oskarjohansson.domain.api
 
 import dev.oskarjohansson.domain.api.dto.request.ActivationTokenRequestDTO
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
+import dev.oskarjohansson.domain.api.dto.request.NewActivationTokenRequestDTO
 import dev.oskarjohansson.domain.api.dto.response.ActivationTokenResponseDTO
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
 import dev.oskarjohansson.model.dto.LoginRequestDTO
@@ -46,10 +47,12 @@ class AdminController(private val adminService: UserService) {
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Login successful",
-                    runBlocking { adminService.loginAdmin(loginRequestDTO) }))
+                    runBlocking { adminService.loginAdmin(loginRequestDTO) })
+            )
         }.getOrElse {
             ResponseEntity.badRequest()
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not login user: ${it.message}"))
+                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "Could not login user: ${it.message}"))
         }
     }
 
@@ -65,22 +68,46 @@ class AdminController(private val adminService: UserService) {
             )
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "${it.message}"))
+                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "${it.message}"))
         }
     }
 
     @PostMapping("/v1/activate-account")
-    fun activate(@Validated @RequestBody activationTokenRequestDTO: ActivationTokenRequestDTO): ResponseEntity<ResponseDTO<AdminResponseDTO>>{
+    fun activate(@Validated @RequestBody activationTokenRequestDTO: ActivationTokenRequestDTO): ResponseEntity<ResponseDTO<AdminResponseDTO>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Account activate",
-                    adminService.activateUser(activationTokenRequestDTO).toAdminResponseDTO())
+                    adminService.activateUser(activationTokenRequestDTO).toAdminResponseDTO()
+                )
             )
         }.getOrElse {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "${it.message}"))
+            ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "${it.message}"))
         }
 
+    }
+
+    @PostMapping("/v1/send-new-activation-token")
+    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
+        return runCatching {
+            ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDTO(
+                    HttpStatus.OK.value(),
+                    "New activation token",
+                    adminService.newActivationToken(email).toActivationTokenResponseDTO()
+                )
+            )
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ResponseDTO(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "${it.message}"
+                )
+            )
+        }
     }
 }

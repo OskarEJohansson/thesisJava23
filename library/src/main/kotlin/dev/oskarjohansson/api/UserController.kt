@@ -45,4 +45,6 @@ class UserController(private val userService: UserService) {
         }
     }
 
+    // TODO: Add activation controller for user 
+
 }

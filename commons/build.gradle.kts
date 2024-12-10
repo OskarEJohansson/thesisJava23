@@ -10,6 +10,10 @@ kotlin {
     compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
 }
 
+plugins{
+    kotlin("plugin.serialization") version "1.9.25"
+}
+
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")

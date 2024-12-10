@@ -67,6 +67,8 @@ class UserService(
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
     }
+
+    // TODO: Add activation service for user 
 }
 
 

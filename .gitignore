@@ -43,3 +43,4 @@ out/
 ### Secret Properties ###
 library/src/main/resources/secrets.properties
 jwt/src/main/resources/secrets.properties
+admin/src/main/resources/secrets.properties

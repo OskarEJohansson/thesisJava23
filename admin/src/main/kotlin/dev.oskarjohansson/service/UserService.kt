@@ -2,6 +2,7 @@ package dev.oskarjohansson.service
 
 import dev.oskarjohansson.domain.api.dto.request.ActivationTokenRequestDTO
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
+import dev.oskarjohansson.domain.api.dto.request.NewActivationTokenRequestDTO
 import dev.oskarjohansson.model.ActivationToken
 import dev.oskarjohansson.model.User
 import dev.oskarjohansson.model.dto.LoginRequestDTO
@@ -52,9 +53,20 @@ class UserService(
             createAdminObject(adminRequestDTO, passwordEncoder)
         ) ?: throw IllegalStateException("Could not save user")
 
-        return ActivationToken(email = user.email)
+        return activationTokenRepository.save(ActivationToken(email = user.email))
     }
 
+    fun newActivationToken(newActivationTokenRequest: NewActivationTokenRequestDTO): ActivationToken {
+        val user =
+            userRepository.findByEmail(newActivationTokenRequest.email) ?: throw IllegalStateException("User not found")
+
+        user.takeIf { !user.isEnabled }
+            ?.let {
+                return activationTokenRepository.save(ActivationToken(email = user.email))
+            } ?: throw IllegalStateException("User is already activated")
+    }
+
+    // TODO: move to common 
     fun activateUser(activationTokenRequestDTO: ActivationTokenRequestDTO): User {
         return run {
 
@@ -71,10 +83,9 @@ class UserService(
         }
     }
 
-
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
-            client.post("http://jwt-service/authentication/v1/login") {
+            client.post("http://localhost:8081/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }
