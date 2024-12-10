@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.api.dto.request
+package dev.oskarjohansson.model.dto
 
 class ActivationTokenRequestDTO(val email:String, val token:String) {
 }

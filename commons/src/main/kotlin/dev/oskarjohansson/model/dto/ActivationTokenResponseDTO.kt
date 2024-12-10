@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.api.dto.response
+package dev.oskarjohansson.model.dto
 
 import java.time.Instant
 

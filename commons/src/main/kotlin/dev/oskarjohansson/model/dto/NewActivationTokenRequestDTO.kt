@@ -1,3 +1,3 @@
-package dev.oskarjohansson.domain.api.dto.request
+package dev.oskarjohansson.model.dto
 
 data class NewActivationTokenRequestDTO(val email:String)

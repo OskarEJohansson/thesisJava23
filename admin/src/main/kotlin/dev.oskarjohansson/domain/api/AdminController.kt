@@ -1,13 +1,12 @@
 package dev.oskarjohansson.domain.api
 
-import dev.oskarjohansson.domain.api.dto.request.ActivationTokenRequestDTO
+
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
-import dev.oskarjohansson.domain.api.dto.request.NewActivationTokenRequestDTO
-import dev.oskarjohansson.domain.api.dto.response.ActivationTokenResponseDTO
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
-import dev.oskarjohansson.model.dto.LoginRequestDTO
-import dev.oskarjohansson.model.dto.ResponseDTO
 import dev.oskarjohansson.model.User
+import dev.oskarjohansson.model.dto.*
+import dev.oskarjohansson.model.toActivationTokenResponseDTO
+import dev.oskarjohansson.service.UserActivationService
 import dev.oskarjohansson.service.UserService
 import kotlinx.coroutines.runBlocking
 import org.springframework.http.HttpStatus
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/admin")
-class AdminController(private val adminService: UserService) {
+class AdminController(private val adminService: UserService, private val userActivationService: UserActivationService) {
 
     @GetMapping("/v1/users")
     fun users(): ResponseEntity<ResponseDTO<List<User>>> {
@@ -80,7 +79,7 @@ class AdminController(private val adminService: UserService) {
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Account activate",
-                    adminService.activateUser(activationTokenRequestDTO).toAdminResponseDTO()
+                    userActivationService.activateUser(activationTokenRequestDTO).toAdminResponseDTO()
                 )
             )
         }.getOrElse {
@@ -98,7 +97,7 @@ class AdminController(private val adminService: UserService) {
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "New activation token",
-                    adminService.newActivationToken(email).toActivationTokenResponseDTO()
+                    userActivationService.newActivationToken(email).toActivationTokenResponseDTO()
                 )
             )
         }.getOrElse {
