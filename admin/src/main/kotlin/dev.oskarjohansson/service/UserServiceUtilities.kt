@@ -14,5 +14,7 @@ fun createAdminObject(user: AdminRequestDTO, passwordEncoder: PasswordEncoder): 
     passwordEncoder.encode(user.password),
     Role.ADMIN,
     LocalDateTime.now(),
-    null
+    null,
+    false,
 )
+

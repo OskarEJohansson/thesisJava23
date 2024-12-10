@@ -26,7 +26,6 @@ class ApiService() {
         install(Logging){
             logger = Logger.DEFAULT
             level = LogLevel.ALL
-            println("ktor installed in API SERVICE")
         }
         install(ContentNegotiation) {
             json(Json {
@@ -41,7 +40,8 @@ class ApiService() {
     // TODO: Use configMap? 
     suspend fun getPublicKey(): RSAPublicKey = runCatching {
             val json = Json.parseToJsonElement(
-                client.get("http://jwt-service/public-key-controller/v1/public-key"
+//                client.get("http://jwt-service/public-key-controller/v1/public-key"
+                client.get("http://localhost:8081/public-key-controller/v1/public-key"
                 ).bodyAsText()
             ).jsonObject
 

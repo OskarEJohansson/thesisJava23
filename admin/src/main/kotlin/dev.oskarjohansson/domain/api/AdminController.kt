@@ -1,6 +1,8 @@
 package dev.oskarjohansson.domain.api
 
+import dev.oskarjohansson.domain.api.dto.request.ActivationTokenRequestDTO
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
+import dev.oskarjohansson.domain.api.dto.response.ActivationTokenResponseDTO
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
 import dev.oskarjohansson.model.dto.LoginRequestDTO
 import dev.oskarjohansson.model.dto.ResponseDTO
@@ -38,7 +40,7 @@ class AdminController(private val adminService: UserService) {
     }
 
     @PostMapping("/v1/login")
-    fun login(@RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO<String>> {
+    fun login(@Validated @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO<String>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
@@ -52,18 +54,33 @@ class AdminController(private val adminService: UserService) {
     }
 
     @PostMapping("/v1/create-admin")
-    fun create(@Validated @RequestBody adminRequestDTO: AdminRequestDTO): ResponseEntity<ResponseDTO<AdminResponseDTO>> {
+    fun create(@Validated @RequestBody adminRequestDTO: AdminRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "Admin user created",
-                    adminService.registerAdmin(adminRequestDTO).toAdminResponseDTO()
+                    "Admin user created. Please activate account",
+                    adminService.registerAdmin(adminRequestDTO).toActivationTokenResponseDTO()
                 )
             )
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not register Admin user: ${it.message}"))
+                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "${it.message}"))
         }
+    }
+
+    @PostMapping("/v1/activate-account")
+    fun activate(@Validated @RequestBody activationTokenRequestDTO: ActivationTokenRequestDTO): ResponseEntity<ResponseDTO<AdminResponseDTO>>{
+        return runCatching {
+            ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDTO(
+                    HttpStatus.OK.value(),
+                    "Account activate",
+                    adminService.activateUser(activationTokenRequestDTO).toAdminResponseDTO())
+            )
+        }.getOrElse {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "${it.message}"))
+        }
+
     }
 }

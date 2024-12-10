@@ -2,7 +2,6 @@ package dev.oskarjohansson.configuration
 
 import dev.oskarjohansson.service.ApiService
 import io.ktor.client.plugins.*
-import jakarta.servlet.http.HttpServletRequest
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -72,7 +71,6 @@ class SecurityConfiguration {
                 it.requestMatchers("/user/v1/register-user", "/user/v1/login").permitAll()
                 it.requestMatchers("/v3/*","/v3/api-docs/swagger-config", "/swagger-ui/*").permitAll() // TODO: Find out how to to do this security chain safe when using a browser
                 it.requestMatchers("/book/*", "/author/*", "/review/*").hasRole("User")
-                it.requestMatchers("/admin/*").hasRole("Admin")
                 it.anyRequest().authenticated()
             }
             .build()

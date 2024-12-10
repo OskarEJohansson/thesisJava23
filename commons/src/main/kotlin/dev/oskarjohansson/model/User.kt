@@ -27,5 +27,6 @@ data class User(
     val password: String,
     val role: Role,
     val dateJoined: LocalDateTime,
-    val library: Library? = null
+    val library: Library? = null,
+    val isEnabled: Boolean = false,
 )

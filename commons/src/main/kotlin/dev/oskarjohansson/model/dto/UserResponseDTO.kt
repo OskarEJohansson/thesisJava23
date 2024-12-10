@@ -1,4 +1,6 @@
-package dev.oskarjohansson.model
+package dev.oskarjohansson.model.dto
+
+import dev.oskarjohansson.model.Role
 
 data class UserResponseDTO(
     val id: String? = null,
