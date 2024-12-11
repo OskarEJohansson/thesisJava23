@@ -1,0 +1,61 @@
+env:
+  PROJECT_ID: cicdtest-438007
+  REGION: europe-north1
+  SERVICE: javathesis23
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+  SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+
+on:
+  push:
+    paths: [ 'admin/**' ]
+  pull_request:
+    paths: [ 'admin/**' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Kotlin
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      #      - name: Run tests
+      #        run: ./gradlew :jwt:test
+
+      - name: Build JWT Jar
+        run: ./gradlew :jwt:build
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Login to GCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: Build and Push Container
+        run: |-
+          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/admin:latest .
+          docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/admin:latest

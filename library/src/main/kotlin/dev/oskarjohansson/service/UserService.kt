@@ -2,7 +2,9 @@ package dev.oskarjohansson.service
 
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
+import dev.oskarjohansson.model.ActivationToken
 import dev.oskarjohansson.model.User
+import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -23,7 +25,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService(
-    private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val activationTokenRepository: ActivationTokenRepository
 ) {
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(UserService::class.java)
 
@@ -41,11 +45,15 @@ class UserService(
         }
     }
 
-    fun registerUser(userRequestDTO: UserRequestDTO): User {
+    fun registerUser(userRequestDTO: UserRequestDTO): ActivationToken {
         userRepository.findUserByUsernameOrEmail(userRequestDTO.username, userRequestDTO.email)
             ?.let { throw IllegalArgumentException("Username or Email already exist") }
 
-        return userRepository.save(createUserObject(userRequestDTO, passwordEncoder))
+        val user = userRepository.save(
+            createUserObject(userRequestDTO, passwordEncoder))
+         ?: throw IllegalStateException("Could not save user")
+
+        return activationTokenRepository.save(ActivationToken(email = user.email))
     }
 
 
@@ -53,7 +61,7 @@ class UserService(
     // TODO: Set configMap? 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
-            client.post("http://jwt-service/authentication/v1/login") {
+            client.post("http://localhost:8081/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }

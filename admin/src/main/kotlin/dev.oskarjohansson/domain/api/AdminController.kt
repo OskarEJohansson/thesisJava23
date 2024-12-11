@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -72,14 +73,15 @@ class AdminController(private val adminService: UserService, private val userAct
         }
     }
 
-    @PostMapping("/v1/activate-account")
-    fun activate(@Validated @RequestBody activationTokenRequestDTO: ActivationTokenRequestDTO): ResponseEntity<ResponseDTO<AdminResponseDTO>> {
+    // TODO: FOR MANUAL TESTING PURPOSE
+    @PostMapping("/v1/activate-account-TEST")
+    fun activateTEST(@Validated @RequestBody activationTokenRequestDTOTEST: ActivationTokenRequestDTOTEST): ResponseEntity<ResponseDTO<AdminResponseDTO>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Account activate",
-                    userActivationService.activateUser(activationTokenRequestDTO).toAdminResponseDTO()
+                    userActivationService.activateUser(activationTokenRequestDTOTEST).toAdminResponseDTO()
                 )
             )
         }.getOrElse {
@@ -90,6 +92,7 @@ class AdminController(private val adminService: UserService, private val userAct
 
     }
 
+    // TODO: implement email delivery
     @PostMapping("/v1/send-new-activation-token")
     fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
         return runCatching {
@@ -108,5 +111,10 @@ class AdminController(private val adminService: UserService, private val userAct
                 )
             )
         }
+    }
+
+    @PostMapping("/v1/activate-account/{activation-token}")
+    fun activateAccount(@PathVariable activationToken:ActivationTokenRequestDto){
+        return
     }
 }

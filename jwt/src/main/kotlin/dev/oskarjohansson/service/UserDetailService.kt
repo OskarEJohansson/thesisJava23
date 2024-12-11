@@ -23,7 +23,7 @@ class UserDetailService(private val repositoryService: RepositoryService) : User
                .takeIf { user -> user.isEnabled }
                ?.let {user ->
                createUserDetailsAndGrantAuthority(user)
-            }
+            } ?: throw IllegalStateException("User not activated")
         }.getOrElse {
             LOG.debug("Failed to load user by username: $username")
             throw UsernameNotFoundException("Username not found")

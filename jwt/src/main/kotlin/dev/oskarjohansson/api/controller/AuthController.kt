@@ -3,6 +3,7 @@ package dev.oskarjohansson.api.controller
 import dev.oskarjohansson.model.dto.ResponseDTO
 import dev.oskarjohansson.model.dto.LoginRequestDTO
 import dev.oskarjohansson.service.TokenService
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -37,7 +38,8 @@ class AuthController(
             ResponseEntity.ok(ResponseDTO(HttpStatus.OK.value(), message = "Login Successful", tokenService.generateToken(auth)))
 
         }.getOrElse {
-            LOG.error("Failed to authenticate: ${it.message}")
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value() ,"Invalid login credentials" ))
+
+            LOG.error("Failed to authenticate: ${it.message}, ${it.printStackTrace()}")
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO(HttpStatus.BAD_REQUEST.value() ,"${it.localizedMessage}" ))
         }
 }
