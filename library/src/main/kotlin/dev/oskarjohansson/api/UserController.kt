@@ -66,13 +66,13 @@ class UserController(private val userService: UserService, private val userActiv
     }
 
     @PostMapping("/v1/send-new-activation-token")
-    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
+    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<Unit>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "New activation token",
-                    userActivationService.newActivationToken(email).toActivationTokenResponseDTO()
+                    userActivationService.newActivationToken(email)
                 )
             )
         }.getOrElse {

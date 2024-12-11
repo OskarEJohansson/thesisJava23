@@ -5,7 +5,6 @@ import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
 import dev.oskarjohansson.model.User
 import dev.oskarjohansson.model.dto.*
-import dev.oskarjohansson.model.toActivationTokenResponseDTO
 import dev.oskarjohansson.service.UserActivationService
 import dev.oskarjohansson.service.UserService
 import kotlinx.coroutines.runBlocking
@@ -57,16 +56,14 @@ class AdminController(private val adminService: UserService, private val userAct
     }
 
     @PostMapping("/v1/create-admin")
-    fun create(@Validated @RequestBody adminRequestDTO: AdminRequestDTO): ResponseEntity<ResponseDTO<String>> {
+    fun create(@Validated @RequestBody adminRequestDTO: AdminRequestDTO): ResponseEntity<ResponseDTO<Unit>> {
         return runCatching {
-
-            adminService.registerAdmin(adminRequestDTO)
 
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Admin user created",
-                    "Please activate account via link sent to your email address"
+                    adminService.registerAdmin(adminRequestDTO)
                 )
             )
         }.getOrElse {

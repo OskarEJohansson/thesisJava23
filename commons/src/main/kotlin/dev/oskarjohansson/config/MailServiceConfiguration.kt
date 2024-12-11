@@ -1,5 +1,6 @@
 package dev.oskarjohansson.config
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.mail.SimpleMailMessage
@@ -8,15 +9,19 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 
 
 @Configuration
-class MailServiceConfiguration {
+class MailServiceConfiguration(@Value("\${mail.password}")
+                               private val pass:String) {
+
+
+
 
     @Bean
     fun mailSender(): JavaMailSender {
         return JavaMailSenderImpl().apply{
             username = "oskarcodeexplorer@gmail.com"
+            password = pass
             host = "smtp.gmail.com"
             port = 587
-
 
             javaMailProperties.apply {
                 put("mail.smtp.auth", "true")
