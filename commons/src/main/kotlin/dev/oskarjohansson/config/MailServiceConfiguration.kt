@@ -1,6 +1,5 @@
 package dev.oskarjohansson.config
 
-import dev.oskarjohansson.service.MailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.mail.SimpleMailMessage
@@ -14,20 +13,23 @@ class MailServiceConfiguration {
     @Bean
     fun mailSender(): JavaMailSender {
         return JavaMailSenderImpl().apply{
+            username = "oskarcodeexplorer@gmail.com"
             host = "smtp.gmail.com"
             port = 587
+
+
+            javaMailProperties.apply {
+                put("mail.smtp.auth", "true")
+                put("mail.smtp.starttls.enable", "true")
+                put("mail.transport.protocol", "smtp")
+            }
         }
     }
 
     @Bean
     fun templateMessage() = SimpleMailMessage().apply {
-        from = "tokenService@mycompany.example"
+        from = "activateYourAccountt@gmail.com"
         subject = "Activation Token"
     }
 
-    @Bean
-    fun mailService(javaMailSender: JavaMailSender, simpleTemplateMessage: SimpleMailMessage) = MailService().apply {
-        mailSender = javaMailSender
-        templateMessage = simpleTemplateMessage
-    }
 }

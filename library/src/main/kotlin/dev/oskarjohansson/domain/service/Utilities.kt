@@ -53,8 +53,6 @@ fun Author.toAuthorResponseDTO(books: List<BookInAuthorResponseDTO>): AuthorResp
         publishedBooks = books
     )
 
-
-
 fun RegisterBookRequestDTO.toBook(authorIds: List<String>) = Book(
     null,
     title = this.title,

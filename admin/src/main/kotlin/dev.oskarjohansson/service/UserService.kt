@@ -25,7 +25,8 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository,
     private val activationTokenRepository: ActivationTokenRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val mailService: MailService
 ) {
 
     val client = HttpClient(CIO) {
@@ -42,7 +43,7 @@ class UserService(
         }
     }
 
-    fun registerAdmin(adminRequestDTO: AdminRequestDTO): ActivationToken {
+    fun registerAdmin(adminRequestDTO: AdminRequestDTO): Unit {
         userRepository.findUserByUsernameOrEmail(adminRequestDTO.username, adminRequestDTO.email)
             ?.let { throw IllegalStateException("Username or Email already exist") }
 
@@ -50,7 +51,9 @@ class UserService(
             createAdminObject(adminRequestDTO, passwordEncoder)
         ) ?: throw IllegalStateException("Could not save user")
 
-        return activationTokenRepository.save(ActivationToken(email = user.email))
+        val activationToken = activationTokenRepository.save(ActivationToken(email = user.email))
+
+        return mailService.sendMail(activationToken.token, user.email)
     }
 
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String {

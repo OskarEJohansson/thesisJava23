@@ -57,13 +57,16 @@ class AdminController(private val adminService: UserService, private val userAct
     }
 
     @PostMapping("/v1/create-admin")
-    fun create(@Validated @RequestBody adminRequestDTO: AdminRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
+    fun create(@Validated @RequestBody adminRequestDTO: AdminRequestDTO): ResponseEntity<ResponseDTO<String>> {
         return runCatching {
+
+            adminService.registerAdmin(adminRequestDTO)
+
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "Admin user created. Please activate account",
-                    adminService.registerAdmin(adminRequestDTO).toActivationTokenResponseDTO()
+                    "Admin user created",
+                    "Please activate account via link sent to your email address"
                 )
             )
         }.getOrElse {
@@ -81,7 +84,7 @@ class AdminController(private val adminService: UserService, private val userAct
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Account activate",
-                    userActivationService.activateUser(activationTokenRequestDTOTEST).toAdminResponseDTO()
+                    userActivationService.activateUserTEST(activationTokenRequestDTOTEST).toAdminResponseDTO()
                 )
             )
         }.getOrElse {
@@ -92,29 +95,45 @@ class AdminController(private val adminService: UserService, private val userAct
 
     }
 
-    // TODO: implement email delivery
-    @PostMapping("/v1/send-new-activation-token")
-    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
+//    // TODO: implement email delivery
+//    @PostMapping("/v1/send-new-activation-token")
+//    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
+//        return runCatching {
+//            ResponseEntity.status(HttpStatus.OK).body(
+//                ResponseDTO(
+//                    HttpStatus.OK.value(),
+//                    "New activation token",
+//                    userActivationService.newActivationToken(email).toActivationTokenResponseDTO()
+//                )
+//            )
+//        }.getOrElse {
+//            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+//                ResponseDTO(
+//                    HttpStatus.BAD_REQUEST.value(),
+//                    "${it.message}"
+//                )
+//            )
+//        }
+//    }
+
+    @PostMapping("/v1/activate-account/{activationToken}")
+    fun activateAccount(@PathVariable activationToken:ActivationTokenRequestDto): ResponseEntity<ResponseDTO<AdminResponseDTO>>{
+
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "New activation token",
-                    userActivationService.newActivationToken(email).toActivationTokenResponseDTO()
+                    "Account activated",
+                    userActivationService.activateUser(activationToken).toAdminResponseDTO()
                 )
             )
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 ResponseDTO(
                     HttpStatus.BAD_REQUEST.value(),
-                    "${it.message}"
+                    "${it.message}",
                 )
             )
         }
-    }
-
-    @PostMapping("/v1/activate-account/{activation-token}")
-    fun activateAccount(@PathVariable activationToken:ActivationTokenRequestDto){
-        return
     }
 }

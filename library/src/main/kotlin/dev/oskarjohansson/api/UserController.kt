@@ -55,7 +55,7 @@ class UserController(private val userService: UserService, private val userActiv
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Account activate",
-                    userActivationService.activateUser(activationTokenRequestDTOTEST).createUserResponseDTO()
+                    userActivationService.activateUserTEST(activationTokenRequestDTOTEST).createUserResponseDTO()
                 )
             )
         }.getOrElse {
