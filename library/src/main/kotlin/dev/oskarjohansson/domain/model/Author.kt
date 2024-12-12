@@ -8,5 +8,4 @@ data class Author(
     @MongoId
     val authorId: String? = null,
     val authorName: String
-) {
-}
+)

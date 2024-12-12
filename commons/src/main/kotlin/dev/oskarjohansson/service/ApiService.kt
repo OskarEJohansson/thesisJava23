@@ -22,7 +22,7 @@ class ApiService() {
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(ApiService::class.java)
 
-    val client = HttpClient(CIO) {
+    private val client = HttpClient(CIO) {
         install(Logging){
             logger = Logger.DEFAULT
             level = LogLevel.ALL

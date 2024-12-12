@@ -1,10 +1,13 @@
 package dev.oskarjohansson.domain.api
 
 
+import dev.oskarjohansson.api.dto.ActivationTokenRequestDto
+import dev.oskarjohansson.api.dto.LoginRequestDTO
+import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
+import dev.oskarjohansson.api.dto.ResponseDTO
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
 import dev.oskarjohansson.model.User
-import dev.oskarjohansson.model.dto.*
 import dev.oskarjohansson.service.UserActivationService
 import dev.oskarjohansson.service.UserService
 import kotlinx.coroutines.runBlocking
@@ -50,8 +53,10 @@ class AdminController(private val adminService: UserService, private val userAct
             )
         }.getOrElse {
             ResponseEntity.badRequest()
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
-                    "Could not login user: ${it.message}"))
+                .body(
+                    ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "Could not login user: ${it.message}")
+                )
         }
     }
 
@@ -68,53 +73,36 @@ class AdminController(private val adminService: UserService, private val userAct
             )
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
-                    "${it.message}"))
+                .body(
+                    ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "${it.message}")
+                )
         }
     }
 
-    // TODO: FOR MANUAL TESTING PURPOSE
-    @PostMapping("/v1/activate-account-TEST")
-    fun activateTEST(@Validated @RequestBody activationTokenRequestDTOTEST: ActivationTokenRequestDTOTEST): ResponseEntity<ResponseDTO<AdminResponseDTO>> {
+
+    @PostMapping("/v1/send-new-activation-token")
+    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<Unit>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
-                    "Account activate",
-                    userActivationService.activateUserTEST(activationTokenRequestDTOTEST).toAdminResponseDTO()
+                    "New activation token",
+                    userActivationService.newActivationToken(email)
                 )
             )
         }.getOrElse {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
-                    "${it.message}"))
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ResponseDTO(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "${it.message}"
+                )
+            )
         }
-
     }
 
-//    // TODO: implement email delivery
-//    @PostMapping("/v1/send-new-activation-token")
-//    fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
-//        return runCatching {
-//            ResponseEntity.status(HttpStatus.OK).body(
-//                ResponseDTO(
-//                    HttpStatus.OK.value(),
-//                    "New activation token",
-//                    userActivationService.newActivationToken(email).toActivationTokenResponseDTO()
-//                )
-//            )
-//        }.getOrElse {
-//            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                ResponseDTO(
-//                    HttpStatus.BAD_REQUEST.value(),
-//                    "${it.message}"
-//                )
-//            )
-//        }
-//    }
-
     @PostMapping("/v1/activate-account/{activationToken}")
-    fun activateAccount(@PathVariable activationToken:ActivationTokenRequestDto): ResponseEntity<ResponseDTO<AdminResponseDTO>>{
+    fun activateAdmin(@PathVariable activationToken: ActivationTokenRequestDto): ResponseEntity<ResponseDTO<AdminResponseDTO>>{
 
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(

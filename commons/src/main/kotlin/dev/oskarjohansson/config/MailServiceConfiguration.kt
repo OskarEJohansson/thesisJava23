@@ -12,9 +12,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 class MailServiceConfiguration(@Value("\${mail.password}")
                                private val pass:String) {
 
-
-
-
+    
     @Bean
     fun mailSender(): JavaMailSender {
         return JavaMailSenderImpl().apply{

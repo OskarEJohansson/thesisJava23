@@ -2,7 +2,7 @@ package dev.oskarjohansson.service
 
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.model.ActivationToken
-import dev.oskarjohansson.model.dto.LoginRequestDTO
+import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
 import io.ktor.client.*

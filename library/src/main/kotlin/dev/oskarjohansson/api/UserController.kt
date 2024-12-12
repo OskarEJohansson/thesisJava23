@@ -1,13 +1,12 @@
 package dev.oskarjohansson.api
 
+import dev.oskarjohansson.api.dto.*
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
-import dev.oskarjohansson.model.dto.*
 import dev.oskarjohansson.model.toActivationTokenResponseDTO
 import dev.oskarjohansson.service.UserActivationService
 import dev.oskarjohansson.service.UserService
 import dev.oskarjohansson.service.createUserResponseDTO
-
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
@@ -15,7 +14,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/user")
@@ -49,19 +51,21 @@ class UserController(private val userService: UserService, private val userActiv
 
 
     @PostMapping("/v1/activate-account")
-    fun activate(@Validated @RequestBody activationTokenRequestDTOTEST: ActivationTokenRequestDTOTEST): ResponseEntity<ResponseDTO<UserResponseDTO>> {
+    fun activateUser(@Validated @RequestBody activationTokenRequestDTOTEST: ActivationTokenRequestDto): ResponseEntity<ResponseDTO<UserResponseDTO>> {
         return runCatching {
             ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "Account activate",
-                    userActivationService.activateUserTEST(activationTokenRequestDTOTEST).createUserResponseDTO()
+                    userActivationService.activateUser(activationTokenRequestDTOTEST).createUserResponseDTO()
                 )
             )
         }.getOrElse {
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ResponseDTO(HttpStatus.BAD_REQUEST.value(),
-                    "${it.message}"))
+                .body(
+                    ResponseDTO(HttpStatus.BAD_REQUEST.value(),
+                    "${it.message}")
+                )
         }
     }
 

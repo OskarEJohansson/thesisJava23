@@ -1,9 +1,9 @@
 package dev.oskarjohansson.api.controller
 
-import dev.oskarjohansson.model.dto.ResponseDTO
-import dev.oskarjohansson.model.dto.LoginRequestDTO
+
+import dev.oskarjohansson.api.dto.LoginRequestDTO
+import dev.oskarjohansson.api.dto.ResponseDTO
 import dev.oskarjohansson.service.TokenService
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

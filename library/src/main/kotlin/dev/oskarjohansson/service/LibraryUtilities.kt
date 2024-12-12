@@ -3,7 +3,7 @@ package dev.oskarjohansson.service
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.model.Role
 import dev.oskarjohansson.model.User
-import dev.oskarjohansson.model.dto.UserResponseDTO
+import dev.oskarjohansson.api.dto.UserResponseDTO
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime

@@ -17,7 +17,7 @@ class MailService(
     private var LOG: Logger = LoggerFactory.getLogger(MailService::class.java)
 
     // TODO: For dev exploration only
-    var tokenAddress = "http://localhost:8080/admin/v1/activate-account/"
+    private var tokenAddress = "http://localhost:8080/admin/v1/activate-account/"
 
     fun sendMail(activationToken: String, address: String) {
 

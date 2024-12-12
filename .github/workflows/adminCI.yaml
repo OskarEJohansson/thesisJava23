@@ -4,8 +4,8 @@ env:
   SERVICE: javathesis23
   WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-  MONGODB_URI: '${{ secrets.MONGODB_URI }}'
-  GOOGLE_APP_PASSWORD: '${{ secrets.GOOGLE_APP_PASSWORD }}' #Pass for Google smtp
+  MONGODB_URI: ${{ secrets.MONGODB_URI }} #Injected inside GCP
+  GOOGLE_APP_PASSWORD: ${{ secrets.GOOGLE_APP_PASSWORD }} #Pass for Google smtp, injected in Github actions
 
 on:
   push:

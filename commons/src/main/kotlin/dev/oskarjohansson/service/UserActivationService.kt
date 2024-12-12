@@ -1,19 +1,20 @@
 package dev.oskarjohansson.service
 
+import dev.oskarjohansson.api.dto.ActivationTokenRequestDto
+import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
 import dev.oskarjohansson.model.ActivationToken
 import dev.oskarjohansson.model.User
-import dev.oskarjohansson.model.dto.ActivationTokenRequestDTOTEST
-import dev.oskarjohansson.model.dto.ActivationTokenRequestDto
-import dev.oskarjohansson.model.dto.NewActivationTokenRequestDTO
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 
 @Service
 class UserActivationService(private val userRepository: UserRepository,private val activationTokenRepository: ActivationTokenRepository,private val mailService: MailService) {
 
-    // TODO: Implement email delivery
     fun newActivationToken(newActivationTokenRequest: NewActivationTokenRequestDTO): Unit {
+
+        // TODO: refactor and consolidate to fun 
         val user =
             userRepository.findByEmail(newActivationTokenRequest.email) ?: throw IllegalStateException("User not found")
 
@@ -25,28 +26,17 @@ class UserActivationService(private val userRepository: UserRepository,private v
             } ?: throw IllegalStateException("User is already activated")
     }
 
-    fun activateUserTEST(activationTokenRequestDTOTEST: ActivationTokenRequestDTOTEST): User {
-        return run {
-
-            val activationToken = activationTokenRepository.findByEmail(activationTokenRequestDTOTEST.email)
-                ?: throw IllegalStateException("Could not find token")
-
-            val user = userRepository.findByEmail(activationTokenRequestDTOTEST.email)
-                ?: throw IllegalStateException("Could not find user")
-
-            if (activationToken.token == activationTokenRequestDTOTEST.token) {
-                userRepository.save(user.copy(isEnabled = true))
-            } else
-                throw IllegalArgumentException("Could not activate user")
-        }
-    }
-
     fun activateUser(activationToken: ActivationTokenRequestDto): User {
+
+        tokenPattern(activationToken.activationToken).takeIf { !it }
+            ?.let { throw IllegalArgumentException("Activation token is not valid") }
+
         return run {
 
             val activationToken: ActivationToken = activationTokenRepository.findByToken(activationToken.activationToken)
                 ?: throw IllegalStateException("Could not find token")
 
+            // TODO: refactor to fun 
             val user = userRepository.findByEmail(activationToken.email)
                 ?: throw IllegalStateException("Could not find user")
 

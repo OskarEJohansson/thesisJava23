@@ -3,8 +3,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class JwtApp
+class Jwt
 
 fun main(args: Array<String>) {
-    runApplication<JwtApp>(*args)
+    runApplication<Jwt>(*args)
 }
