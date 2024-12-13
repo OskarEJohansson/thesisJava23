@@ -23,7 +23,7 @@ import java.security.interfaces.RSAPublicKey
 @Configuration
 @EnableWebSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
-class SecurityConfiguration {
+class SecurityConfiguration(private val apiService: ApiService) {
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
 
@@ -33,7 +33,7 @@ class SecurityConfiguration {
     @Bean
     fun getPublicKeyFromTokenService(): RSAPublicKey {
         return runCatching {
-            runBlocking { ApiService().getPublicKey()
+            runBlocking { apiService.getPublicKey()
             }
         }.getOrElse {
             when (it) {
