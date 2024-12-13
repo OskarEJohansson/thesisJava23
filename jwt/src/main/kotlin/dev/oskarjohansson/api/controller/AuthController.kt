@@ -27,6 +27,7 @@ class AuthController(
 
     private val LOG: Logger = LoggerFactory.getLogger(AuthController::class.java)
 
+
     @PostMapping("/v1/login")
     fun token(@Valid @RequestBody loginRequestDTO: LoginRequestDTO): ResponseEntity<ResponseDTO<String>> =
 

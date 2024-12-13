@@ -20,6 +20,7 @@ class ApiService(
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(ApiService::class.java)
 
+
     suspend fun getPublicKey(): RSAPublicKey = runCatching {
             val json = Json.parseToJsonElement(
                 httpClientService.client.get("${hostAddress}/public-key-controller/v1/public-key"

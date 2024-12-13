@@ -48,7 +48,7 @@ class UserController(private val userService: UserService, private val userActiv
         }
     }
 
-
+    // TODO: Move to a separate file? 
     @PostMapping("/v1/activate-account")
     fun activateUser(@Validated @RequestBody activationTokenRequestDTOTEST: ActivationTokenRequestDto): ResponseEntity<ResponseDTO<UserResponseDTO>> {
         return runCatching {
