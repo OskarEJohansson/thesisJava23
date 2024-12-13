@@ -88,7 +88,7 @@ class AdminController(private val adminService: UserService, private val userAct
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "New activation token",
-                    userActivationService.newActivationToken(email)
+                    adminService.sendNewActivationToken(email)
                 )
             )
         }.getOrElse {

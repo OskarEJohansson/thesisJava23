@@ -75,7 +75,7 @@ class UserController(private val userService: UserService, private val userActiv
                 ResponseDTO(
                     HttpStatus.OK.value(),
                     "New activation token",
-                    userActivationService.newActivationToken(email)
+                    userService.sendNewActivationToken(email)
                 )
             )
         }.getOrElse {

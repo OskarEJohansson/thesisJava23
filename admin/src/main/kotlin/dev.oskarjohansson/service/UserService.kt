@@ -1,18 +1,14 @@
 package dev.oskarjohansson.service
 
+import dev.oskarjohansson.api.dto.LoginRequestDTO
+import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.model.ActivationToken
-import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -30,7 +26,9 @@ class UserService(
     private val passwordEncoder: PasswordEncoder,
     private val mailService: MailService,
     private val httpClientService: HttpClientService,
-    @Value(value = "\${domain.host.address}") private val hostAddress:String
+    private val userActivationService: UserActivationService,
+    @Value(value = "\${domain.host.address}") private val hostAddress:String,
+    @Value(value = "\${token.activation.address.admin}") private val moduleAddress:String
 ) {
     
     private val LOG:org.slf4j.Logger = LoggerFactory.getLogger(UserService::class.java)
@@ -45,9 +43,8 @@ class UserService(
 
         val activationToken = activationTokenRepository.save(ActivationToken(email = user.email))
 
-        return mailService.sendMail(activationToken.token, user.email)
+        return mailService.sendMail(activationToken.token, user.email, hostAddress, moduleAddress)
     }
-
 
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String {
         LOG.info("Host address for Login Admin: $hostAddress")
@@ -63,5 +60,9 @@ class UserService(
         } else {
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
+    }
+
+    fun sendNewActivationToken(newActivationTokenRequestDto: NewActivationTokenRequestDTO): Unit {
+        userActivationService.newActivationToken(newActivationTokenRequestDto, hostAddress, moduleAddress)
     }
 }

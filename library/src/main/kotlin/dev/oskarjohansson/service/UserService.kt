@@ -1,5 +1,7 @@
 package dev.oskarjohansson.service
 
+import dev.oskarjohansson.api.dto.ActivationTokenRequestDto
+import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.model.ActivationToken
@@ -25,7 +27,9 @@ class UserService(
     private val activationTokenRepository: ActivationTokenRepository,
     private val mailService: MailService,
     private val httpClientService: HttpClientService,
-    @Value(value = "\${domain.host.address}") private val hostAddress: String
+    private val userActivationService: UserActivationService,
+    @Value(value = "\${domain.host.address}") private val hostAddress: String,
+    @Value(value = "\${token.activation.address.library}") private val moduleAddress: String
 ) {
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(UserService::class.java)
 
@@ -39,12 +43,9 @@ class UserService(
 
         val activationToken: ActivationToken = activationTokenRepository.save(ActivationToken(email = user.email))
 
-        return mailService.sendMail(activationToken.token, user.email)
+        return mailService.sendMail(activationToken.token, user.email,hostAddress, moduleAddress )
     }
 
-
-    //use "http://jwt-service/authentication/v1/login"
-    // TODO: Set configMap? 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
             httpClientService.client.post("${hostAddress}/authentication/v1/login") {
@@ -60,6 +61,10 @@ class UserService(
         } else {
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
+    }
+
+    fun sendNewActivationToken(newActivationTokenRequestDto: NewActivationTokenRequestDTO): Unit {
+        userActivationService.newActivationToken(newActivationTokenRequestDto, hostAddress, moduleAddress)
     }
 }
 

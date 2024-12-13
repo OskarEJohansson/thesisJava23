@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
 
 @Service
-class UserActivationService(private val userRepository: UserRepository,private val activationTokenRepository: ActivationTokenRepository,private val mailService: MailService) {
+class UserActivationService(
+    private val userRepository: UserRepository,
+    private val activationTokenRepository: ActivationTokenRepository,
+    private val mailService: MailService
+) {
 
-    fun newActivationToken(newActivationTokenRequest: NewActivationTokenRequestDTO): Unit {
+    fun newActivationToken(newActivationTokenRequest: NewActivationTokenRequestDTO, hostAddress:String, moduleAddress:String): Unit {
 
         // TODO: refactor and consolidate to fun 
         val user =
@@ -21,7 +25,7 @@ class UserActivationService(private val userRepository: UserRepository,private v
         user.takeIf { !user.isEnabled }
             ?.let {
                 val token = activationTokenRepository.save(ActivationToken(email = user.email))
-                mailService.sendMail(token.token ,token.email)
+                mailService.sendMail(token.token, token.email, hostAddress, moduleAddress)
 
             } ?: throw IllegalStateException("User is already activated")
     }
@@ -33,14 +37,15 @@ class UserActivationService(private val userRepository: UserRepository,private v
 
         return run {
 
-            val activationToken: ActivationToken = activationTokenRepository.findByToken(activationToken.activationToken)
-                ?: throw IllegalStateException("Could not find token")
+            val activationToken: ActivationToken =
+                activationTokenRepository.findByToken(activationToken.activationToken)
+                    ?: throw IllegalStateException("Could not find token")
 
             // TODO: refactor to fun 
             val user = userRepository.findByEmail(activationToken.email)
                 ?: throw IllegalStateException("Could not find user")
 
-            if(!user.isEnabled){
+            if (!user.isEnabled) {
                 userRepository.save(user.copy(isEnabled = true))
             } else {
                 throw IllegalStateException("User is activated")
