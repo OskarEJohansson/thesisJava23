@@ -1,9 +1,10 @@
 package dev.oskarjohansson.service
 
-import dev.oskarjohansson.api.dto.ActivationTokenRequestDto
 import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
+import dev.oskarjohansson.domain.service.MailService
+import dev.oskarjohansson.domain.service.UserActivationService
 import dev.oskarjohansson.model.ActivationToken
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
@@ -14,7 +15,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder

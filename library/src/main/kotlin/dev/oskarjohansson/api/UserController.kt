@@ -3,7 +3,8 @@ package dev.oskarjohansson.api
 import dev.oskarjohansson.api.dto.*
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
-import dev.oskarjohansson.service.UserActivationService
+import dev.oskarjohansson.domain.service.UserActivationService
+
 import dev.oskarjohansson.service.UserService
 import dev.oskarjohansson.service.createUserResponseDTO
 import jakarta.validation.Valid
