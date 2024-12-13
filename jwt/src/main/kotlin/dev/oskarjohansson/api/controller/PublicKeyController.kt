@@ -13,12 +13,12 @@ import java.util.*
 
 @RestController
 @RequestMapping("/public-key-controller")
-class PublicKeyController(val rsaKey: RSAKey) {
+class PublicKeyController(
+    private val rsaKey: RSAKey
+) {
 
     private val LOG: Logger = LoggerFactory.getLogger(PublicKeyController::class.java)
 
-
-    // TODO: ASD 
     @GetMapping("/v1/public-key")
     fun publicKey(request: HttpServletRequest): ResponseEntity<PublicKeyResponseDTO> {
         return runCatching {

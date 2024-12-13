@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/author")
-class AuthorController(private val libraryService: LibraryService) {
+class AuthorController(
+    private val libraryService: LibraryService
+) {
 
     @PostMapping("/v1/register-author")
     fun registerAuthor(@Valid @RequestBody authorRequestDTO: AuthorRequestDTO): ResponseEntity<ResponseDTO<AuthorResponseDTO>> {

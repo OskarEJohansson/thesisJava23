@@ -48,6 +48,7 @@ class UserService(
         return mailService.sendMail(activationToken.token, user.email)
     }
 
+
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String {
         LOG.info("Host address for Login Admin: $hostAddress")
         val response = runBlocking {
