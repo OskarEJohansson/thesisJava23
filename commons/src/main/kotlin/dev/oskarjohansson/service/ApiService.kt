@@ -2,46 +2,30 @@ package dev.oskarjohansson.service
 
 
 import com.nimbusds.jose.jwk.JWK
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.security.interfaces.RSAPublicKey
 
 
-
 @Service
-class ApiService() {
+class ApiService(
+    private val httpClientService: HttpClientService,
+@Value(value = "\${domain.host.address}") private val hostAddress:String
+) {
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(ApiService::class.java)
 
-    private val client = HttpClient(CIO) {
-        install(Logging){
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-                isLenient = true
-            })
-        }
-    }
 
     //use http://jwt-service/public-key-controller/v1/public-key when using pipeline
     // TODO: Use configMap? 
     suspend fun getPublicKey(): RSAPublicKey = runCatching {
             val json = Json.parseToJsonElement(
-//                client.get("http://jwt-service/public-key-controller/v1/public-key"
-                client.get("http://localhost:8081/public-key-controller/v1/public-key"
+                httpClientService.client.get("${hostAddress}/public-key-controller/v1/public-key"
                 ).bodyAsText()
             ).jsonObject
 

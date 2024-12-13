@@ -9,10 +9,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 
 
 @Configuration
-class MailServiceConfiguration(@Value("\${mail.password}")
+class MailServiceConfiguration(@Value("\${smtp.password}")
                                private val pass:String) {
 
-    
+
     @Bean
     fun mailSender(): JavaMailSender {
         return JavaMailSenderImpl().apply{

@@ -3,23 +3,18 @@ package dev.oskarjohansson.service
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
 import dev.oskarjohansson.model.ActivationToken
-import dev.oskarjohansson.model.User
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -27,25 +22,14 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val activationTokenRepository: ActivationTokenRepository
+    private val activationTokenRepository: ActivationTokenRepository,
+    private val mailService: MailService,
+    private val httpClientService: HttpClientService,
+    @Value(value = "\${domain.host.address}") private val hostAddress: String
 ) {
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(UserService::class.java)
 
-    val client = HttpClient(CIO) {
-        install(Logging){
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-                isLenient = true
-            })
-        }
-    }
-
-    fun registerUser(userRequestDTO: UserRequestDTO): ActivationToken {
+    fun registerUser(userRequestDTO: UserRequestDTO): Unit {
         userRepository.findUserByUsernameOrEmail(userRequestDTO.username, userRequestDTO.email)
             ?.let { throw IllegalArgumentException("Username or Email already exist") }
 
@@ -53,7 +37,9 @@ class UserService(
             createUserObject(userRequestDTO, passwordEncoder))
          ?: throw IllegalStateException("Could not save user")
 
-        return activationTokenRepository.save(ActivationToken(email = user.email))
+        val activationToken: ActivationToken = activationTokenRepository.save(ActivationToken(email = user.email))
+
+        return mailService.sendMail(activationToken.token, user.email)
     }
 
 
@@ -61,7 +47,7 @@ class UserService(
     // TODO: Set configMap? 
     suspend fun loginUser(loginRequestDTO: LoginRequestDTO): String {
         val response = runBlocking {
-            client.post("http://localhost:8081/authentication/v1/login") {
+            httpClientService.client.post("${hostAddress}/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }
@@ -75,8 +61,6 @@ class UserService(
             throw IllegalArgumentException("Error logging in, status code: ${response.status} ")
         }
     }
-
-    // TODO: Add activation service for user 
 }
 
 

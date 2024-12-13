@@ -21,11 +21,10 @@ import java.security.interfaces.RSAPublicKey
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration {
+class SecurityConfiguration(private val apiService: ApiService) {
 
 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
-
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -33,7 +32,7 @@ class SecurityConfiguration {
     @Bean
     fun getPublicKeyFromTokenService(): RSAPublicKey {
         return runCatching {
-            runBlocking { ApiService().getPublicKey()
+            runBlocking { apiService.getPublicKey()
             }
         }.getOrElse {
             when (it) {

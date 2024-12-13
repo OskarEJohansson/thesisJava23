@@ -17,6 +17,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -26,22 +28,12 @@ class UserService(
     private val userRepository: UserRepository,
     private val activationTokenRepository: ActivationTokenRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val mailService: MailService
+    private val mailService: MailService,
+    private val httpClientService: HttpClientService,
+    @Value(value = "\${domain.host.address}") private val hostAddress:String
 ) {
-
-    val client = HttpClient(CIO) {
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-                isLenient = true
-            })
-        }
-    }
+    
+    private val LOG:org.slf4j.Logger = LoggerFactory.getLogger(UserService::class.java)
 
     fun registerAdmin(adminRequestDTO: AdminRequestDTO): Unit {
         userRepository.findUserByUsernameOrEmail(adminRequestDTO.username, adminRequestDTO.email)
@@ -57,8 +49,9 @@ class UserService(
     }
 
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String {
+        LOG.info("Host address for Login Admin: $hostAddress")
         val response = runBlocking {
-            client.post("http://localhost:8081/authentication/v1/login") {
+            httpClientService.client.post("${hostAddress}/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }

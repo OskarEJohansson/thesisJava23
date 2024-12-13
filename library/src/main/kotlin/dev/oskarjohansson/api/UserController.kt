@@ -3,7 +3,6 @@ package dev.oskarjohansson.api
 import dev.oskarjohansson.api.dto.*
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
 import dev.oskarjohansson.api.dto.request.UserRequestDTO
-import dev.oskarjohansson.model.toActivationTokenResponseDTO
 import dev.oskarjohansson.service.UserActivationService
 import dev.oskarjohansson.service.UserService
 import dev.oskarjohansson.service.createUserResponseDTO
@@ -39,11 +38,11 @@ class UserController(private val userService: UserService, private val userActiv
     }
 
     @PostMapping("/v1/register-user")
-    fun registerUser(@Valid @RequestBody registerUser: UserRequestDTO): ResponseEntity<ResponseDTO<ActivationTokenResponseDTO>> {
+    fun registerUser(@Valid @RequestBody registerUser: UserRequestDTO): ResponseEntity<ResponseDTO<Unit>> {
 
         return runCatching {
             ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDTO(HttpStatus.OK.value(), "User successfully registered", userService.registerUser(registerUser).toActivationTokenResponseDTO()))
+                .body(ResponseDTO(HttpStatus.OK.value(), "User successfully registered", userService.registerUser(registerUser)))
         }.getOrElse {
             ResponseEntity.badRequest().body(ResponseDTO(HttpStatus.BAD_REQUEST.value(), "Could not register user, ${it.message}"))
         }

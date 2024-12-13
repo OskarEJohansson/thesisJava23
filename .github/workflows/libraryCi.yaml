@@ -2,13 +2,13 @@
 name: LibraryCI
 
 env:
-  PROJECT_ID: 'cicdtest-438007'
-  REGION: 'europe-north1'
-  SERVICE: 'javathesis23'
-  WORKLOAD_IDENTITY_PROVIDER: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}'
-  SERVICE_ACCOUNT: '${{ secrets.SERVICE_ACCOUNT }}'
-  MONGODB_URI: '${{ secrets.MONGODB_URI }}'
-  GOOGLE_APP_PASSWORD: '${{ secrets.GOOGLE_APP_PASSWORD }}' #Pass for Google smtp
+  PROJECT_ID: cicdtest-438007
+  REGION: europe-north1
+  SERVICE: javathesis23
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+  SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+#  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+#  GOOGLE_SMTP_PASSWORD: ${{ secrets.GOOGLE_SMTP_PASSWORD }}
 
 on:
   push:
