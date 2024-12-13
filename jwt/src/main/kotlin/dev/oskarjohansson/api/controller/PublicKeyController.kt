@@ -34,7 +34,6 @@ class PublicKeyController(
 
             ResponseEntity.ok().body(PublicKeyResponseDTO(keyID, publicKeyData))
 
-
         }.getOrElse {
             LOG.error("Error retrieving public RSA key: ${it.message}", it)
             throw IllegalStateException("Internal Server error: ${it.message}")
