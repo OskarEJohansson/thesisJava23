@@ -16,7 +16,6 @@ class UserDetailService(private val repositoryService: RepositoryService) : User
 
     private val LOG: Logger = LoggerFactory.getLogger(UserDetailService::class.java)
 
-    // TODO: Make sure UserDetails with ? works 
     override fun loadUserByUsername(username: String): UserDetails? {
         return runCatching {
            repositoryService.getUserByUsername(username)
