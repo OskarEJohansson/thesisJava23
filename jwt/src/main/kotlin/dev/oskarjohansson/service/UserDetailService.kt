@@ -28,7 +28,6 @@ class UserDetailService(private val repositoryService: RepositoryService) : User
             throw UsernameNotFoundException("Username not found")
         }
     }
-    
 
     fun createUserDetailsAndGrantAuthority(user: User): UserDetails =
         user.id?.let {
