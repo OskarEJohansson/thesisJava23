@@ -24,7 +24,7 @@ class ApiService(
 
     suspend fun getPublicKey(): RSAPublicKey = runCatching {
             val json = Json.parseToJsonElement(
-                httpClientService.client.get("http://jwt-service/public-key-controller/v1/public-key"
+                httpClientService.client.get("http://localhost:8081/public-key-controller/v1/public-key"
                 ).bodyAsText()
             ).jsonObject
 
