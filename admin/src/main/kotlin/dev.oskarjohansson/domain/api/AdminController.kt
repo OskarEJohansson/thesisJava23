@@ -80,7 +80,6 @@ class AdminController(private val adminService: UserService, private val userAct
         }
     }
 
-
     @PostMapping("/v1/send-new-activation-token")
     fun sendNewActivationToken(@Validated @RequestBody email: NewActivationTokenRequestDTO): ResponseEntity<ResponseDTO<Unit>> {
         return runCatching {
