@@ -18,13 +18,13 @@ class ApiService(
 @Value(value = "\${domain.host.address}") private val hostAddress:String
 ) {
 
-    // TODO: Move Value to inject address somewhere else. 
+    // TODO: Move Value to inject address somewhere else.
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(ApiService::class.java)
 
 
     suspend fun getPublicKey(): RSAPublicKey = runCatching {
             val json = Json.parseToJsonElement(
-                httpClientService.client.get("${hostAddress}/public-key-controller/v1/public-key"
+                httpClientService.client.get("http://jwt-service/public-key-controller/v1/public-key"
                 ).bodyAsText()
             ).jsonObject
 
