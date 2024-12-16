@@ -4,8 +4,6 @@ env:
   SERVICE: javathesis23
   WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-#  MONGODB_URI: ${{ secrets.MONGODB_URI }}
-#  GOOGLE_SMTP_PASSWORD: ${{ secrets.GOOGLE_SMTP_PASS }}
 
 
 on:
@@ -40,8 +38,8 @@ jobs:
       #      - name: Run tests
       #        run: ./gradlew :jwt:test
 
-      - name: Build JWT Jar
-        run: ./gradlew :jwt:build
+      - name: Build ADMIN Jar
+        run: ./gradlew :admin:build
 
       - name: Authenticate to Google Cloud
         id: auth
@@ -60,5 +58,5 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -f jwt/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/admin:latest .
+          docker build -f admin/Dockerfile --tag '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/admin:latest .
           docker push '${{ env.REGION }}'-docker.pkg.dev/'${{ env.PROJECT_ID }}'/'${{ env.SERVICE }}'/admin:latest

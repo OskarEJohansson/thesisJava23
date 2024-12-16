@@ -17,6 +17,8 @@ class MailService(
 
     fun sendMail(activationToken: String, userEmailAddress: String, hostAddress: String, moduleAddress:String) {
 
+        LOG.debug("Inside MailService sendMail")
+
         val msg = SimpleMailMessage(templateMessage)
         msg.setTo(userEmailAddress)
         msg.text =

@@ -110,7 +110,56 @@ spec:
         - image: europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/library:latest
           imagePullPolicy: IfNotPresent
           name: library-sha256-1
-          env:
+          spec:
+            containers:
+              - image: europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/library:latest
+                imagePullPolicy: IfNotPresent
+                name: library-sha256-1
+                env:
+                  - name: MONGODB_URI
+                    valueFrom:
+                      secretKeyRef:
+                        key: mongodb-uri
+                        name: mongodb-uri
+                  - name: DOMAIN_HOST_ADDRESS
+                    valueFrom:
+                      secretKeyRef:
+                        key: domain-host-address
+                        name: domain-host-address
+                  - name: GOOGLE_SMTP_PASS
+                    valueFrom:
+                      secretKeyRef:
+                        key: google-smtp-pass
+                        name: google-smtp-pass
+                resources:
+                  limits:
+                    ephemeral-storage: 1Gi
+                  requests:
+                    cpu: 500m
+                    ephemeral-storage: 1Gi
+                    memory: 2Gi
+                securityContext:
+                  capabilities:
+                    drop:
+                      - NET_RAW
+                terminationMessagePath: /dev/termination-log
+                terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext:
+              seccompProfile:
+                type: RuntimeDefault
+            terminationGracePeriodSeconds: 30
+            tolerations:
+              - effect: NoSchedule
+                key: kubernetes.io/arch
+                operator: Equal
+                value:
+                  amd64From:
+                secretKeyRef:
+                  key: mongodb-uri
+                  name: mongodb-uri
             - name: DOMAIN_HOST_ADDRESS
               valueFrom:
                 secretKeyRef:
@@ -121,11 +170,6 @@ spec:
                 secretKeyRef:
                   key: google-smtp-pass
                   name: google-smtp-pass
-            - name: MONGODB_URI
-              valueFrom:
-                secretKeyRef:
-                  key: mongodb-uri
-                  name: mongodb-uri
           resources:
             limits:
               ephemeral-storage: 1Gi

@@ -113,21 +113,21 @@ spec:
           imagePullPolicy: Always
           name: admin-1
           env:
-            - name: DOMAIN_HOST_ADDRESS
-              valueFrom:
-                secretKeyRef:
-                  key: domain-host-address
-                  name: domain-host-address
-            - name: GOOGLE_SMTP_PASS
-              valueFrom:
-                secretKeyRef:
-                  key: google-smtp-pass
-                  name: google-smtp-pass
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
                   key: mongodb-uri
                   name: mongodb-uri
+            - name: GOOGLE_SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: google-smtp-pass
+                  name: google-smtp-pass
+            - name: DOMAIN_HOST_ADDRESS
+                valueFrom:
+                secretKeyRef:
+                  key: domain-host-address
+                  name: domain-host-address
           resources:
             limits:
               ephemeral-storage: 1Gi

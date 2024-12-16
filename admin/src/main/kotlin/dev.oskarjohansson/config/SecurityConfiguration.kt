@@ -23,7 +23,6 @@ import java.security.interfaces.RSAPublicKey
 @EnableWebSecurity
 class SecurityConfiguration(private val apiService: ApiService) {
 
-
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
 
     @Bean

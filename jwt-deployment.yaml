@@ -36,6 +36,11 @@ spec:
         imagePullPolicy: IfNotPresent
         name: jwt-sha256-1
         env:
+          - name: MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                key: mongodb-uri
+                name: mongodb-uri
           - name: DOMAIN_HOST_ADDRESS
             valueFrom:
               secretKeyRef:
@@ -46,11 +51,6 @@ spec:
               secretKeyRef:
                 key: google-smtp-pass
                 name: google-smtp-pass
-          - name: MONGODB_URI
-            valueFrom:
-              secretKeyRef:
-                key: mongodb-uri
-                name: mongodb-uri
         resources:
           limits:
             ephemeral-storage: 1Gi

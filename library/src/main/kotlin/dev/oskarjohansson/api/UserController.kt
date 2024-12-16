@@ -7,6 +7,7 @@ import dev.oskarjohansson.domain.service.UserActivationService
 
 import dev.oskarjohansson.service.UserService
 import dev.oskarjohansson.service.createUserResponseDTO
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import kotlin.math.log
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +28,8 @@ class UserController(private val userService: UserService, private val userActiv
     private val LOG: Logger = LoggerFactory.getLogger(UserController::class.java)
 
     @PostMapping("/v1/login")
-    fun login(@Valid @RequestBody loginRequest: LoginRequestDTO): ResponseEntity<ResponseDTO<String>> {
+    fun login(@Valid @RequestBody loginRequest: LoginRequestDTO, servletRequest: HttpServletRequest): ResponseEntity<ResponseDTO<String>> {
+        LOG.debug("Servlet request header: ${servletRequest.headerNames}, context: ${servletRequest.contextPath}. method: ${servletRequest.method}")
         return runCatching {
             ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDTO(HttpStatus.OK.value(), "Login Successful", runBlocking {
@@ -39,7 +42,9 @@ class UserController(private val userService: UserService, private val userActiv
     }
 
     @PostMapping("/v1/register-user")
-    fun registerUser(@Valid @RequestBody registerUser: UserRequestDTO): ResponseEntity<ResponseDTO<Unit>> {
+    fun registerUser(@Valid @RequestBody registerUser: UserRequestDTO, servletRequest: HttpServletRequest): ResponseEntity<ResponseDTO<Unit>> {
+        LOG.debug("Request: header names: ${servletRequest.headerNames}, content type: ${servletRequest.contentType}")
+
 
         return runCatching {
             ResponseEntity.status(HttpStatus.OK)

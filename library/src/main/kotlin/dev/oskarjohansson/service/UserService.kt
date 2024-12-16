@@ -42,6 +42,7 @@ class UserService(
          ?: throw IllegalStateException("Could not save user")
 
         val activationToken: ActivationToken = activationTokenRepository.save(ActivationToken(email = user.email))
+        LOG.debug("Token saved expires: ${activationToken.expirationDate}")
 
         return mailService.sendMail(activationToken.token, user.email,hostAddress, moduleAddress )
     }
