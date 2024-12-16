@@ -13,7 +13,6 @@ class MailService(
     private val templateMessage: SimpleMailMessage,
 ) {
 
-    // TODO: MOVE TO EACH MODULE 
     private var LOG: Logger = LoggerFactory.getLogger(MailService::class.java)
 
     fun sendMail(activationToken: String, userEmailAddress: String, hostAddress: String, moduleAddress:String) {

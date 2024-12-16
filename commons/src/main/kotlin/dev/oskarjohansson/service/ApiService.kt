@@ -18,6 +18,7 @@ class ApiService(
 @Value(value = "\${domain.host.address}") private val hostAddress:String
 ) {
 
+    // TODO: Move Value to inject address somewhere else. 
     private val LOG: org.slf4j.Logger = LoggerFactory.getLogger(ApiService::class.java)
 
 

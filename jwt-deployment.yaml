@@ -32,7 +32,7 @@ spec:
         app: jwt
     spec:
       containers:
-      - image: europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt@sha256:bd94993c9d163b982205a594c51cd5a0991fc46bcb6d84368e8b04bfa65d21fe
+      - image: europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/jwt:latest
         imagePullPolicy: IfNotPresent
         name: jwt-sha256-1
         env:
