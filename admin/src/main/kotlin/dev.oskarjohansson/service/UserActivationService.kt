@@ -41,6 +41,7 @@ class UserActivationService(
                 activationTokenRepository.findByToken(activationToken.activationToken)
                     ?: throw IllegalStateException("Could not find token")
 
+
             // TODO: refactor to fun 
             val user = userRepository.findByEmail(activationToken.email)
                 ?: throw IllegalStateException("Could not find user")

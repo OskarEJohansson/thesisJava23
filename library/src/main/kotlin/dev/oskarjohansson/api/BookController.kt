@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/book")
 class BookController(private val libraryService: LibraryService) {
 
-
     @PostMapping("/v1/register-book")
     fun registerBook(@Valid @RequestBody book: RegisterBookRequestDTO): ResponseEntity<ResponseDTO<BookResponseDTO>> {
 
