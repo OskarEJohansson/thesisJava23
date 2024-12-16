@@ -123,11 +123,6 @@ spec:
                 secretKeyRef:
                   key: google-smtp-pass
                   name: google-smtp-pass
-            - name: DOMAIN_HOST_ADDRESS
-                valueFrom:
-                secretKeyRef:
-                  key: domain-host-address
-                  name: domain-host-address
           resources:
             limits:
               ephemeral-storage: 1Gi
