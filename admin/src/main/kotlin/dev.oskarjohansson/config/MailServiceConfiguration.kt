@@ -1,5 +1,7 @@
 package dev.oskarjohansson.config
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -16,9 +18,11 @@ class MailServiceConfiguration(
     private val pass: String
 ) {
 
+    private val LOG: Logger = LoggerFactory.getLogger(MailServiceConfiguration::class.java)
 
     @Bean
     fun mailSender(): JavaMailSender {
+        LOG.debug("Password in MailServiceConfig ${pass}")
         return JavaMailSenderImpl().apply {
             username = "oskarcodeexplorer@gmail.com"
             password = pass

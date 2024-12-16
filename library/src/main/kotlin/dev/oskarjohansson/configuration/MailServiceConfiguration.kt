@@ -20,7 +20,6 @@ class MailServiceConfiguration(
 
     private val LOG: Logger = LoggerFactory.getLogger(MailServiceConfiguration::class.java)
 
-
     @Bean
     fun mailSender(): JavaMailSender {
 

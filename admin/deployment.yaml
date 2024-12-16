@@ -112,7 +112,7 @@ spec:
         - image: europe-north1-docker.pkg.dev/cicdtest-438007/javathesis23/admin:latest
           imagePullPolicy: Always
           name: admin-1
-          env:
+         env:
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
@@ -123,6 +123,11 @@ spec:
                 secretKeyRef:
                   key: google-smtp-pass
                   name: google-smtp-pass
+            - name: DOMAIN_HOST_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  key: domain-host-address
+                  name: domain-host-address
           resources:
             limits:
               ephemeral-storage: 1Gi
