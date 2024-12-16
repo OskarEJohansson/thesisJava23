@@ -38,7 +38,7 @@ jobs:
       #      - name: Run tests
       #        run: ./gradlew :jwt:test
 
-      - name: Build ADMIN Jar
+      - name: Build Admin Jar
         run: ./gradlew :admin:build
 
       - name: Authenticate to Google Cloud
