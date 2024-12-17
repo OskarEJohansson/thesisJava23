@@ -13,16 +13,16 @@ class MailService(
     private val templateMessage: SimpleMailMessage,
 ) {
 
-    // TODO: MOVE TO EACH MODULE 
     private var LOG: Logger = LoggerFactory.getLogger(MailService::class.java)
 
     fun sendMail(activationToken: String, userEmailAddress: String, hostAddress: String, moduleAddress:String) {
 
+        LOG.info("Activation token address: $hostAddress/$moduleAddress/$activationToken")
         val msg = SimpleMailMessage(templateMessage)
         msg.setTo(userEmailAddress)
         msg.text =
 
-            ("Please activate your account by clicking the link: $hostAddress/$moduleAddress ")
+            ("Please activate your account by clicking the link: $hostAddress/$moduleAddress/$activationToken ")
 
         runCatching {
             mailSender.send(msg)

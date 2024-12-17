@@ -17,13 +17,13 @@ class MailService(
 
     fun sendMail(activationToken: String, userEmailAddress: String, hostAddress: String, moduleAddress:String) {
 
-        LOG.debug("Inside MailService sendMail")
+        LOG.info("Activation token address: $hostAddress/$moduleAddress/$activationToken")
 
         val msg = SimpleMailMessage(templateMessage)
         msg.setTo(userEmailAddress)
         msg.text =
 
-            ("Please activate your account by clicking the link: $hostAddress/$moduleAddress ")
+            ("Please activate your account by clicking the link: $hostAddress/$moduleAddress/$activationToken ")
 
         runCatching {
             mailSender.send(msg)
