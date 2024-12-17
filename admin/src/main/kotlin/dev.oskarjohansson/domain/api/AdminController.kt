@@ -28,11 +28,11 @@ class AdminController(private val adminService: UserService, private val userAct
 
     @GetMapping("/v1/users")
     fun users(): ResponseEntity<ResponseDTO<List<User>>> {
-
         return try {
-            ResponseEntity.status(HttpStatus.OK).body(ResponseDTO(HttpStatus.OK.value(), "Users"))
+            ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDTO(HttpStatus.OK.value(),
+                    "Users")) // TODO: Implement get users
         } catch (exception: IllegalStateException) {
-
             ResponseEntity.internalServerError().body(
                 ResponseDTO(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),

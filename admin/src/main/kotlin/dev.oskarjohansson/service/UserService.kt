@@ -48,8 +48,9 @@ class UserService(
 
     suspend fun loginAdmin(loginRequestDTO: LoginRequestDTO): String {
         LOG.info("Host address for Login Admin: $hostAddress")
+        LOG.info("Module address for Login Admin, $moduleAddress")
         val response = runBlocking {
-            httpClientService.client.post("${hostAddress}/authentication/v1/login") {
+            httpClientService.client.post("${hostAddress}/admin/authentication/v1/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequestDTO)
             }
