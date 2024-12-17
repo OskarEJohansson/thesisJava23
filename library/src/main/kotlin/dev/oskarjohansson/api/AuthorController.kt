@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/author")
+@RequestMapping("/user/author")
 class AuthorController(
     private val libraryService: LibraryService
 ) {
@@ -37,7 +37,6 @@ class AuthorController(
         }
     }
 
-    // TODO: 123 
     @GetMapping("/v1/authors")
     fun authors(pageable: Pageable): ResponseEntity<ResponseDTO<Page<AuthorResponseDTO>>> {
         return runCatching {

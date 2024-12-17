@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/user/review")
 class ReviewController(private val libraryService: LibraryService) {
 
     @PostMapping("/v1/create-review")

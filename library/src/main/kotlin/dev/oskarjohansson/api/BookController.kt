@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/user/book")
 class BookController(private val libraryService: LibraryService) {
 
     @PostMapping("/v1/register-book")
