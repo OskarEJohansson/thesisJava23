@@ -67,7 +67,7 @@ class SecurityConfiguration(private val apiService: ApiService) {
             .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/admin/v1/login", "/admin/v1/create-admin" ,"/admin/v1/activate-account/*", "admin/health", "/admin", "/user").permitAll()
+                it.requestMatchers("/admin/v1/login", "/admin/v1/create-admin" ,"/admin/v1/activate-account/*", "/health", "/admin", "/user").permitAll()
                 it.requestMatchers("/v3/*","/v3/api-docs/swagger-config", "/swagger-ui/*").permitAll() // TODO: Find out how to to do this security chain safe when using a browser
                 it.requestMatchers("/admin/*").hasRole("Admin")
                 it.anyRequest().authenticated()
