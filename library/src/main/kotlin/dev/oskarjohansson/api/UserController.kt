@@ -93,8 +93,4 @@ class UserController(private val userService: UserService, private val userActiv
             )
         }
     }
-
-
-
-
 }
