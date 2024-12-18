@@ -5,8 +5,8 @@ metadata:
     autopilot.gke.io/resource-adjustment: '{"input":{"containers":[{"name":"admin-sha256-1"}]},"output":{"containers":[{"limits":{"ephemeral-storage":"1Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"admin-sha256-1"}]},"modified":true}'
     autopilot.gke.io/warden-version: 3.0.42
     deployment.kubernetes.io/revision: "4"
-  creationTimestamp: "2024-12-16T14:52:17Z"
-  generation: 11
+  creationTimestamp: "2024-12-17T13:47:17Z"
+  generation: 26
   labels:
     app: admin
   managedFields:
@@ -77,19 +77,7 @@ metadata:
               f:terminationGracePeriodSeconds: {}
       manager: unknown
       operation: Update
-      time: "2024-12-17T08:24:07Z"
-    - apiVersion: apps/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          f:template:
-            f:metadata:
-              f:annotations:
-                .: {}
-                f:kubectl.kubernetes.io/restartedAt: {}
-      manager: kubectl-rollout
-      operation: Update
-      time: "2024-12-17T09:03:03Z"
+      time: "2024-12-18T07:38:29Z"
     - apiVersion: apps/v1
       fieldsType: FieldsV1
       fieldsV1:
@@ -123,11 +111,11 @@ metadata:
       manager: kube-controller-manager
       operation: Update
       subresource: status
-      time: "2024-12-17T09:10:00Z"
+      time: "2024-12-18T07:43:52Z"
   name: admin
   namespace: default
-  resourceVersion: "1180312"
-  uid: 9083c8bb-ea3d-46df-ae80-4a2d24962e26
+  resourceVersion: "2447684"
+  uid: 196bbf11-9743-4919-9c00-a5280be3a65d
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -142,8 +130,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        kubectl.kubernetes.io/restartedAt: "2024-12-17T10:03:03+01:00"
       creationTimestamp: null
       labels:
         app: admin
@@ -196,19 +182,19 @@ spec:
 status:
   availableReplicas: 1
   conditions:
-    - lastTransitionTime: "2024-12-16T14:52:17Z"
-      lastUpdateTime: "2024-12-17T09:03:52Z"
-      message: ReplicaSet "admin-6679f776d8" has successfully progressed.
+    - lastTransitionTime: "2024-12-17T13:47:18Z"
+      lastUpdateTime: "2024-12-17T14:11:33Z"
+      message: ReplicaSet "admin-bf87c7d67" has successfully progressed.
       reason: NewReplicaSetAvailable
       status: "True"
       type: Progressing
-    - lastTransitionTime: "2024-12-17T09:10:00Z"
-      lastUpdateTime: "2024-12-17T09:10:00Z"
+    - lastTransitionTime: "2024-12-18T07:43:51Z"
+      lastUpdateTime: "2024-12-18T07:43:51Z"
       message: Deployment has minimum availability.
       reason: MinimumReplicasAvailable
       status: "True"
       type: Available
-  observedGeneration: 11
+  observedGeneration: 26
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1

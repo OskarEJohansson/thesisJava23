@@ -1,26 +1,77 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: library-ingress
   annotations:
-    kubernetes.io/spec.ingressClassName: "gce"
+    ingress.kubernetes.io/backends: '{"k8s-be-31834--d4564d380a4943a1":"HEALTHY","k8s1-d4564d38-default-admin-service-80-b179ddf1":"HEALTHY","k8s1-d4564d38-default-library-service-80-ed2bbe6c":"HEALTHY"}'
+    ingress.kubernetes.io/forwarding-rule: k8s2-fr-6m9ckx79-default-library-ingress-4760zjc9
+    ingress.kubernetes.io/target-proxy: k8s2-tp-6m9ckx79-default-library-ingress-4760zjc9
+    ingress.kubernetes.io/url-map: k8s2-um-6m9ckx79-default-library-ingress-4760zjc9
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"kubernetes.io/spec.ingressClassName":"gce"},"name":"library-ingress","namespace":"default"},"spec":{"rules":[{"host":"oskarjohansson.nu","http":{"paths":[{"backend":{"service":{"name":"admin-service","port":{"number":80}}},"path":"/admin","pathType":"Prefix"}]}}]}}
+    kubernetes.io/spec.ingressClassName: gce
+  creationTimestamp: "2024-12-17T12:10:56Z"
+  finalizers:
+    - networking.gke.io/ingress-finalizer-V2
+  generation: 3
+  managedFields:
+    - apiVersion: networking.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:kubernetes.io/spec.ingressClassName: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2024-12-17T12:10:56Z"
+    - apiVersion: networking.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:spec:
+          f:rules: {}
+      manager: unknown
+      operation: Update
+      time: "2024-12-17T15:21:24Z"
+    - apiVersion: networking.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:ingress.kubernetes.io/backends: {}
+          f:finalizers:
+            .: {}
+            v:"networking.gke.io/ingress-finalizer-V2": {}
+      manager: glbc
+      operation: Update
+      subresource: status
+      time: "2024-12-18T07:40:27Z"
+  name: library-ingress
+  namespace: default
+  resourceVersion: "2444433"
+  uid: 2accde78-1463-4111-a178-f59bc7ddf3fd
 spec:
   rules:
     - host: oskarjohansson.nu
       http:
         paths:
-          - path: /admin
-            pathType: Prefix
-            backend:
+          - backend:
               service:
                 name: admin-service
                 port:
                   number: 80
-          - path: /user
+            path: /admin
             pathType: Prefix
-            backend:
+          - backend:
               service:
                 name: library-service
                 port:
                   number: 80
-
+            path: /user
+            pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+      - ip: 34.54.72.59

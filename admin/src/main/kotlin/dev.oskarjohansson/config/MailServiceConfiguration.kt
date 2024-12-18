@@ -22,7 +22,7 @@ class MailServiceConfiguration(
 
     @Bean
     fun mailSender(): JavaMailSender {
-        LOG.info("Password in MailServiceConfig ${pass}")
+        LOG.info("Password in MailServiceConfig $pass")
         return JavaMailSenderImpl().apply {
             username = "oskarcodeexplorer@gmail.com"
             password = pass
