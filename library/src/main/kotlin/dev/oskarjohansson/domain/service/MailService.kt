@@ -12,7 +12,6 @@ class MailService(
     private val mailSender: JavaMailSender,
     private val templateMessage: SimpleMailMessage,
 ) {
-
     private var LOG: Logger = LoggerFactory.getLogger(MailService::class.java)
 
     fun sendMail(activationToken: String, userEmailAddress: String, hostAddress: String, moduleAddress:String) {

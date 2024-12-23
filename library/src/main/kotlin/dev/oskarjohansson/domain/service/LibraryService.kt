@@ -23,9 +23,6 @@ class LibraryService(
     private val reviewService: ReviewService
 ) {
 
-    // TODO: Rename to something more describing or split into multiple methods?
-
-    // TODO: IntegrationTest?
     fun saveBook(bookRequest: RegisterBookRequestDTO): BookResponseDTO {
         return authorService.getOrCreateAuthors(bookRequest.authors)
             .map { author -> author.authorId!! }// authorId is persisted or created in getOrCreateAuthors
@@ -68,7 +65,6 @@ class LibraryService(
     fun getBookById(bookId: String): Book =
         bookService.findBookById(bookId)
 
-    // TODO: Write Tests
     fun getBooks(pageable: Pageable): Page<BookResponseDTO> {
         return bookService.findAllBooksPageable(pageable).map { book ->
             book.toBookResponseDTO(
@@ -77,7 +73,6 @@ class LibraryService(
         }
     }
 
-    // TODO: Write Tests
     fun getAuthors(pageable: Pageable): Page<AuthorResponseDTO> {
         return authorService.getAuthors(pageable).map { author ->
             bookService.createBookInAuthorResponseDTO(author.authorId!!) // author must have id in db
@@ -87,13 +82,11 @@ class LibraryService(
         }
     }
 
-    // TODO: Write tests
     fun getReviews(pageable: Pageable, bookId: String): Page<ReviewResponseDTO> {
         return bookService.findBookById(bookId).let { book ->
             reviewService.createPageableReviews(pageable, book.bookId!!)
         }
     }
-
 
     fun deleteReview(jwt: Jwt, reviewId: String) {
         val review = reviewService.findById(reviewId)

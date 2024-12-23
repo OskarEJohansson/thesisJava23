@@ -11,12 +11,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BookServiceTest {
-
-    val bookRepository = mockk<BookRepository>()
-    val bookService = BookService(bookRepository)
-    val mockBook = mockk<Book>()
-    val bookTitle = BookRequestDTO(title = "ABC")
-    val bookId = BookRequestDTO(bookId = "123")
+    private val bookRepository = mockk<BookRepository>()
+    private val bookService = BookService(bookRepository)
+    private val mockBook = mockk<Book>()
+    private val bookTitle = BookRequestDTO(title = "ABC")
+    private val bookId = BookRequestDTO(bookId = "123")
 
 
 

@@ -7,9 +7,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6" apply false
 }
 
-group = "com.OskarJohansson"
-version = "0.0.1-SNAPSHOT"
-
 allprojects{
     repositories {
         mavenCentral()

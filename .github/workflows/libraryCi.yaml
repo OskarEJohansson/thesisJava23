@@ -10,9 +10,9 @@ env:
 
 on:
   push:
-    paths: [ 'library/**' ]
+    paths: [  ] #library/**
   pull_request:
-    paths: [ 'library/**' ]
+    paths: [  ] #library/**
 
 jobs:
   build:

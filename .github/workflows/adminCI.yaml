@@ -8,9 +8,9 @@ env:
 
 on:
   push:
-    paths: [ 'admin/**' ]
+    paths: [ ] # admin/**
   pull_request:
-    paths: [ 'admin/**' ]
+    paths: [  ] #admin/**
 
 jobs:
   build:

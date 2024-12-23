@@ -17,9 +17,8 @@ class UserActivationService(
     private val mailService: MailService
 ) {
 
-    fun newActivationToken(newActivationTokenRequest: NewActivationTokenRequestDTO, hostAddress:String, moduleAddress:String): Unit {
+    fun newActivationToken(newActivationTokenRequest: NewActivationTokenRequestDTO, hostAddress:String, moduleAddress:String) {
 
-        // TODO: refactor and consolidate to fun 
         val user =
             userRepository.findByEmail(newActivationTokenRequest.email) ?: throw IllegalStateException("User not found")
 
@@ -41,8 +40,6 @@ class UserActivationService(
             val activationToken: ActivationToken =
                 activationTokenRepository.findByToken(activationToken.activationToken)
                     ?: throw IllegalStateException("Could not find token")
-
-            // TODO: refactor to fun 
             val user = userRepository.findByEmail(activationToken.email)
                 ?: throw IllegalStateException("Could not find user")
 

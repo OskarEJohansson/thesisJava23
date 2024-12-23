@@ -30,9 +30,8 @@ class ReviewService(private val reviewRepository: ReviewRepository) {
 
     fun save(review: Review): Review = reviewRepository.save(review)
 
-    fun findById(reviewId: String): Review {
-        return reviewRepository.findByReviewId(reviewId) ?: throw IllegalArgumentException("Could not find Review with reviewId: $reviewId")
-    }
+    fun findById(reviewId: String): Review = reviewRepository.findByReviewId(reviewId) ?: throw IllegalArgumentException("Could not find Review with reviewId: $reviewId")
+
 
     fun deleteById(reviewId: String) {
         return reviewRepository.deleteById(reviewId)

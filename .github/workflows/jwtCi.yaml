@@ -9,9 +9,9 @@ env:
 
 on:
   push:
-    paths: [ 'jwt/**' ]
+    paths: [  ] #jwt/**
   pull_request:
-    paths: [ 'jwt/**' ]
+    paths: [  ] #jwt/**
 
 jobs:
   build:
