@@ -1,4 +1,4 @@
-package dev.oskarjohansson.service
+package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.model.Role

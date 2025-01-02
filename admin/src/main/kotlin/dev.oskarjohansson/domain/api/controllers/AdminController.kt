@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.api
+package dev.oskarjohansson.domain.api.controllers
 
 import dev.oskarjohansson.api.dto.ResponseDTO
 import dev.oskarjohansson.domain.service.AdminService

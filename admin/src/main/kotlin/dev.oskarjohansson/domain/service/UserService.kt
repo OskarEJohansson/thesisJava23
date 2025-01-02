@@ -1,4 +1,4 @@
-package dev.oskarjohansson.service
+package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.LoginRequestDTO
 import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
@@ -6,6 +6,7 @@ import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.model.ActivationToken
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
+import dev.oskarjohansson.service.HttpClientService
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

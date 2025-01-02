@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api
+package dev.oskarjohansson.api.controllers
 
 import dev.oskarjohansson.api.dto.request.AddAuthorRequestDTO
 import dev.oskarjohansson.api.dto.request.BookRequestDTO

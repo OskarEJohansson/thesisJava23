@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.api
+package dev.oskarjohansson.domain.api.controllers
 
 
 import dev.oskarjohansson.api.dto.ActivationTokenRequestDto
@@ -7,8 +7,9 @@ import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
 import dev.oskarjohansson.api.dto.ResponseDTO
 import dev.oskarjohansson.domain.api.dto.request.AdminRequestDTO
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
-import dev.oskarjohansson.service.UserActivationService
-import dev.oskarjohansson.service.UserService
+import dev.oskarjohansson.domain.api.utilities.toAdminResponseDTO
+import dev.oskarjohansson.domain.service.UserActivationService
+import dev.oskarjohansson.domain.service.UserService
 import kotlinx.coroutines.runBlocking
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

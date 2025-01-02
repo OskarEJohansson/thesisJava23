@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api
+package dev.oskarjohansson.api.controllers
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

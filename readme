@@ -1,0 +1,11 @@
+
+ This is a book review application written in REST. It comprises of three services and a library.
+
+ The jwt service is a security service handling authentication and authorization of a user.
+ The Library service handles all user interaction.
+ The admin service handles all admin transactions.
+
+Swagger
+
+Library: http://localhost:8080/swagger-ui/index.html
+Admin: http://localhost:8082/swagger-ui/index.html

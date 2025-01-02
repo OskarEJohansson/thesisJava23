@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api
+package dev.oskarjohansson.api.controllers
 
 import dev.oskarjohansson.api.dto.request.ReviewRequestDTO
 import dev.oskarjohansson.api.dto.response.ReviewResponseDTO

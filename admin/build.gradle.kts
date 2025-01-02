@@ -34,6 +34,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.12")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.sun.mail:jakarta.mail:2.0.1")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation(project(":commons"))
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

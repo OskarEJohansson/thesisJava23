@@ -1,4 +1,4 @@
-package dev.oskarjohansson.api
+package dev.oskarjohansson.api.controllers
 
 import dev.oskarjohansson.api.dto.*
 import dev.oskarjohansson.api.dto.request.LoginRequestDTO
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import kotlin.math.log
 
 @RestController
 @RequestMapping("/user")

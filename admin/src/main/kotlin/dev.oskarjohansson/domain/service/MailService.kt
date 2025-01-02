@@ -1,4 +1,4 @@
-package dev.oskarjohansson.service
+package dev.oskarjohansson.domain.service
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

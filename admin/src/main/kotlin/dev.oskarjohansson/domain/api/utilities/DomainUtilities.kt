@@ -1,4 +1,4 @@
-package dev.oskarjohansson.domain.api
+package dev.oskarjohansson.domain.api.utilities
 
 import dev.oskarjohansson.domain.api.dto.response.AdminResponseDTO
 import dev.oskarjohansson.model.User

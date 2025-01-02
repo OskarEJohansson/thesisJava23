@@ -1,4 +1,4 @@
-package dev.oskarjohansson.service
+package dev.oskarjohansson.domain.service
 
 import dev.oskarjohansson.api.dto.ActivationTokenRequestDto
 import dev.oskarjohansson.api.dto.NewActivationTokenRequestDTO
@@ -6,6 +6,7 @@ import dev.oskarjohansson.model.ActivationToken
 import dev.oskarjohansson.model.User
 import dev.oskarjohansson.repository.ActivationTokenRepository
 import dev.oskarjohansson.repository.UserRepository
+import dev.oskarjohansson.service.tokenPattern
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
 
